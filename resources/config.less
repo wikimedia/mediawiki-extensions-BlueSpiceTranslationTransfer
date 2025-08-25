@@ -1,0 +1,40 @@
+#bsgTranslateTransferTargetNamespaceMapping {
+	.translationTransfer-namespaceMapWidget-value {
+		padding: 10px;
+		border: 1px solid gray;
+		margin-top: 10px;
+		margin-bottom: 20px;
+
+		&:empty {
+			border: none; /* stylelint-disable-line declaration-property-value-disallowed-list */
+		}
+
+		.translationTransfer-namespace {
+			font-size: 1em;
+			font-weight: bold;
+		}
+
+		.oojsplus-data-gridWidget-cell.action-cell .oo-ui-buttonElement {
+			margin-left: 0 !important;
+
+			.oo-ui-iconElement-icon {
+				width: 1em;
+			}
+		}
+	}
+
+	.oo-ui-layout.oo-ui-panelLayout {
+		& > fieldset > legend > .oo-ui-labelElement-label {
+			font-size: 15px; /* stylelint-disable-line declaration-property-unit-disallowed-list */
+		}
+
+		& > fieldset > .oo-ui-fieldsetLayout-group > .oo-ui-fieldLayout:last-child {
+			display: flex;
+			justify-content: right;
+
+			.oo-ui-fieldLayout-header {
+				display: none;
+			}
+		}
+	}
+}
