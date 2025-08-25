@@ -1,0 +1,81 @@
+.translate-transfer-dictionary-desc {
+	font-size: 15px !important; /* stylelint-disable-line declaration-property-unit-disallowed-list */
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.translate-transfer-dictionary-filter {
+	margin-top: 35px;
+	padding-left: 16px;
+	padding-right: 16px;
+
+	& > * {
+		font-size: 15px; /* stylelint-disable-line declaration-property-unit-disallowed-list */
+	}
+
+	& > input {
+		width: 350px;
+		margin-left: 25px;
+	}
+}
+
+.translate-transfer-dictionary-language-switch-wrapper {
+	display: flex;
+	padding-left: 21px;
+	padding-right: 21px;
+	margin-top: 30px;
+	margin-bottom: 10px;
+
+	& p {
+		font-size: 15px !important; /* stylelint-disable-line declaration-property-unit-disallowed-list */
+	}
+
+	& > p {
+		width: 50%;
+	}
+
+	& .translate-transfer-dictionary-language-switch {
+		display: flex;
+		justify-content: space-between;
+		width: 50%;
+		margin-left: -5px;
+
+		& > p {
+			width: 180px;
+		}
+	}
+}
+
+/** "Edit translation" dialog **/
+
+.translate-transfer-dictionary-edit-dialog {
+	padding: 12px 40px 20px;
+
+	& .translate-transfer-dictionary-edit-dialog-message {
+		border-color: black !important;
+		border-radius: 5px;
+
+		& .oo-ui-image-warning {
+			background-position: center;
+		}
+
+		& .oo-ui-labelElement-label {
+			margin-left: 40px;
+		}
+	}
+
+	& .translate-transfer-dictionary-edit-dialog-affected-pages {
+		margin-bottom: 15px;
+		margin-top: 15px;
+	}
+
+	& input[ name='translation' ] {
+		width: 100%;
+	}
+}
+
+/** "Remove translation" dialog **/
+
+.translate-transfer-dictionary-remove-dialog {
+	padding: 12px 40px 20px;
+}

@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dejan Savuljesku",
+			"Patric Wirth"
+		]
+	},
+	"bs-translation-transfer-outdated-translation-label": "Diese Übersetzung ist veraltet. Bitte überprüfen Sie die '''[$1 Quellseite]'''",
+	"bs-translation-transfer-dictionary-edit-dialog-message": "Bitte seien Sie bei der Bearbeitung von Übersetzungen vorsichtig. Bei Änderungen wird der Seitentitel geändert und alle Links zu dieser Seite müssen manuell aktualisiert werden",
+	"bs-translation-transfer-dictionary-edit-dialog-confirmation-label": "Sind Sie sich sicher, dass Sie die Übersetzung von <b>$1</b> nach <b>$2</b>ändern möchten?",
+	"bs-translation-transfer-dictionary-remove-dialog-confirmation-label": "Sind Sie sich sicher, dass Sie die Übersetzung für <b>$1</b> entfernen möchten?"
+
+}
