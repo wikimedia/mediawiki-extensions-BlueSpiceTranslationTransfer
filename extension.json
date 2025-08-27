@@ -1,0 +1,561 @@
+{
+	"name": "BlueSpiceTranslationTransfer",
+	"version": "5.1.2",
+	"license-name": "GPL-3.0-only",
+	"author": [
+		"[https://www.hallowelt.com Hallo Welt! GmbH]"
+	],
+	"url": "https://en.wiki.bluespice.com/wiki/Reference:BlueSpiceTranslationTransfer",
+	"descriptionmsg": "bs-translationtransfer-desc",
+	"requires": {
+		"MediaWiki": ">= 1.43.0",
+		"extensions": {
+			"BlueSpiceFoundation": ">= 5.0.0",
+			"BlueSpiceVisualEditorConnector": "*",
+			"ContentTransfer": "*",
+			"MergeArticles": "*",
+			"OOJSPlus": ">= 3.0.0",
+			"VisualEditor": "*"
+		}
+	},
+	"attributes": {
+		"BlueSpiceFoundation": {
+			"TagRegistry": {
+				"deepl:ignore": "BlueSpice\\TranslationTransfer\\Tag\\DeeplIgnore"
+			},
+			"AlertProviderRegistry": {
+				"translationtransfer-translation-banner": "BlueSpice\\TranslationTransfer\\AlertProvider\\TranslationBanner::factory"
+			},
+			"ConfigDefinitionRegistry": {
+				"TranslateTransferTargetNamespaceMapping": "BlueSpice\\TranslationTransfer\\ConfigDefinition\\TranslateTransferTargetNamespaceMapping::getInstance",
+				"TranslateTransferNamespaces": "BlueSpice\\TranslationTransfer\\ConfigDefinition\\TranslateTransferNamespaces::getInstance"
+			}
+		},
+		"BlueSpiceDiscovery": {
+			"LangLinksProviderRegistry": {
+				"translation-transfer": {
+					"class": "BlueSpice\\TranslationTransfer\\LangLinksProvider\\TranslationTransfer",
+					"services": [
+						"LanguageNameUtils",
+						"TranslationTransferTargetRecognizer",
+						"ContentTransferTargetManager",
+						"DBLoadBalancer"
+					]
+				}
+			}
+		},
+		"BlueSpiceTranslationTransfer": {
+			"PluginModules": []
+		}
+	},
+	"MessagesDirs": {
+		"TranslationTransfer": "i18n"
+	},
+	"AutoloadNamespaces": {
+		"BlueSpice\\TranslationTransfer\\": "src/"
+	},
+	"TestAutoloadNamespaces": {
+		"BlueSpice\\TranslationTransfer\\Tests\\": "tests/phpunit/"
+	},
+	"SpecialPages": {
+		"TranslationsOverview": "\\BlueSpice\\TranslationTransfer\\Special\\TranslationsOverview",
+		"TranslationDictionary": "\\BlueSpice\\TranslationTransfer\\Special\\TranslationDictionary",
+		"TranslationsGlossary": "\\BlueSpice\\TranslationTransfer\\Special\\TranslationsGlossary"
+	},
+	"APIModules": {
+		"bs-translation-transfer-tasks": "\\BlueSpice\\TranslationTransfer\\Api\\Task\\Translate",
+		"bs-translation-transfer-foreign-page-tasks": "\\BlueSpice\\TranslationTransfer\\Api\\Task\\ForeignPage",
+		"bs-translation-transfer-convert": {
+			"class": "\\BlueSpice\\TranslationTransfer\\Api\\ParsoidConversion",
+			"services": [
+				"RevisionLookup",
+				"TempUserCreator",
+				"UserFactory",
+				"UserOptionsLookup",
+				"WatchlistManager",
+				"ContentTransformer",
+				"StatsdDataFactory",
+				"WikiPageFactory",
+				"IntroMessageBuilder",
+				"PreloadedContentBuilder",
+				"SpecialPageFactory",
+				"VisualEditor.ParsoidClientFactory"
+			]
+		}
+	},
+	"ServiceWiringFiles": [
+		"includes/ServiceWiring.php"
+	],
+	"ResourceModules": {
+		"ext.translate.transfer.bootstrap": {
+			"scripts": "bootstrap.js"
+		},
+		"ext.translate.transfer": {
+			"scripts": [
+				"ui/booklet/page/LanguageSelection.js",
+				"ui/booklet/page/Translation.js",
+				"ui/booklet/page/SetTargetTitle.js",
+				"ui/booklet/page/Preview.js",
+				"ui/booklet/page/Transfer.js",
+				"ui/booklet/TranslationBooklet.js",
+				"ui/dialog/TranslateDialog.js"
+			],
+			"styles": [
+				"translate.less"
+			],
+			"messages": [
+				"bs-translation-transfer-ui-language-selection-label",
+				"bs-translation-transfer-ui-transfer-working",
+				"bs-translation-transfer-ui-transfer-success",
+				"bs-translation-transfer-ui-transfer-failed",
+				"bs-translation-transfer-ui-translate-working",
+				"bs-translation-transfer-ui-translate-success",
+				"bs-translation-transfer-ui-translate-fail",
+				"bs-translation-transfer-ui-check-target-working",
+				"bs-translation-transfer-ui-check-target-success",
+				"bs-translation-transfer-ui-check-target-fail",
+				"bs-translation-transfer-ui-dialog-target-title-input-label",
+				"bs-translation-transfer-ui-transfer-preview-html",
+				"bs-translation-transfer-ui-transfer-preview-wt",
+				"bs-translation-transfer-ui-dialog-title",
+				"bs-translation-transfer-ui-dialog-action-translate",
+				"bs-translation-transfer-ui-dialog-action-cancel",
+				"bs-translation-transfer-ui-dialog-action-back",
+				"bs-translation-transfer-ui-dialog-action-save",
+				"bs-translation-transfer-ui-dialog-action-wikitext",
+				"bs-translation-transfer-ui-dialog-action-translate-another",
+				"bs-translation-transfer-ui-dialog-action-done",
+				"bs-translation-transfer-ui-dialog-title-preview"
+			],
+			"dependencies": [
+				"ext.bluespice",
+				"oojs-ui",
+				"mediawiki.api"
+			]
+		},
+		"ext.translate.local": {
+			"scripts": [
+				"localTranslation.js",
+				"ui/LocalTranslation.js"
+			],
+			"styles": [
+				"translate.local.less"
+			],
+			"messages": [
+				"bs-translation-transfer-local-layout-label",
+				"bs-translation-transfer-local-no-languages",
+				"bs-translation-transfer-local-failed",
+				"bs-translation-transfer-local-success",
+				"bs-translation-transfer-local-progress"
+			],
+			"dependencies": [
+				"ext.bluespice",
+				"oojs-ui",
+				"mediawiki.api"
+			]
+		},
+		"ext.translate.transfer.flow.bootstrap": {
+			"scripts": [
+				"translate.js"
+			]
+		},
+		"ext.translate.transfer.api": {
+			"scripts": [
+				"api/Api.js"
+			]
+		},
+		"ext.translate.transfer.overview": {
+			"packageFiles": [
+				{ "name": "translate.overview.js", "main": true },
+				"ui/panel/Overview.js",
+				"store/Translations.js",
+				{
+					"name": "pluginModules.json",
+					"callback": "\\BlueSpice\\TranslationTransfer\\TranslationTransferPluginModules::getPluginModules"
+				}
+			],
+			"messages": [
+				"bs-translation-transfer-overview-source-page-column",
+				"bs-translation-transfer-overview-source-lang-column",
+				"bs-translation-transfer-overview-target-page-column",
+				"bs-translation-transfer-overview-target-lang-column",
+				"bs-translation-transfer-overview-release-timestamp-column",
+				"bs-translation-transfer-overview-source-last-change-timestamp-column",
+				"bs-translation-transfer-overview-target-last-change-timestamp-column"
+			],
+			"dependencies": [
+				"ext.bluespice",
+				"ext.oOJSPlus.data",
+				"oojs-ui"
+			]
+		},
+		"ext.translate.transfer.banner": {
+			"scripts": [
+				"translationBanner.js"
+			]
+		},
+		"ext.translate.transfer.config": {
+			"scripts": [
+				"ui/widget/NamespaceMapWidget.js",
+				"ui/widget/EnabledNamespacesWidget.js"
+			],
+			"messages": [
+				"bs-translation-transfer-ui-source-namespace",
+				"bs-translation-transfer-ui-target-namespace",
+				"bs-translation-transfer-ui-target-lang",
+				"bs-translation-transfer-ui-add",
+				"bs-translation-transfer-ui-add-namespace-mapping",
+				"bs-translation-transfer-config-column-target-language",
+				"bs-translation-transfer-config-column-target-namespace",
+				"bs-translation-transfer-config-column-delete-title"
+			],
+			"styles": [
+				"config.less"
+			],
+			"dependencies": [
+				"ext.bluespice",
+				"oojs-ui",
+				"ext.oOJSPlus.data"
+			]
+		},
+		"ext.translate.transfer.dictionary": {
+			"scripts": [
+				"store/Dictionary.js",
+				"ui/panel/Dictionary.js",
+				"ui/booklet/dictionary/DictionaryDialogBooklet.js",
+				"ui/booklet/dictionary/page/ChangeConfirm.js",
+				"ui/booklet/dictionary/page/TranslationChange.js",
+				"ui/dialog/DictionaryEditEntryDialog.js",
+				"ui/dialog/DictionaryRemoveEntryDialog.js",
+				"special.dictionary/special.dictionary.js"
+			],
+			"messages": [
+				"bs-translation-transfer-dictionary-desc",
+				"bs-translation-transfer-dictionary-filter-label",
+				"bs-translation-transfer-dictionary-filter-placeholder",
+				"bs-translation-transfer-dictionary-switch-main-language",
+				"bs-translation-transfer-dictionary-switch-select-language",
+				"bs-translation-transfer-dictionary-action-edit",
+				"bs-translation-transfer-dictionary-action-remove",
+				"bs-translation-transfer-dictionary-edit-dialog-title",
+				"bs-translation-transfer-dictionary-edit-dialog-save",
+				"bs-translation-transfer-dictionary-edit-dialog-cancel",
+				"bs-translation-transfer-dictionary-edit-dialog-back",
+				"bs-translation-transfer-dictionary-edit-dialog-message",
+				"bs-translation-transfer-dictionary-edit-dialog-affected-pages",
+				"bs-translation-transfer-dictionary-edit-dialog-change-translation-label",
+				"bs-translation-transfer-dictionary-edit-dialog-confirmation-label",
+				"bs-translation-transfer-dictionary-remove-dialog-title",
+				"bs-translation-transfer-dictionary-remove-dialog-delete",
+				"bs-translation-transfer-dictionary-remove-dialog-cancel",
+				"bs-translation-transfer-dictionary-remove-dialog-confirmation-label"
+			],
+			"styles": [
+				"special.dictionary/special.dictionary.less"
+			],
+			"dependencies": [
+				"ext.bluespice",
+				"ext.oOJSPlus.data",
+				"oojs-ui",
+				"oojs-ui.styles.icons-editing-core"
+			]
+		},
+		"ext.translate.transfer.glossary": {
+			"scripts": [
+				"special.glossary/special.glossary.js",
+				"ui/dialog/GlossaryEditEntryDialog.js",
+				"ui/panel/Glossary.js",
+				"store/Glossary.js"
+			],
+			"messages": [
+				"bs-translation-transfer-glossary-source-text-placeholder",
+				"bs-translation-transfer-glossary-translation-text-placeholder",
+				"bs-translation-transfer-glossary-action-edit",
+				"bs-translation-transfer-glossary-action-remove",
+				"bs-translation-transfer-glossary-edit-dialog-title",
+				"bs-translation-transfer-glossary-edit-dialog-save",
+				"bs-translation-transfer-glossary-edit-dialog-cancel",
+				"bs-translation-transfer-glossary-edit-dialog-change-translation-label"
+			],
+			"styles": [
+				"special.glossary/special.glossary.less"
+			],
+			"dependencies": [
+				"ext.bluespice",
+				"oojs-ui",
+				"ext.oOJSPlus.data",
+				"oojs-ui.styles.icons-editing-core"
+			]
+		}
+	},
+	"JobClasses": {
+		"UpdateTranslationsReleaseTimestamp": "\\BlueSpice\\TranslationTransfer\\Job\\UpdateTranslationsReleaseTimestamp",
+		"UpdateTranslationTargetTimestamp": "\\BlueSpice\\TranslationTransfer\\Job\\UpdateTranslationTargetTimestamp"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "TranslationTransfer/resources"
+	},
+	"ExtensionMessagesFiles": {
+		"TranslationTransferMagic": "languages/TranslationTransfer.magic.i18n.php"
+	},
+	"config_prefix": "bsg",
+	"config": {
+		"DeeplTranslateConversionConfig": {
+			"description": "Configuration of translation behaviour",
+			"value": {
+				"translatePageTitle": false,
+				"addDisplayTitleToContent": true,
+				"translateNamespaces": true,
+				"namespaceMap": {},
+				"translateMagicWords": true
+			}
+		},
+		"TranslateTransferFilesToDraft": {
+			"description": "If true, files will be included in the review process (pushed to draft NS first)",
+			"value": true
+		},
+		"TranslateTransferTargets": {
+			"description": "Key is target language code and value is array containing information about target instance. 'key' - target instance ID as declared in ContentTransfer targets, 'url' - client URL of the instance",
+			"value": {}
+		},
+		"TranslateTransferNamespaces": {
+			"description": "Configuration of per-namespace translation direction (if it takes place). Key is language code and value is an array with namespaces IDs. That means that articles can be translated from specified language only from specified namespaces",
+			"value": {}
+		},
+		"TranslateTransferTargetNamespaceMapping": {
+			"description": "Defines the mapping of source and target namespaces for translation transfer. E.g. ['Dokumentation': ['en':'Documentation', 'it':'Documentazione']]",
+			"value": {}
+		},
+		"TranslateTransferLeadingLanguage": {
+			"description": "False if there is no leading language in the wiki farm, otherwise language code of leading language. Dictionary and glossary special pages will work only for leading language.",
+			"value": false
+		}
+	},
+	"Hooks": {
+		"SkinTemplateNavigation::Universal": "add-translation-action",
+		"LoadExtensionSchemaUpdates": [
+			"add-translations-table",
+			"add-dictionary-table",
+			"add-glossary-tables"
+		],
+		"ParserFirstCallInit": "BlueSpice\\TranslationTransfer\\Hook\\ParserFirstCallInit\\AddContentTranslate::callback",
+		"BlueSpiceDiscoveryTemplateDataProviderAfterInit": "discovery-skin",
+		"PageMoveComplete": "update-translation-after-page-move",
+		"PageDeleteComplete": "remove-translation-record",
+		"PageSaveComplete": [
+			"update-translation-source-last-change",
+			"update-translation-target-last-change"
+		],
+		"MergeArticlesAfterMergePage": "update-translation-after-merge",
+		"GetDoubleUnderscoreIDs": "add-no-automatic-document-translate",
+		"BeforePageDisplay": [
+			"addModules",
+			"add-bootstrap"
+		],
+		"SpecialPage_initList": "hide-dictionary-and-glossary"
+	},
+	"HookHandlers": {
+		"discovery-skin": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\DiscoverySkin"
+		},
+		"add-translation-action": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\SkinTemplateNavigationUniversal\\AddTranslateAction",
+			"services": [
+				"ConfigFactory",
+				"PermissionManager",
+				"ContentTransferTargetManager",
+				"TranslationTransferTargetRecognizer",
+				"LanguageNameUtils",
+				"DBLoadBalancer"
+			]
+		},
+		"add-translations-table": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\LoadExtensionSchemaUpdates\\AddTranslationsTable"
+		},
+		"add-dictionary-table": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\LoadExtensionSchemaUpdates\\AddDictionaryTable"
+		},
+		"add-glossary-tables": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\LoadExtensionSchemaUpdates\\AddGlossaryTables"
+		},
+		"update-translation-after-page-move": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\PageMoveComplete\\UpdateTranslationAfterMove",
+			"services": [
+				"DBLoadBalancer",
+				"TranslationTransferTargetRecognizer",
+				"NamespaceInfo"
+			]
+		},
+		"update-translation-after-merge": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\MergeArticlesAfterMergePage\\UpdateTranslationAfterMerge",
+			"services": [
+				"DBLoadBalancer",
+				"TranslationTransferTargetRecognizer"
+			]
+		},
+		"update-translation-source-last-change": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\PageContentSaveComplete\\UpdateTranslationSourceLastChange",
+			"services": [
+				"DBLoadBalancer",
+				"TranslationTransferTargetRecognizer"
+			]
+		},
+		"update-translation-target-last-change": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\PageContentSaveComplete\\UpdateTranslationTargetLastChange",
+			"services": [
+				"DBLoadBalancer",
+				"TranslationTransferTargetRecognizer"
+			]
+		},
+		"remove-translation-record": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\PageDeleteComplete\\RemoveTranslationRecord",
+			"services": [
+				"DBLoadBalancer",
+				"TranslationTransferTargetRecognizer",
+				"NamespaceInfo"
+			]
+		},
+		"add-no-automatic-document-translate": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\GetDoubleUnderscoreIDs\\AddNoAutomaticDocumentTranslate"
+		},
+		"addModules": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\BeforePageDisplay\\AddModules"
+		},
+		"add-bootstrap": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\BeforePageDisplay\\AddBootstrap"
+		},
+		"hide-dictionary-and-glossary": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\SpecialPage_initList\\HideDictionaryAndGlossary",
+			"services": [
+				"ConfigFactory",
+				"MainConfig"
+			]
+		}
+	},
+	"RestRoutes": [
+		{
+			"path": "/translations/list",
+			"method": "GET",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\ListTranslations",
+			"services": [
+				"HookContainer",
+				"DBLoadBalancer",
+				"TranslationTransferTargetRecognizer"
+			]
+		},
+		{
+			"path": "/translations/ack/{targetTitleId}",
+			"method": "POST",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\AckTranslation",
+			"services": [
+				"DBLoadBalancer",
+				"UserGroupManager",
+				"TranslationTransferTargetRecognizer"
+			]
+		},
+		{
+			"path": "/translations/dictionary/{langCodeTo}",
+			"method": "GET",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Dictionary\\ListDictionaryEntries",
+			"services": [
+				"HookContainer",
+				"DBLoadBalancer",
+				"LanguageFactory",
+				"ContentLanguage",
+				"ConfigFactory",
+				"TitleFactory",
+				"TranslationTransferTargetRecognizer"
+			]
+		},
+		{
+			"path": "/translations/dictionary/insert/{targetLang}",
+			"method": "POST",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Dictionary\\InsertDictionaryEntry"
+		},
+		{
+			"path": "/translations/dictionary/update/{targetLang}",
+			"method": "POST",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Dictionary\\ChangeDictionaryEntry",
+			"services": [
+				"TitleFactory",
+				"ContentTransferAuthenticatedRequestHandlerFactory",
+				"ContentTransferTargetManager",
+				"TranslationTransferTargetRecognizer"
+			]
+		},
+		{
+			"path": "/translations/dictionary/remove/{targetLang}",
+			"method": "POST",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Dictionary\\DeleteDictionaryEntry"
+		},
+		{
+			"path": "/translations/dictionary/affected_pages/{targetLang}",
+			"method": "GET",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Dictionary\\GetAffectedPages",
+			"services": [
+				"TitleFactory",
+				"ContentTransferAuthenticatedRequestHandlerFactory",
+				"ContentTransferTargetManager",
+				"TranslationTransferTargetRecognizer"
+			]
+		},
+		{
+			"path": "/translations/glossary/list/{targetLang}",
+			"method": "GET",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Glossary\\ListGlossaryEntries",
+			"services": [
+				"HookContainer",
+				"DBLoadBalancer"
+			]
+		},
+		{
+			"path": "/translations/glossary/insert/{targetLang}",
+			"method": "POST",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Glossary\\InsertGlossaryEntry",
+			"services": [
+				"DBLoadBalancer"
+			]
+		},
+		{
+			"path": "/translations/glossary/update/{targetLang}",
+			"method": "POST",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Glossary\\UpdateGlossaryEntry",
+			"services": [
+				"DBLoadBalancer"
+			]
+		},
+		{
+			"path": "/translations/glossary/remove/{targetLang}",
+			"method": "POST",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Glossary\\DeleteGlossaryEntry",
+			"services": [
+				"DBLoadBalancer"
+			]
+		},
+		{
+			"path": "/translations/glossary/sync/{targetLang}",
+			"method": "POST",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Glossary\\SyncRemoteGlossary",
+			"services": [
+				"DBLoadBalancer",
+				"ConfigFactory",
+				"HttpRequestFactory"
+			]
+		},
+		{
+			"path": "/translations/glossary/languages",
+			"method": "GET",
+			"class": "BlueSpice\\TranslationTransfer\\Rest\\Glossary\\GetSupportedTargetLangs",
+			"services": [
+				"ConfigFactory",
+				"HttpRequestFactory"
+			]
+		}
+	],
+	"LogTypes": [ "bs-translation-transfer" ],
+	"LogActionsHandlers": {
+		"bs-translation-transfer/translate": "LogFormatter"
+	},
+	"manifest_version": 2
+}

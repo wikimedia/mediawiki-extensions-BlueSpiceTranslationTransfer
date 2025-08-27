@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dejan Savuljesku",
+			"Patric Wirth"
+		]
+	},
+	"bs-translation-transfer-ui-language-selection-label": "Sélectionne la langue dans laquelle tu souhaites traduire la page.",
+	"bs-translation-transfer-ui-transfer-working": "La page est en cours de transfert...",
+	"bs-translation-transfer-ui-transfer-success": "Transfert réussi",
+	"bs-translation-transfer-ui-transfer-failed": "Echec du transfert",
+	"bs-translation-transfer-ui-translate-working": "La page est en cours de traduction…",
+	"bs-translation-transfer-ui-translate-success": "Traduction réussie",
+	"bs-translation-transfer-ui-translate-fail": "Echec de la traduction",
+	"bs-translation-transfer-ui-check-target-working": "Vérification de la destination…",
+	"bs-translation-transfer-ui-check-target-success": "Vérification de la destination réussie",
+	"bs-translation-transfer-ui-check-target-fail": "Echec de la vérification",
+	"bs-translation-transfer-ui-generate-preview-working": "Génération de l’aperçu…",
+	"bs-translation-transfer-ui-generate-preview-success": "Génération de l’aperçu réussie",
+	"bs-translation-transfer-ui-generate-preview-fail": "Echec de l’aperçu",
+	"bs-translation-transfer-ui-transfer-site": "Emplacement de transfert",
+	"bs-translation-transfer-ui-target-title": "Titre de la page de destination",
+	"bs-translation-transfer-ui-check-transfer-target": "Destination du transfert",
+	"bs-translation-transfer-ui-transfer-warning-draft-exist": "Une ébauche non vérifiée existe déjà sur la page de destination. Le transfert d’une nouvelle version peut provoquer une perte de données!",
+	"bs-translation-transfer-ui-transfer-warning-new": "La page de destination n’existe pas encore à l’emplacement du transfert. La page sera transférée au titre de destination définitif sans passer par la phase de vérification.",
+	"bs-translation-transfer-ui-transfer-preview-label": "Contenus traduits qui doivent être transférés",
+	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
+	"bs-translation-transfer-ui-transfer-preview-wt": "Wikitext",
+	"bs-translation-transfer-ui-dialog-title": "Traduire la page",
+	"bs-translation-transfer-ui-dialog-action-translate": "Traduire",
+	"bs-translation-transfer-ui-dialog-action-cancel": "Annuler",
+	"bs-translation-transfer-ui-dialog-action-back": "Retour",
+	"bs-translation-transfer-ui-dialog-action-transfer": "Transférer",
+	"bs-translation-transfer-ui-dialog-action-translate-another": "Traduire dans une autre langue",
+	"bs-translation-transfer-ui-dialog-action-done": "Terminé",
+	"action-translation-transfer": "Traduire"
+}
