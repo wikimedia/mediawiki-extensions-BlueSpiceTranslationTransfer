@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Brettchenweber",
 			"Dejan Savuljesku",
 			"Patric Wirth"
 		]
@@ -65,7 +66,7 @@
 	"bs-translation-transfer-dictionary-edit-dialog-message": "Bitte sei bei der Bearbeitung von Übersetzungen vorsichtig. Bei Änderungen wird der Seitentitel geändert und alle Links zu dieser Seite müssen manuell aktualisiert werden",
 	"bs-translation-transfer-dictionary-edit-dialog-affected-pages": "{{PLURAL:$1|Eine Seite|$1 Seiten}} {{PLURAL:$1|muss|müssen}} manuell aktualisiert werden. [$2 Alle betroffenen Seiten] ansehen.",
 	"bs-translation-transfer-dictionary-edit-dialog-change-translation-label": "Übersetzung ändern für: <b>$1</b>",
-	"bs-translation-transfer-dictionary-edit-dialog-confirmation-label": "Bist du dir sicher, dass du die Übersetzung von <b>$1</b> nach <b>$2</b>ändern möchtest?",
+	"bs-translation-transfer-dictionary-edit-dialog-confirmation-label": "Bist du dir sicher, dass du die Übersetzung von <b>$1</b> in <b>$2</b>ändern möchtest?",
 	"bs-translation-transfer-dictionary-translation-exists": "Vorgeschlagene Übersetzung existiert bereits für eine andere Quelle im gleichen Namensraum.",
 	"bs-translation-transfer-dictionary-remove-dialog-title": "Übersetzung entfernen",
 	"bs-translation-transfer-dictionary-remove-dialog-delete": "Entfernen",
