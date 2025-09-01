@@ -4,17 +4,26 @@
 			"Milicevic01"
 		]
 	},
+	"bs-translation-transfer-ui-transfer-success": "Страница <b>$1</b> је преведена на [$2 $3]",
 	"bs-translation-transfer-ui-translate-working": "Превођење странице...",
 	"bs-translation-transfer-ui-translate-success": "Превођење успешно",
 	"bs-translation-transfer-ui-transfer-preview-wt": "Викитекст",
+	"bs-translation-transfer-ui-dialog-action-cancel": "Откажи",
 	"bs-translation-transfer-ui-dialog-action-back": "Назад",
+	"bs-translation-transfer-ui-dialog-action-wikitext": "Викитекст",
+	"bs-translation-transfer-ui-dialog-action-done": "Готово",
 	"bs-translation-transfer-outdated-translation-label": "Овај превод је застарео. Молимо проверите '''[$1 изворни језик]'''",
+	"bs-translation-transfer-overview-source-lang-column": "Изворни језик",
 	"bs-translation-transfer-ui-add": "Додај",
 	"bs-translation-transfer-dictionary-switch-select-language": "Изаберите језик",
+	"bs-translation-transfer-dictionary-edit-dialog-title": "Уреди превод",
+	"bs-translation-transfer-dictionary-edit-dialog-cancel": "Откажи",
 	"bs-translation-transfer-dictionary-remove-dialog-title": "Уклони превод",
 	"bs-translation-transfer-glossary-action-edit": "Уреди",
 	"bs-translation-transfer-glossary-translation-text-placeholder": "Преведен текст",
 	"bs-translation-transfer-glossary-edit-dialog-title": "Уреди превод",
 	"bs-translation-transfer-glossary-edit-dialog-save": "Сачувај",
+	"bs-translation-transfer-glossary-edit-dialog-cancel": "Откажи",
+	"bs-translation-transfer-config-column-target-language": "Језик",
 	"bs-translation-transfer-config-column-target-namespace": "Циљни именски простор"
 }
