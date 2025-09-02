@@ -2,12 +2,14 @@
 	"@metadata": {
 		"authors": [
 			"Dejan Savuljesku",
-			"Patric Wirth"
+			"Patric Wirth",
+			"Beta16"
 		]
 	},
+	"action-translation-transfer": "Traduci",
 	"bs-translation-transfer-ui-language-selection-label": "Seleziona la lingua in cui la pagina deve essere tradotta.",
 	"bs-translation-transfer-ui-transfer-working": "Pagina in fase di trasmissione...",
-	"bs-translation-transfer-ui-transfer-success": "Trasmissione riuscita",
+	"bs-translation-transfer-ui-transfer-success": "La pagina <b>$1</b> è stata tradotta in [$2 $3]",
 	"bs-translation-transfer-ui-transfer-failed": "Trasmissione fallita",
 	"bs-translation-transfer-ui-translate-working": "Pagina in fase di traduzione...",
 	"bs-translation-transfer-ui-translate-success": "Traduzione riuscita",
@@ -15,22 +17,14 @@
 	"bs-translation-transfer-ui-check-target-working": "Destinazione in fase di verifica...",
 	"bs-translation-transfer-ui-check-target-success": "Verifica della destinazione riuscita",
 	"bs-translation-transfer-ui-check-target-fail": "Verifica fallita",
-	"bs-translation-transfer-ui-generate-preview-working": "Anteprima in fase di creazione...",
-	"bs-translation-transfer-ui-generate-preview-success": "Creazione dell’anteprima riuscita",
-	"bs-translation-transfer-ui-generate-preview-fail": "Anteprima fallita",
-	"bs-translation-transfer-ui-transfer-site": "Luogo di trasmissione",
-	"bs-translation-transfer-ui-target-title": "Titolo della pagina di destinazione",
-	"bs-translation-transfer-ui-check-transfer-target": "Destinazione della trasmissione",
-	"bs-translation-transfer-ui-transfer-warning-draft-exist": "Nella pagina di destinazione esiste già una bozza che non è stata controllata. La trasmissione di una nuova versione può portare alla perdita di dati!",
-	"bs-translation-transfer-ui-transfer-warning-new": "La pagina di destinazione non esiste ancora nel luogo di trasmissione. La pagina viene trasmessa al titolo definitivo della destinazione e la fase di revisione viene saltata.",
-	"bs-translation-transfer-ui-transfer-preview-label": "Contenuti tradotti da trasmettere",
 	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "Wikitext",
 	"bs-translation-transfer-ui-dialog-title": "Traduci pagina",
 	"bs-translation-transfer-ui-dialog-action-translate": "Traduci",
 	"bs-translation-transfer-ui-dialog-action-cancel": "Interrompi",
 	"bs-translation-transfer-ui-dialog-action-back": "Indietro",
-	"bs-translation-transfer-ui-dialog-action-transfer": "Trasmetti",
 	"bs-translation-transfer-ui-dialog-action-translate-another": "Traduci in un’altra lingua",
-	"action-translation-transfer": "Traduci"
+	"bs-translation-transfer-ui-add": "Aggiungi",
+	"bs-translation-transfer-glossary-edit-dialog-save": "Salva",
+	"bs-translation-transfer-config-column-target-namespace": "Namespace di destinazione"
 }

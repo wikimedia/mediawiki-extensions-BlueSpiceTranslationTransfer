@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ykhwong"
+		]
+	},
+	"action-translation-transfer": "번역",
+	"bs-translation-transfer-ui-transfer-failed": "전송 실패",
+	"bs-translation-transfer-ui-translate-success": "번역 성공",
+	"bs-translation-transfer-ui-transfer-preview-wt": "위키텍스트",
+	"bs-translation-transfer-outdated-translation-label": "이 번역은 오래되었습니다. '''[$1 원본 언어]'''를 확인해 주십시오.",
+	"bs-translation-transfer-ui-add": "추가",
+	"bs-translation-transfer-ui-add-namespace-mapping": "새 이름공간 매핑 추가",
+	"bs-translation-transfer-dictionary-edit-dialog-save": "저장",
+	"bs-translation-transfer-glossary-action-edit": "편집",
+	"bs-translation-transfer-glossary-edit-dialog-save": "저장",
+	"bs-translation-transfer-config-column-target-namespace": "대상 이름공간",
+	"bs-translation-transfer-config-column-delete-title": "삭제"
+}
