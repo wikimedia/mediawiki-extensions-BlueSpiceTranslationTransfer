@@ -1,19 +1,38 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bisang",
 			"Ykhwong"
 		]
 	},
+	"translationoverview": "번역 개요",
 	"action-translation-transfer": "번역",
 	"bs-translation-transfer-ui-transfer-failed": "전송 실패",
+	"bs-translation-transfer-ui-translate-working": "페이지 번역 중...",
 	"bs-translation-transfer-ui-translate-success": "번역 성공",
+	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "위키텍스트",
+	"bs-translation-transfer-ui-dialog-action-translate-another": "다른 언어로 번역하기",
+	"bs-translation-transfer-local-success": "번역 완료!",
 	"bs-translation-transfer-outdated-translation-label": "이 번역은 오래되었습니다. '''[$1 원본 언어]'''를 확인해 주십시오.",
+	"bs-translation-transfer-overview-source-page-column": "원본 문서",
+	"bs-translation-transfer-overview-source-lang-column": "원본 언어",
+	"bs-translation-transfer-overview-target-page-column": "대상 문서",
 	"bs-translation-transfer-ui-add": "추가",
 	"bs-translation-transfer-ui-add-namespace-mapping": "새 이름공간 매핑 추가",
+	"bs-translation-transfer-dictionary-desc": "모든 기존 번역은 여기에 나열되어 있으며 편집하거나 삭제할 수 있습니다. 페이지 번역 과정에서 새 번역을 별도로 추가할 수 있습니다.",
+	"bs-translation-transfer-dictionary-switch-main-language": "기본 언어",
+	"bs-translation-transfer-dictionary-switch-select-language": "언어 선택",
+	"bs-translation-transfer-dictionary-action-edit": "수정",
 	"bs-translation-transfer-dictionary-edit-dialog-save": "저장",
+	"bs-translation-transfer-dictionary-edit-dialog-back": "뒤로",
+	"bs-translation-transfer-dictionary-remove-dialog-title": "번역 삭제",
+	"bs-translation-transfer-ui-dialog-target-title-input-label": "대상 문서 이름 설정",
 	"bs-translation-transfer-glossary-action-edit": "편집",
+	"bs-translation-transfer-glossary-translation-text-placeholder": "번역문",
+	"bs-translation-transfer-glossary-edit-dialog-title": "번역 수정",
 	"bs-translation-transfer-glossary-edit-dialog-save": "저장",
+	"bs-translation-transfer-config-column-target-language": "언어",
 	"bs-translation-transfer-config-column-target-namespace": "대상 이름공간",
 	"bs-translation-transfer-config-column-delete-title": "삭제"
 }
