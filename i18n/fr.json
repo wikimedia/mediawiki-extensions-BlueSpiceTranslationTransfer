@@ -3,6 +3,7 @@
 		"authors": [
 			"Dejan Savuljesku",
 			"JLTRY",
+			"McDutchie",
 			"Patric Wirth"
 		]
 	},
@@ -30,7 +31,7 @@
 	"bs-translation-transfer-local-layout-label": "Traduire cette page",
 	"bs-translation-transfer-local-no-languages": "Aucune langue valide pour la traduction trouvée",
 	"bs-translation-transfer-local-progress": "Traduction du contenu...",
-	"bs-translation-transfer-outdated-translation-label": "Cette traduction est obsolète. Veuillez vérifier « [$1 le langage source] »",
+	"bs-translation-transfer-outdated-translation-label": "Cette traduction est obsolète. Veuillez vérifier '''[$1 le langage source]'''",
 	"bs-translation-transfer-overview-source-page-column": "Page source",
 	"bs-translation-transfer-overview-source-lang-column": "Langue source",
 	"bs-translation-transfer-overview-target-page-column": "Page cible",
