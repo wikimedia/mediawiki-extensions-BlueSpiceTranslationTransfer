@@ -106,7 +106,7 @@ class Translate extends BSApiTasksBase {
 			'action' => 'bs-translation-transfer-convert',
 			'content' => $content,
 			'to' => $to,
-			'token' => $this->getUser()->getEditToken(),
+			'token' => $this->getContext()->getCsrfTokenSet()->getToken()->toString()
 		], true );
 
 		try {
