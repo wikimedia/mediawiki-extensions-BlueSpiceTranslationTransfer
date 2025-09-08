@@ -20,9 +20,6 @@
 	},
 	"attributes": {
 		"BlueSpiceFoundation": {
-			"TagRegistry": {
-				"deepl:ignore": "BlueSpice\\TranslationTransfer\\Tag\\DeeplIgnore"
-			},
 			"AlertProviderRegistry": {
 				"translationtransfer-translation-banner": "BlueSpice\\TranslationTransfer\\AlertProvider\\TranslationBanner::factory"
 			},
@@ -396,7 +393,8 @@
 			"addModules",
 			"add-bootstrap"
 		],
-		"SpecialPage_initList": "hide-dictionary-and-glossary"
+		"SpecialPage_initList": "hide-dictionary-and-glossary",
+		"MWStakeGenericTagHandlerInitTags": "registerTags"
 	},
 	"HookHandlers": {
 		"discovery-skin": {
@@ -474,6 +472,9 @@
 				"ConfigFactory",
 				"MainConfig"
 			]
+		},
+		"registerTags": {
+			"class": "BlueSpice\\TranslationTransfer\\Hook\\RegisterTags"
 		}
 	},
 	"RestRoutes": [

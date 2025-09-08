@@ -2,36 +2,58 @@
 
 namespace BlueSpice\TranslationTransfer\Tag;
 
-use BlueSpice\Tag\Tag;
-use MediaWiki\Parser\Parser;
-use MediaWiki\Parser\PPFrame;
+use MediaWiki\MediaWikiServices;
+use MWStake\MediaWiki\Component\GenericTagHandler\ClientTagSpecification;
+use MWStake\MediaWiki\Component\GenericTagHandler\GenericTag;
+use MWStake\MediaWiki\Component\GenericTagHandler\ITagHandler;
 
-class DeeplIgnore extends Tag {
+class DeeplIgnore extends GenericTag {
 	/**
-	 * @return string[]|void
+	 * @inheritDoc
 	 */
-	public function getTagNames() {
+	public function getTagNames(): array {
 		return [ 'deepl:ignore', 'translation:ignore' ];
 	}
 
 	/**
-	 *
-	 * @return string
+	 * @return bool
 	 */
-	public function getContainerElementName() {
+	public function hasContent(): bool {
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function shouldParseInput(): bool {
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getContainerElementName(): ?string {
 		return 'span';
 	}
 
 	/**
-	 *
-	 * @param string $processedInput
-	 * @param array $processedArgs
-	 * @param Parser $parser
-	 * @param PPFrame $frame
-	 * @return DeeplIgnoreHandler
+	 * @inheritDoc
 	 */
-	public function getHandler( $processedInput, array $processedArgs, Parser $parser,
-		PPFrame $frame ) {
-		return new DeeplIgnoreHandler( $processedInput, $processedArgs, $parser, $frame );
+	public function getHandler( MediaWikiServices $services ): ITagHandler {
+		return new DeeplIgnoreHandler();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getParamDefinition(): ?array {
+		return null;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getClientTagSpecification(): ClientTagSpecification|null {
+		return null;
 	}
 }
