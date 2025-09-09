@@ -75,7 +75,7 @@
 	"bs-translation-transfer-dictionary-edit-dialog-message": "Wees voorzichtig bij het bewerken van vertalingen. Bij veranderingen wordt de paginatitel gewijzigd. Alle koppelingen naar deze pagina moeten dan handmatig worden bijgewerkt.",
 	"bs-translation-transfer-dictionary-edit-dialog-affected-pages": "{{PLURAL:$1|Eén pagina moet|$1 pagina’s moeten}} handmatig bijgewerkt worden. Bekijk [$2 alle betrokken pagina’s].",
 	"bs-translation-transfer-dictionary-edit-dialog-change-translation-label": "Vertaling wijzigen voor: <b>$1</b>",
-	"bs-translation-transfer-dictionary-edit-dialog-confirmation-label": "Weet u zeker dat u de vertaling wilt wijzigen van <b>$1</b> naar <b>$2</b>?",
+	"bs-translation-transfer-dictionary-edit-dialog-confirmation-label": "Weet u zeker dat u de vertaling wilt wijzigen van <b>$1</b> in <b>$2</b>?",
 	"bs-translation-transfer-dictionary-translation-exists": "Er is al een voorgestelde vertaling voor een andere bron in dezelfde naamruimte.",
 	"bs-translation-transfer-dictionary-remove-dialog-title": "Vertaling verwijderen",
 	"bs-translation-transfer-dictionary-remove-dialog-delete": "Verwijderen",

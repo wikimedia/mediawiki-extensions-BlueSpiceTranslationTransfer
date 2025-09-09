@@ -3,7 +3,8 @@
 		"authors": [
 			"Dejan Savuljesku",
 			"Patric Wirth",
-			"JLTRY"
+			"JLTRY",
+			"McDutchie"
 		]
 	},
 	"action-translation-transfer": "Traduire",
@@ -30,7 +31,7 @@
 	"bs-translation-transfer-local-layout-label": "Traduire cette page",
 	"bs-translation-transfer-local-no-languages": "Aucune langue valide pour la traduction trouvée",
 	"bs-translation-transfer-local-progress": "Traduction du contenu...",
-	"bs-translation-transfer-outdated-translation-label": "Cette traduction est obsolète. Veuillez vérifier « [$1 le langage source] »",
+	"bs-translation-transfer-outdated-translation-label": "Cette traduction est obsolète. Veuillez vérifier '''[$1 le langage source]'''",
 	"bs-translation-transfer-overview-source-page-column": "Page source",
 	"bs-translation-transfer-overview-source-lang-column": "Langue source",
 	"bs-translation-transfer-overview-target-page-column": "Page cible",
@@ -58,5 +59,7 @@
 	"bs-translation-transfer-dictionary-edit-dialog-save": "Enregistrer",
 	"bs-translation-transfer-dictionary-edit-dialog-cancel": "Annuler",
 	"bs-translation-transfer-dictionary-edit-dialog-back": "Retour",
-	"bs-translation-transfer-dictionary-edit-dialog-message": "Soyez prudent lors de la modification des traductions. Toute modification modifiera le titre de la page et tous les liens vers cette page devront être mis à jour manuellement."
+	"bs-translation-transfer-dictionary-edit-dialog-message": "Soyez prudent lors de la modification des traductions. Toute modification modifiera le titre de la page et tous les liens vers cette page devront être mis à jour manuellement.",
+	"bs-translation-transfer-dictionary-edit-dialog-affected-pages": "{{PLURAL:$1|Une page doit être mise|$1 pages doivent être mises}} à jour manuellement. Voir [$2 les pages concernées].",
+	"bs-translation-transfer-dictionary-edit-dialog-change-translation-label": "Changer la traduction pour : <b>$1</b>"
 }
