@@ -46,6 +46,11 @@
 		},
 		"BlueSpiceTranslationTransfer": {
 			"PluginModules": []
+		},
+		"VisualEditor": {
+			"PluginModules": [
+				"ext.translate.transfer.nodes"
+			]
 		}
 	},
 	"MessagesDirs": {
@@ -288,6 +293,22 @@
 				"oojs-ui",
 				"ext.oOJSPlus.data",
 				"oojs-ui.styles.icons-editing-core"
+			]
+		},
+		"ext.translate.transfer.nodes": {
+			"scripts": [
+				"ve/dm/NoTranslateNode.js",
+				"ve/ce/NoTranslateNode.js",
+				"ve/ui/NoTranslateTool.js",
+				"ve/ui/NoTranslateInspector.js"
+			],
+			"dependencies": [
+				"oojs-ui",
+				"ext.bluespice",
+				"ext.visualEditor.mwcore"
+			],
+			"messages": [
+				"bs-translation-transfer-no-translate-tool-label"
 			]
 		}
 	},

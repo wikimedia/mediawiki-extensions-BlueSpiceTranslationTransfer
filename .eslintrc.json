@@ -13,7 +13,8 @@
 		"jQuery": "readonly",
 		"mediaWiki": "readonly",
 		"OOJSPlus": "readonly",
-		"translationTransfer": "readonly"
+		"translationTransfer": "readonly",
+		"ve": "readonly"
 	},
 	"rules": {
 		"es-x/no-array-prototype-includes": "off",

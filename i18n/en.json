@@ -101,5 +101,6 @@
 	"bs-translation-transfer-config-column-target-namespace": "Target namespace",
 	"bs-translation-transfer-config-column-delete-title": "Delete",
 	"bs-translation-transfer-config-namespaces-enabled": "Namespaces enabled for translation",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Select namespaces which should be part of translation workflow, for that wiki instance"
+	"bs-translation-transfer-config-namespaces-enabled-help": "Select namespaces which should be part of translation workflow, for that wiki instance",
+	"bs-translation-transfer-no-translate-tool-label": "No translate"
 }
