@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Hallo Welt! GmbH",
 			"McDutchie"
 		]
@@ -29,7 +30,7 @@
 	"bs-translation-transfer-ui-check-target-working": "Status message while verifying the target page",
 	"bs-translation-transfer-ui-check-target-success": "Message shown when the target page is successfully verified",
 	"bs-translation-transfer-ui-check-target-fail": "Error message when verification of the target page fails",
-	"bs-translation-transfer-ui-transfer-preview-html": "Tab or option label to view translated content as HTML",
+	"bs-translation-transfer-ui-transfer-preview-html": "{{optional}}\n\nTab or option label to view translated content as HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "Tab or option label to view translated content as wikitext",
 	"bs-translation-transfer-ui-dialog-title": "Title of the translation dialog",
 	"bs-translation-transfer-ui-dialog-action-translate": "Button label to start the translation process",

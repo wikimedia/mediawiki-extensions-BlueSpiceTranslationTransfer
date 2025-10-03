@@ -28,7 +28,6 @@
 	"bs-translation-transfer-ui-check-target-working": "正在驗證目標…",
 	"bs-translation-transfer-ui-check-target-success": "目標已驗證",
 	"bs-translation-transfer-ui-check-target-fail": "驗證目標失敗",
-	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "Wikitext",
 	"bs-translation-transfer-ui-dialog-title": "翻譯頁面",
 	"bs-translation-transfer-ui-dialog-action-translate": "翻譯",
