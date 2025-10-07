@@ -12,7 +12,6 @@
 	"bs-translation-transfer-ui-transfer-failed": "전송 실패",
 	"bs-translation-transfer-ui-translate-working": "문서 번역 중...",
 	"bs-translation-transfer-ui-translate-success": "번역 성공",
-	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "위키텍스트",
 	"bs-translation-transfer-ui-dialog-action-translate-another": "다른 언어로 번역하기",
 	"bs-translation-transfer-local-success": "번역 완료!",

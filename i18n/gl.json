@@ -28,7 +28,6 @@
 	"bs-translation-transfer-ui-check-target-working": "Verificando o destino...",
 	"bs-translation-transfer-ui-check-target-success": "Verificouse o destino",
 	"bs-translation-transfer-ui-check-target-fail": "Non se puido verificar o destino",
-	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "Texto wiki",
 	"bs-translation-transfer-ui-dialog-title": "Traducir a páxina",
 	"bs-translation-transfer-ui-dialog-action-translate": "Traducir",

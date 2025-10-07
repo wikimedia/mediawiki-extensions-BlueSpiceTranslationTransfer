@@ -11,7 +11,6 @@
 	"bs-translation-transfer-ui-transfer-success": "D'Säit <b>$1</b> gouf op [$2 $3] iwwersat",
 	"bs-translation-transfer-ui-translate-working": "Säit gëtt iwwersat…",
 	"bs-translation-transfer-ui-translate-success": "Iwwersetzung erfollegräich",
-	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "Wikitext",
 	"bs-translation-transfer-ui-dialog-title": "Säit iwwersetzen",
 	"bs-translation-transfer-ui-dialog-action-translate": "Iwwersetzen",

@@ -24,7 +24,6 @@
 	"bs-translation-transfer-ui-check-target-working": "Ziel wird überprüft…",
 	"bs-translation-transfer-ui-check-target-success": "Ziel erfolgreich überprüft",
 	"bs-translation-transfer-ui-check-target-fail": "Überprüfung fehlgeschlagen",
-	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "Wikitext",
 	"bs-translation-transfer-ui-dialog-title": "Seite übersetzen",
 	"bs-translation-transfer-ui-dialog-action-translate": "Übersetzen",

@@ -28,7 +28,6 @@
 	"bs-translation-transfer-ui-check-target-working": "Doel wordt geverifieerd…",
 	"bs-translation-transfer-ui-check-target-success": "Doel geverifieerd",
 	"bs-translation-transfer-ui-check-target-fail": "Het is niet gelukt het doel te verifiëren",
-	"bs-translation-transfer-ui-transfer-preview-html": "HTML",
 	"bs-translation-transfer-ui-transfer-preview-wt": "Wikitekst",
 	"bs-translation-transfer-ui-dialog-title": "Pagina vertalen",
 	"bs-translation-transfer-ui-dialog-action-translate": "Vertalen",
