@@ -27,8 +27,8 @@
 				"translationtransfer-translation-banner": "BlueSpice\\TranslationTransfer\\AlertProvider\\TranslationBanner::factory"
 			},
 			"ConfigDefinitionRegistry": {
-				"TranslateTransferTargetNamespaceMapping": "BlueSpice\\TranslationTransfer\\ConfigDefinition\\TranslateTransferTargetNamespaceMapping::getInstance",
-				"TranslateTransferNamespaces": "BlueSpice\\TranslationTransfer\\ConfigDefinition\\TranslateTransferNamespaces::getInstance"
+				"TranslateTransferNamespaces": "BlueSpice\\TranslationTransfer\\ConfigDefinition\\TranslateTransferNamespaces::getInstance",
+				"TranslateTransferTargetNamespaceMapping": "BlueSpice\\TranslationTransfer\\ConfigDefinition\\TranslateTransferTargetNamespaceMapping::getInstance"
 			}
 		},
 		"BlueSpiceDiscovery": {
@@ -201,8 +201,11 @@
 			],
 			"messages": [
 				"bs-translation-transfer-ui-source-namespace",
+				"bs-translation-transfer-ui-source-namespace-help",
 				"bs-translation-transfer-ui-target-namespace",
+				"bs-translation-transfer-ui-target-namespace-help",
 				"bs-translation-transfer-ui-target-lang",
+				"bs-translation-transfer-ui-target-lang-help",
 				"bs-translation-transfer-ui-add",
 				"bs-translation-transfer-ui-add-namespace-mapping",
 				"bs-translation-transfer-config-column-target-language",

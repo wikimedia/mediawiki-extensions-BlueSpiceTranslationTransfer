@@ -4,6 +4,13 @@
 		border: 1px solid gray;
 		margin-top: 10px;
 		margin-bottom: 20px;
+		margin-right: auto;
+		width: 100%;
+		/*
+		 * OOUI's default.
+		 * That's needed for all elements in Config Manager to be the same width
+		 */
+		max-width: 50em;
 
 		&:empty {
 			border: none; /* stylelint-disable-line declaration-property-value-disallowed-list */
@@ -24,8 +31,16 @@
 	}
 
 	.oo-ui-layout.oo-ui-panelLayout {
+		width: 100%;
+		/*
+		 * OOUI's default.
+		 * That's needed for all elements in Config Manager to be the same width
+		 */
+		max-width: 50em;
+
 		& > fieldset > legend > .oo-ui-labelElement-label {
 			font-size: 15px; /* stylelint-disable-line declaration-property-unit-disallowed-list */
+			font-weight: normal;
 		}
 
 		& > fieldset > .oo-ui-fieldsetLayout-group > .oo-ui-fieldLayout:last-child {
@@ -37,4 +52,16 @@
 			}
 		}
 	}
+}
+
+.mw-htmlform-field-EnabledNamespacesFormField {
+	padding-bottom: 15px;
+	border-bottom: 1px solid gray;
+	margin-bottom: 20px;
+
+	/*
+	 * OOUI's default.
+	 * That's needed for all elements in Config Manager to be the same width.
+	 */
+	max-width: 50em;
 }
