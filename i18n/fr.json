@@ -4,7 +4,8 @@
 			"Dejan Savuljesku",
 			"Patric Wirth",
 			"JLTRY",
-			"McDutchie"
+			"McDutchie",
+			"SleaY"
 		]
 	},
 	"action-translation-transfer": "Traduire",
@@ -60,5 +61,9 @@
 	"bs-translation-transfer-dictionary-edit-dialog-back": "Retour",
 	"bs-translation-transfer-dictionary-edit-dialog-message": "Soyez prudent lors de la modification des traductions. Toute modification modifiera le titre de la page et tous les liens vers cette page devront être mis à jour manuellement.",
 	"bs-translation-transfer-dictionary-edit-dialog-affected-pages": "{{PLURAL:$1|Une page doit être mise|$1 pages doivent être mises}} à jour manuellement. Voir [$2 les pages concernées].",
-	"bs-translation-transfer-dictionary-edit-dialog-change-translation-label": "Changer la traduction pour : <b>$1</b>"
+	"bs-translation-transfer-dictionary-edit-dialog-change-translation-label": "Changer la traduction pour : <b>$1</b>",
+	"bs-translation-transfer-dictionary-remove-dialog-cancel": "Annuler",
+	"bs-translation-transfer-glossary-edit-dialog-cancel": "Annuler",
+	"bs-translation-transfer-config-column-target-language": "Langue",
+	"bs-translation-transfer-config-column-delete-title": "Supprimer"
 }
