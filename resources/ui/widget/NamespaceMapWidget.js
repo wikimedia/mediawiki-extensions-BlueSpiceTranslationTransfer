@@ -162,9 +162,24 @@ translationTransfer.ui.NamespaceMapWidget.prototype.addNewForm = function () {
 		{
 			label: mw.msg( 'bs-translation-transfer-ui-add-namespace-mapping' ),
 			items: [
-				new OO.ui.FieldLayout( nsField, { label: mw.msg( 'bs-translation-transfer-ui-source-namespace' ) } ),
-				new OO.ui.FieldLayout( langField, { label: mw.msg( 'bs-translation-transfer-ui-target-lang' ) } ),
-				new OO.ui.FieldLayout( targetField, { label: mw.msg( 'bs-translation-transfer-ui-target-namespace' ) } ),
+				new OO.ui.FieldLayout( nsField, {
+					label: mw.msg( 'bs-translation-transfer-ui-source-namespace' ),
+					help: mw.msg( 'bs-translation-transfer-ui-source-namespace-help' ),
+					helpInline: true,
+					align: 'top'
+				} ),
+				new OO.ui.FieldLayout( langField, {
+					label: mw.msg( 'bs-translation-transfer-ui-target-lang' ),
+					help: mw.msg( 'bs-translation-transfer-ui-target-lang-help' ),
+					helpInline: true,
+					align: 'top'
+				} ),
+				new OO.ui.FieldLayout( targetField, {
+					label: mw.msg( 'bs-translation-transfer-ui-target-namespace' ),
+					help: mw.msg( 'bs-translation-transfer-ui-target-namespace-help' ),
+					helpInline: true,
+					align: 'top'
+				} ),
 				new OO.ui.FieldLayout( addButton )
 			]
 		}

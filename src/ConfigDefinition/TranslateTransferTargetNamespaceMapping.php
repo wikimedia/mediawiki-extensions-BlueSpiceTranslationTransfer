@@ -94,10 +94,12 @@ class TranslateTransferTargetNamespaceMapping extends ConfigDefinition {
 
 	/**
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getHelpMessageKey() {
-		return 'bs-translation-transfer-config-namespace-map-help';
+		// It was decided to drop this help message,
+		// because each separate field of the corresponding widget already has its own help message.
+		return null;
 	}
 
 	/**
