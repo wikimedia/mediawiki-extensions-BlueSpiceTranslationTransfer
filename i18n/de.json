@@ -3,6 +3,7 @@
 		"authors": [
 			"Brettchenweber",
 			"Dejan Savuljesku",
+			"Mschlindwein",
 			"Patric Wirth"
 		]
 	},
@@ -88,5 +89,9 @@
 	"bs-translation-transfer-glossary-edit-dialog-title": "Übersetzung bearbeiten",
 	"bs-translation-transfer-glossary-edit-dialog-save": "Speichern",
 	"bs-translation-transfer-glossary-edit-dialog-cancel": "Abbrechen",
-	"bs-translation-transfer-glossary-edit-dialog-change-translation-label": "Übersetzung ändern für: <b>$1</b>"
+	"bs-translation-transfer-glossary-edit-dialog-change-translation-label": "Übersetzung ändern für: <b>$1</b>",
+	"bs-translation-transfer-config-column-target-language": "Sprache",
+	"bs-translation-transfer-config-column-target-namespace": "Ziel-Namensraum",
+	"bs-translation-transfer-config-namespaces-enabled": "Für die Übersetzung aktivierte Namensräume",
+	"bs-translation-transfer-config-namespaces-enabled-help": "Namensräume, die Teil des Übersetzungsworkflows für diese Wiki-Instanz sein sollen, auswählen"
 }
