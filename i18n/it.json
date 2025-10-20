@@ -1,13 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
+			"Beta16",
 			"Dejan Savuljesku",
 			"Patric Wirth"
 		]
 	},
 	"bs-translation-transfer-ui-language-selection-label": "Seleziona la lingua in cui la pagina deve essere tradotta.",
 	"bs-translation-transfer-ui-transfer-working": "Pagina in fase di trasmissione...",
-	"bs-translation-transfer-ui-transfer-success": "Trasmissione riuscita",
+	"bs-translation-transfer-ui-transfer-success": "La pagina <b>$1</b> è stata tradotta in [$2 $3]",
 	"bs-translation-transfer-ui-transfer-failed": "Trasmissione fallita",
 	"bs-translation-transfer-ui-translate-working": "Pagina in fase di traduzione...",
 	"bs-translation-transfer-ui-translate-success": "Traduzione riuscita",
@@ -32,5 +33,8 @@
 	"bs-translation-transfer-ui-dialog-action-back": "Indietro",
 	"bs-translation-transfer-ui-dialog-action-transfer": "Trasmetti",
 	"bs-translation-transfer-ui-dialog-action-translate-another": "Traduci in un’altra lingua",
-	"action-translation-transfer": "Traduci"
+	"action-translation-transfer": "Traduci",
+	"bs-translation-transfer-ui-add": "Aggiungi",
+	"bs-translation-transfer-glossary-edit-dialog-save": "Salva",
+	"bs-translation-transfer-config-column-target-namespace": "Namespace di destinazione"
 }
