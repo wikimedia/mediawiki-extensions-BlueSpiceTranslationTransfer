@@ -104,5 +104,6 @@
 	"bs-translation-transfer-config-namespaces-enabled": "Label for config variable to enable namespaces for translation",
 	"bs-translation-transfer-config-namespaces-enabled-help": "Help message for the config variable to enable namespaces for translation",
 	"translationglossary": "Name of special page",
-	"translationoverview": "Name of special page"
+	"translationoverview": "Name of special page",
+	"bs-translation-transfer-no-translate-tool-label": "Label for a VisualEditor tool that prevents text from being translated"
 }
