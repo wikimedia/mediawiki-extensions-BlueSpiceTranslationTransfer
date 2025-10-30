@@ -99,5 +99,6 @@
 	"bs-translation-transfer-config-column-target-namespace": "Espazo de nomes de destino",
 	"bs-translation-transfer-config-column-delete-title": "Borrar",
 	"bs-translation-transfer-config-namespaces-enabled": "Espazos de nomes habilitados para a tradución",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Selecciona os espazos de nomes que deberían formar parte do fluxo de traballo de tradución para esa instancia wiki"
+	"bs-translation-transfer-config-namespaces-enabled-help": "Selecciona os espazos de nomes que deberían formar parte do fluxo de traballo de tradución para esa instancia wiki",
+	"bs-translation-transfer-no-translate-tool-label": "Sen tradución"
 }
