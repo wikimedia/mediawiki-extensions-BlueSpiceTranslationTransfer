@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"bs-translation-transfer-ui-add": "Dodaj",
+	"bs-translation-transfer-dictionary-action-remove": "Odstrani",
+	"bs-translation-transfer-dictionary-remove-dialog-delete": "Odstrani",
+	"bs-translation-transfer-glossary-action-remove": "Odstrani"
+}
