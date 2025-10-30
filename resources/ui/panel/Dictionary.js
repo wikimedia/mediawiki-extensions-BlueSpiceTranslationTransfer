@@ -126,7 +126,7 @@ translationTransfer.ui.panel.Dictionary.prototype.makeGrid = function () {
 				width: 40,
 				type: 'action',
 				visibleOnHover: true,
-				title: mw.message( 'bs-translation-transfer-dictionary-action-edit' ).plain(),
+				title: mw.message( 'bs-translation-transfer-dictionary-action-edit' ).text(),
 				actionId: 'edit',
 				icon: 'edit'
 			},
@@ -134,7 +134,7 @@ translationTransfer.ui.panel.Dictionary.prototype.makeGrid = function () {
 				width: 40,
 				type: 'action',
 				visibleOnHover: true,
-				title: mw.message( 'bs-translation-transfer-dictionary-action-remove' ).plain(),
+				title: mw.message( 'bs-translation-transfer-dictionary-action-remove' ).text(),
 				actionId: 'remove',
 				icon: 'trash'
 			}
