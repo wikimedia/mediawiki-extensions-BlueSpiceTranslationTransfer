@@ -151,10 +151,10 @@ class ForeignPage extends BSApiTasksBase {
 		$targetRecognizer = MediaWikiServices::getInstance()->getService(
 			'TranslationTransferTargetRecognizer'
 		);
-		$langWikiMap = $targetRecognizer->getLangToTargetKeyMap();
+		$langTargetKeyMap = $targetRecognizer->getLangToTargetKeyMap();
 		$targetKey = $targetRecognizer->getTargetKeyFromTargetUrl( $target->getUrl() );
 
-		$targetLang = array_search( $targetKey, $langWikiMap );
+		$targetLang = array_search( $targetKey, $langTargetKeyMap );
 
 		$hookContainer->run( 'BlueSpiceTranslationTransferPagePushComplete', [
 			$this->getTitle(),
@@ -165,7 +165,7 @@ class ForeignPage extends BSApiTasksBase {
 
 		$result->payload = [
 			'targetTitleHref' => $targetRecognizer->composeTargetTitleLink(
-				$targetKey, $targetTitlePrefixedKey
+				$targetLang, $targetTitlePrefixedKey
 			)
 		];
 		$result->success = $status->isOK();
