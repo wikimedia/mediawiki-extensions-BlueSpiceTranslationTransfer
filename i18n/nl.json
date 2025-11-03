@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"McDutchie"
+			"McDutchie",
+			"Siebrand"
 		]
 	},
 	"bs-translationtransfer-desc": "Maakt de vertaling en overdracht van pagina’s tussen wiki-servers mogelijk",
@@ -99,5 +100,6 @@
 	"bs-translation-transfer-config-column-target-namespace": "Doelnaamruimte",
 	"bs-translation-transfer-config-column-delete-title": "Verwijderen",
 	"bs-translation-transfer-config-namespaces-enabled": "Naamruimten die zijn toegestaan voor vertaling",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Selecteer naamruimten die voor die wiki-server deel moeten uitmaken van de vertaalprocedure"
+	"bs-translation-transfer-config-namespaces-enabled-help": "Selecteer naamruimten die voor die wiki-server deel moeten uitmaken van de vertaalprocedure",
+	"bs-translation-transfer-no-translate-tool-label": "Geen vertaling"
 }

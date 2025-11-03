@@ -99,5 +99,6 @@
 	"bs-translation-transfer-config-namespaces-enabled-help": "Selige le spatios de nomines que debe facer parte del processo de traduction pro ille servitor wiki",
 	"bs-translation-transfer-ui-source-namespace-help": "Selige le spatio de nomine del wiki de origine del traductiones",
 	"bs-translation-transfer-ui-target-namespace-help": "Specifica como le spatios de nomine de origine se appella in le lingua seligite",
-	"bs-translation-transfer-ui-target-lang-help": "Defini le lingua usate pro traducer le spatio de nomines"
+	"bs-translation-transfer-ui-target-lang-help": "Defini le lingua usate pro traducer le spatio de nomines",
+	"bs-translation-transfer-no-translate-tool-label": "Non traducer"
 }
