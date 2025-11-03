@@ -99,5 +99,6 @@
 	"bs-translation-transfer-config-column-target-namespace": "Spatio de nomines de destination",
 	"bs-translation-transfer-config-column-delete-title": "Deler",
 	"bs-translation-transfer-config-namespaces-enabled": "Spatios de nomines activate pro traduction",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Selige le spatios de nomines que debe facer parte del processo de traduction pro ille servitor wiki"
+	"bs-translation-transfer-config-namespaces-enabled-help": "Selige le spatios de nomines que debe facer parte del processo de traduction pro ille servitor wiki",
+	"bs-translation-transfer-no-translate-tool-label": "Non traducer"
 }
