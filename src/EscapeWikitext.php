@@ -117,6 +117,8 @@ class EscapeWikitext implements LoggerAwareInterface {
 
 		$this->processLists();
 
+		$this->processGallery();
+
 		$this->unmaskWikitext();
 
 		$runTime = microtime( true ) - $startTime;
@@ -550,6 +552,49 @@ class EscapeWikitext implements LoggerAwareInterface {
 			$line = preg_replace( '#^[\*\#\:\;]+#', '<deepl:ignore>$0</deepl:ignore>', $line );
 		}
 		unset( $line );
+	}
+
+	/**
+	 * We should make sure that file names inside "<gallery>" tags will leave unchanged.
+	 * They need a bit other processing as soon as files in the gallery do not use internal links syntax.
+	 *
+	 * Logic for looking up and working with galleries is partly C&P from here:
+	 * {@link TranslationWikitextConverter::translateGallery()}
+	 *
+	 * @return void
+	 */
+	private function processGallery(): void {
+		$wikitext = implode( "\n", $this->lines );
+
+		$matches = [];
+		preg_match_all( '/(<gallery>|<gallery.*?>)(.*?)<\/gallery>/sm', $wikitext, $matches );
+		foreach ( $matches[2] as $index => $match ) {
+			$match = trim( $match );
+			$lines = explode( "\n", $match );
+
+			$newLines = '';
+			foreach ( $lines as $line ) {
+				$mainBits = explode( '|', $line );
+				$target = array_shift( $mainBits );
+
+				if ( !empty( $mainBits ) ) {
+					$label = implode( '|', $mainBits );
+
+					$newLines .= "<deepl:ignore>$target|</deepl:ignore>$label\n";
+				} else {
+					$newLines .= "<deepl:ignore>$target</deepl:ignore>\n";
+				}
+			}
+			$newText = "{$matches[1][$index]}\n{$newLines}</gallery>";
+
+			$wikitext = str_replace(
+				$matches[0][$index],
+				$newText,
+				$wikitext
+			);
+		}
+
+		$this->lines = explode( "\n", $wikitext );
 	}
 
 	private function processNonTranslatedBlocks(): void {
