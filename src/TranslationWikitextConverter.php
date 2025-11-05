@@ -132,10 +132,18 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 			}
 		}
 
-		$this->removeTag( 'deepl:ignore', $wikitext );
-		$this->removeTag( 'translation:ignore', $wikitext );
+		$this->stripTranslationIgnoreTags( $wikitext );
 
 		return $wikitext;
+	}
+
+	/**
+	 * @param string &$wikitext
+	 * @return void
+	 */
+	public function stripTranslationIgnoreTags( string &$wikitext ): void {
+		$this->removeTag( 'deepl:ignore', $wikitext );
+		$this->removeTag( 'translation:ignore', $wikitext );
 	}
 
 	/**
@@ -803,11 +811,37 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 	}
 
 	/**
+	 * The same categories translation as in {@link TranslationWikitextConverter::translateCategories()},
+	 * but also with translating local version of NS_CATEGORY to target one.
+	 *
+	 * That is needed when we need to just translate categories in specified wikitext, nothing more.
+	 * Without any title-specific context.
+	 * Currently, it is done for transcluded titles when we translate page where they are used.
+	 * So the only content we need to translate there - category links. Because categories are
+	 * always translated with any translation, by design.
+	 *
+	 * This method can be used outside of {@link TranslationWikitextConverter::preTranslationProcessing()},
+	 * but there'll still be conflict in case with usage of both, in any order.
+	 * Because here we'll translate NS_CATEGORY to target wiki language, so these internal links will not be
+	 * correctly recognized on the source wiki after that. That may cause hardly-recognizable issues
+	 * with broken internal links, or adding "rubbish" records to "title dictionary".
+	 *
 	 * @param string &$wikitext
 	 * @param string $lang
+	 * @return void
+	 * @see \BlueSpice\TranslationTransfer\Util\TranslationPusher::transferTranscludedTitle()
+	 */
+	public function translateCategoriesWithNs( string &$wikitext, string $lang ): void {
+		$this->translateCategories( $wikitext, $lang, true );
+	}
+
+	/**
+	 * @param string &$wikitext
+	 * @param string $lang
+	 * @param bool $withNs [false] Whether we should also translate NS_CATEGORY text to target language as well.
 	 * @return string
 	 */
-	private function translateCategories( &$wikitext, $lang ) {
+	private function translateCategories( &$wikitext, $lang, bool $withNs = false ) {
 		preg_match_all( '/\[\[(.*?)\]\]/', $wikitext, $matches );
 		foreach ( $matches[0] as $index => $link ) {
 			$colonStart = false;
@@ -840,7 +874,12 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 			} else {
 				$translatedTitle = Title::makeTitle( NS_CATEGORY, $translation );
 
-				$targetText = $translatedTitle->getPrefixedText();
+				if ( !$withNs ) {
+					$targetText = $translatedTitle->getPrefixedText();
+				} else {
+					$targetText = $this->getNsTextInternal( NS_CATEGORY, $lang ) .
+						':' . $translatedTitle->getText();
+				}
 			}
 
 			array_unshift( $linkBits, $targetText );

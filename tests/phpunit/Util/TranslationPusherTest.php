@@ -3,6 +3,7 @@
 namespace BlueSpice\TranslationTransfer\Tests\Util;
 
 use BlueSpice\TranslationTransfer\TranslationWikitextConverter;
+use BlueSpice\TranslationTransfer\Translator;
 use BlueSpice\TranslationTransfer\Util\ContentTransfer\TargetRecognizer;
 use BlueSpice\TranslationTransfer\Util\TranslationPusher;
 use BlueSpice\TranslationTransfer\Util\TranslationsDao;
@@ -75,6 +76,7 @@ class TranslationPusherTest extends TestCase {
 		$titleFactory = $this->createMock( TitleFactory::class );
 		$wikiPageFactory = $this->createMock( WikiPageFactory::class );
 		$wtConverter = $this->createMock( TranslationWikitextConverter::class );
+		$translator = $this->createMock( Translator::class );
 
 		$this->translationPusher = new TranslationPusher(
 			$services->getConfigFactory()->makeConfig( 'bsg' ),
@@ -87,7 +89,8 @@ class TranslationPusherTest extends TestCase {
 			$loadBalancer,
 			$titleFactory,
 			$wikiPageFactory,
-			$wtConverter
+			$wtConverter,
+			$translator
 		);
 	}
 
