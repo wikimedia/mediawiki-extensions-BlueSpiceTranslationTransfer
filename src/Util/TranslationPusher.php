@@ -3,11 +3,14 @@
 namespace BlueSpice\TranslationTransfer\Util;
 
 use BlueSpice\TranslationTransfer\TranslationWikitextConverter;
+use BlueSpice\TranslationTransfer\Translator;
 use BlueSpice\TranslationTransfer\Util\ContentTransfer\TargetRecognizer;
 use ContentTransfer\AuthenticatedRequestHandler;
 use ContentTransfer\AuthenticatedRequestHandlerFactory;
 use ContentTransfer\PageContentProviderFactory;
 use ContentTransfer\Target;
+use Exception;
+use File;
 use MediaWiki\Config\Config;
 use MediaWiki\Content\TextContent;
 use MediaWiki\HookContainer\HookContainer;
@@ -65,6 +68,11 @@ class TranslationPusher implements LoggerAwareInterface {
 	private $wtConverter;
 
 	/**
+	 * @var Translator
+	 */
+	private $translator;
+
+	/**
 	 * @var array
 	 */
 	private $blockedFileTransferCache = [];
@@ -103,7 +111,8 @@ class TranslationPusher implements LoggerAwareInterface {
 		ILoadBalancer $lb,
 		TitleFactory $titleFactory,
 		WikiPageFactory $wikiPageFactory,
-		TranslationWikitextConverter $wtConverter
+		TranslationWikitextConverter $wtConverter,
+		Translator $translator
 	) {
 		$this->config = $config;
 		$this->targetRecognizer = $targetRecognizer;
@@ -116,6 +125,7 @@ class TranslationPusher implements LoggerAwareInterface {
 		$this->titleFactory = $titleFactory;
 		$this->wikiPageFactory = $wikiPageFactory;
 		$this->wtConverter = $wtConverter;
+		$this->translator = $translator;
 
 		$this->logger = new NullLogger();
 	}
@@ -164,10 +174,10 @@ class TranslationPusher implements LoggerAwareInterface {
 
 		$targetLang = array_search( $targetKey, $langWikiMap );
 
-		// Update/insert new translation
+		// Update/insert new translation.
 		// We need to do that before pushing the page because after page creation on the target wiki
-		// hook handler for "PageContentSaveComplete" hook will update target's last change timestamp
-		// And translation should already exist, to update target's last change timestamp
+		// hook handler for "PageContentSaveComplete" hook will update target's last change timestamp.
+		// And translation should already exist, to update target's last change timestamp.
 		// aka "racing condition"
 		$this->updateTranslation(
 			$targetTitlePrefixedKey,
@@ -222,10 +232,37 @@ class TranslationPusher implements LoggerAwareInterface {
 			$requestHandler->runAuthenticatedRequest( $requestData );
 		}
 
+		$status = $this->transferRelatedResources( $sourceTitle, $targetLang, $requestHandler );
+
+		/**
+		 * Copied from Page purger
+		 * purge the target page
+		 */
+		$requestHandler->runAuthenticatedRequest( [
+			'action' => 'purge',
+			'forcerecursivelinkupdate' => true,
+			'titles' => $targetTitlePrefixedKey,
+			'format' => 'json'
+		] );
+
+		return $status;
+	}
+
+	/**
+	 * @param Title $sourceTitle
+	 * @param string $targetLang
+	 * @param AuthenticatedRequestHandler $requestHandler
+	 * @return Status
+	 * @throws Exception
+	 */
+	public function transferRelatedResources(
+		Title $sourceTitle, string $targetLang,
+		AuthenticatedRequestHandler $requestHandler
+	): Status {
 		$this->logger->debug( "Pushing related files..." );
 
-		// Get all included files and templates
-		[ $relatedFiles, $transcludedTitles ] = $this->getRelatedFilesAndTransclusions( $sourceTitle );
+		// Get all included files and templates/transcluded pages
+		[ $relatedFiles, $transcludedTitles ] = $this->getRelatedResources( $sourceTitle );
 
 		// Push files
 		foreach ( $relatedFiles as $fileTitle ) {
@@ -279,81 +316,40 @@ class TranslationPusher implements LoggerAwareInterface {
 					continue;
 				}
 
-				$upload = $requestHandler->uploadFile(
-					$file,
-					$contentProvider->getContent(),
-					$filename
+				// Actually transfer that specific file.
+				// Also whole content of file description page will be translated, as a regular title.
+				$status = $this->transferFile(
+					$requestHandler, $file,
+					$contentProvider->getContent(), $filename,
+					$targetLang
 				);
-				if ( !$upload ) {
-					$this->logger->error( "Error while pushing file: {$file->getName()}" );
+
+				if ( !$status->isOK() ) {
+					$this->logger->error( "Error while pushing file: {$file->getName()}. Status: $status" );
+
+					// TODO: Should we break if one of related resources failed to push?
+					break;
 				}
 			} else {
 				$this->logger->warning( "Skipping, because not a file..." );
 			}
 		}
 
-		$this->logger->debug( "Pushing related templates..." );
+		$this->logger->debug( "Pushing transcluded titles..." );
 
 		// Push templates or transcluded pages from other (not NS_TEMPLATE) namespaces
 		foreach ( $transcludedTitles as $transcludedTitle ) {
-			$this->logger->debug( "Processing template '$transcludedTitle'..." );
-
-			$wikiPage = $this->wikiPageFactory->newFromTitle( $transcludedTitle );
-			$content = $wikiPage->getContent();
-			if ( !$content instanceof TextContent ) {
-				$this->logger->error( 'Cannot translate non-text content' );
-			}
-			$wikitext = $content->getText();
-
-			$sourceTemplateDbKey = $transcludedTitle->getDBkey();
-
-			$targetNsText = $this->wtConverter->getNsText( $transcludedTitle->getNamespace(), $targetLang );
-			if ( $targetNsText ) {
-				$targetTemplatePrefixedDbKey = $targetNsText . ':' . $sourceTemplateDbKey;
-			} else {
-				$targetTemplatePrefixedDbKey = $sourceTemplateDbKey;
-			}
-
-			// Push template
-			$status = $requestHandler->runAuthenticatedRequest( [
-				'action' => 'edit',
-				'token' => $requestHandler->getCSRFToken(),
-				'summary' => 'Origin ' . $sourceTitle->getCanonicalURL(),
-				'text' => $wikitext,
-				'title' => $targetTemplatePrefixedDbKey,
-				'format' => 'json'
-			] );
+			$status = $this->transferTranscludedTitle( $requestHandler, $sourceTitle, $transcludedTitle, $targetLang );
 
 			if ( !$status->isOK() ) {
-				return $status;
-			}
+				$this->logger->error( "Error while pushing transcluded title: $transcludedTitle. Status: $status" );
 
-			// Get ID of the title after push
-			$response = (object)$status->getValue();
-
-			if ( !property_exists( $response, 'edit' ) ) {
-				$this->logger->error( 'Error when pushing the page. Response: ' . print_r( $response, true ) );
-
-				if ( property_exists( $response, 'error' ) ) {
-					return Status::newFatal( 'Error when pushing the page: ' . $response->error['info'] );
-				} else {
-					return Status::newFatal( 'Error when pushing the page. More details in the logs.' );
-				}
+				// TODO: Should we break if one of related resources failed to push?
+				break;
 			}
 		}
 
-		/**
-		 * Copied from Page purger
-		 * purge the target page
-		 */
-		$requestHandler->runAuthenticatedRequest( [
-			'action' => 'purge',
-			'forcerecursivelinkupdate' => true,
-			'titles' => $targetTitlePrefixedKey,
-			'format' => 'json'
-		] );
-
-		return $status;
+		return Status::newGood();
 	}
 
 	/**
@@ -361,7 +357,7 @@ class TranslationPusher implements LoggerAwareInterface {
 	 *
 	 * @return Title[]
 	 */
-	private function getRelatedFilesAndTransclusions( Title $sourceTitle ): array {
+	private function getRelatedResources( Title $sourceTitle ): array {
 		$contentProvider = $this->pageContentProviderFactory->newFromTitle( $sourceTitle );
 		$related = $contentProvider->getRelatedTitles( [] );
 
@@ -383,6 +379,112 @@ class TranslationPusher implements LoggerAwareInterface {
 		}
 
 		return [ $files, $transclusions ];
+	}
+
+	/**
+	 * Transfers one of related to source title files.
+	 * As part of this process, whole content of file description page will also be translated,
+	 * as a content of regular wiki page. But file title itself will not be translated.
+	 *
+	 * @param AuthenticatedRequestHandler $requestHandler
+	 * @param File $file
+	 * @param string $content
+	 * @param string $filename
+	 * @param string $targetLang
+	 * @return Status
+	 */
+	private function transferFile(
+		AuthenticatedRequestHandler $requestHandler,
+		File $file, string $content, string $filename, string $targetLang
+	): Status {
+		// Translate content of file description page.
+		try {
+			$content = $this->translator->translateWikitext( $content, $targetLang );
+		} catch ( Exception $e ) {
+			return Status::newFatal(
+				$e->getMessage()
+			);
+		}
+
+		$upload = $requestHandler->uploadFile(
+			$file,
+			$content,
+			$filename
+		);
+		if ( !$upload ) {
+			$this->logger->error( "Error while pushing file: {$file->getName()}" );
+		}
+
+		return Status::newGood();
+	}
+
+	/**
+	 * Transfer some related title which is transcluded in the source page.
+	 * It may be either template (the most common transclusion case) or transcluded regular wiki title.
+	 * Both cases are considered, and in both of them we also translate categories in the wikitext, because,
+	 * as part of this software design, we always translate categories in case of any wiki title translation.
+	 *
+	 * @param AuthenticatedRequestHandler $requestHandler
+	 * @param Title $sourceTitle
+	 * @param Title $transcludedTitle
+	 * @param string $targetLang
+	 * @return Status
+	 * @throws Exception
+	 */
+	private function transferTranscludedTitle(
+		AuthenticatedRequestHandler $requestHandler,
+		Title $sourceTitle, Title $transcludedTitle,
+		string $targetLang
+	): Status {
+		$this->logger->debug( "Processing template '$transcludedTitle'..." );
+
+		$wikiPage = $this->wikiPageFactory->newFromTitle( $transcludedTitle );
+		$content = $wikiPage->getContent();
+		if ( !$content instanceof TextContent ) {
+			$this->logger->error( 'Cannot translate non-text content' );
+		}
+		$wikitext = $content->getText();
+
+		$sourceTemplateDbKey = $transcludedTitle->getDBkey();
+
+		$targetNsText = $this->wtConverter->getNsText( $transcludedTitle->getNamespace(), $targetLang );
+		if ( $targetNsText ) {
+			$targetTemplatePrefixedDbKey = $targetNsText . ':' . $sourceTemplateDbKey;
+		} else {
+			$targetTemplatePrefixedDbKey = $sourceTemplateDbKey;
+		}
+
+		// Translate categories in the wikitext before pushing
+		$this->wtConverter->translateCategoriesWithNs( $wikitext, $targetLang );
+
+		// Push transcluded title
+		$status = $requestHandler->runAuthenticatedRequest( [
+			'action' => 'edit',
+			'token' => $requestHandler->getCSRFToken(),
+			'summary' => 'Origin ' . $sourceTitle->getCanonicalURL(),
+			'text' => $wikitext,
+			'title' => $targetTemplatePrefixedDbKey,
+			'format' => 'json'
+		] );
+
+		if ( !$status->isOK() ) {
+			return $status;
+		}
+
+		// Get ID of the title after push
+		$response = (object)$status->getValue();
+
+		if ( !property_exists( $response, 'edit' ) ) {
+			$this->logger->error( 'Error when pushing the page. Response: ' . print_r( $response, true ) );
+
+			if ( property_exists( $response, 'error' ) ) {
+				return Status::newFatal( 'Error when pushing the page: ' . $response->error['info'] );
+			} else {
+				return Status::newFatal( 'Error when pushing the page. More details in the logs.' );
+			}
+		}
+
+		return Status::newGood();
 	}
 
 	/**

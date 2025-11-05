@@ -61,7 +61,8 @@ return [
 			$services->getDBLoadBalancer(),
 			$services->getTitleFactory(),
 			$services->getWikiPageFactory(),
-			TranslationWikitextConverter::factory()
+			TranslationWikitextConverter::factory(),
+			$services->getService( 'TranslationsTransferTranslator' )
 		);
 		$translationPusher->setLogger(
 			LoggerFactory::getInstance( 'BlueSpiceTranslationTransfer' )
