@@ -152,6 +152,37 @@ class Translator implements LoggerAwareInterface {
 	}
 
 	/**
+	 * For rare cases when we need to translate some wikitext, but without title context.
+	 * For example, when transferring files - we translate only content of file description page.
+	 *
+	 * @param string $wikitext
+	 * @param string $targetLang
+	 * @return string
+	 * @throws Exception If wikitext translation failed during request to DeepL.
+	 */
+	public function translateWikitext( string $wikitext, string $targetLang ): string {
+		$wikitext = $this->wtConverter->preTranslationProcessing( $wikitext, $targetLang );
+
+		$status = $this->deepL->translateText(
+			$wikitext, $this->deepL->extractSourceLanguage(),
+			$targetLang
+		);
+
+		if ( $status->isOK() ) {
+			$translation = $status->getValue();
+
+			$this->wtConverter->stripTranslationIgnoreTags( $translation );
+
+			return $translation;
+		}
+
+		throw new Exception(
+			// TODO: Find a probably better way to pass error messages from "Status" object.
+			'Failed to translate wikitext using DeepL: ' . $status
+		);
+	}
+
+	/**
 	 * Do some "pre-translation processing" with {@link TranslationWikitextConverter} for specified wikitext
 	 *
 	 * @param Title $title
