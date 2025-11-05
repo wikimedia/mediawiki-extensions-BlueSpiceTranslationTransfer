@@ -327,6 +327,31 @@ Of course
 <deepl:ignore>##</deepl:ignore>list item B2
 <deepl:ignore>#</deepl:ignore>list item A2
 HERE
+			],
+			'Gallery' => [
+				<<<HERE
+<gallery>
+File:IMG 1111.JPEG|Some description here, (smth) + random
+File:IMG 3333.JPG|Some description here, with [[Internal link|link label]]
+File:Image 22.jpg|Description
+File:Image 33.jpg|Description with ©Smth and break line<br />
+File:Image 9999.jpg|[[Some page]] anything<br />
+File:Another image.JPG|Description with break line<br /> and ''bold text''
+File:Image without description.JPG
+</gallery>
+HERE
+,
+				<<<HERE
+<gallery>
+<deepl:ignore>File:IMG 1111.JPEG|</deepl:ignore>Some description here, (smth) + random
+<deepl:ignore>File:IMG 3333.JPG|</deepl:ignore>Some description here, with <deepl:ignore>[[Internal link|</deepl:ignore>link label<deepl:ignore>]]</deepl:ignore>
+<deepl:ignore>File:Image 22.jpg|</deepl:ignore>Description
+<deepl:ignore>File:Image 33.jpg|</deepl:ignore>Description with ©Smth and break line<br />
+<deepl:ignore>File:Image 9999.jpg|</deepl:ignore><deepl:ignore>[[Some page]]</deepl:ignore> anything<br />
+<deepl:ignore>File:Another image.JPG|</deepl:ignore>Description with break line<br /> and <deepl:ignore>''</deepl:ignore>bold text<deepl:ignore>''</deepl:ignore>
+<deepl:ignore>File:Image without description.JPG</deepl:ignore>
+</gallery>
+HERE
 			]
 		];
 	}
