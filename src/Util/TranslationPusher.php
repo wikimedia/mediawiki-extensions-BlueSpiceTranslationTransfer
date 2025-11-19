@@ -319,7 +319,7 @@ class TranslationPusher implements LoggerAwareInterface {
 				// Actually transfer that specific file.
 				// Also whole content of file description page will be translated, as a regular title.
 				$status = $this->transferFile(
-					$requestHandler, $file,
+					$requestHandler, $sourceTitle, $file,
 					$contentProvider->getContent(), $filename,
 					$targetLang
 				);
@@ -387,6 +387,7 @@ class TranslationPusher implements LoggerAwareInterface {
 	 * as a content of regular wiki page. But file title itself will not be translated.
 	 *
 	 * @param AuthenticatedRequestHandler $requestHandler
+	 * @param Title $sourceTitle
 	 * @param File $file
 	 * @param string $content
 	 * @param string $filename
@@ -394,12 +395,12 @@ class TranslationPusher implements LoggerAwareInterface {
 	 * @return Status
 	 */
 	private function transferFile(
-		AuthenticatedRequestHandler $requestHandler,
+		AuthenticatedRequestHandler $requestHandler, Title $sourceTitle,
 		File $file, string $content, string $filename, string $targetLang
 	): Status {
 		// Translate content of file description page.
 		try {
-			$content = $this->translator->translateWikitext( $content, $targetLang );
+			$translatedWikitext = $this->translator->translateWikitext( $content, $targetLang );
 		} catch ( Exception $e ) {
 			return Status::newFatal(
 				$e->getMessage()
@@ -408,11 +409,42 @@ class TranslationPusher implements LoggerAwareInterface {
 
 		$upload = $requestHandler->uploadFile(
 			$file,
-			$content,
+			$translatedWikitext,
 			$filename
 		);
 		if ( !$upload ) {
 			$this->logger->error( "Error while pushing file: {$file->getName()}" );
+
+			return Status::newFatal( 'Failed to push the file' );
+		}
+
+		// As soon as MediaWiki "upload" API uses "text" parameter only as initial text for new files,
+		// that does not update text for description page if file already exists on the target wiki.
+		// So, to make sure, we need to push changes for file description page separately.
+		$status = $requestHandler->runAuthenticatedRequest( [
+			'action' => 'edit',
+			'token' => $requestHandler->getCSRFToken(),
+			'summary' => 'Origin ' . $sourceTitle->getCanonicalURL(),
+			'text' => $translatedWikitext,
+			'title' => 'File:' . $file->getTitle()->getDBkey(),
+			'format' => 'json'
+		] );
+
+		if ( !$status->isOK() ) {
+			return $status;
+		}
+
+		// Get ID of the title after push if needed
+		$response = (object)$status->getValue();
+
+		if ( !property_exists( $response, 'edit' ) ) {
+			$this->logger->error( 'Error when pushing file description page. Response: ' . print_r( $response, true ) );
+
+			if ( property_exists( $response, 'error' ) ) {
+				return Status::newFatal( 'Error when pushing file description page: ' . $response->error['info'] );
+			} else {
+				return Status::newFatal( 'Error when pushing file description page. More details in the logs.' );
+			}
 		}
 
 		return Status::newGood();
