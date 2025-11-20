@@ -1,0 +1,7 @@
+/* Highlight excluded text */
+.tt-notranslate {
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
+	text-decoration-thickness: from-font;
+	text-underline-offset: 2px; /* adjust as required */
+}

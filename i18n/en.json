@@ -104,5 +104,5 @@
 	"bs-translation-transfer-config-namespaces-enabled-help": "Select namespaces which should be part of translation workflow, for that wiki instance",
 	"translationglossary": "Translation glossary",
 	"translationoverview": "Translation overview",
-	"bs-translation-transfer-no-translate-tool-label": "No translate"
+	"bs-translation-transfer-no-translate-tool-label": "Exclude from translation"
 }
