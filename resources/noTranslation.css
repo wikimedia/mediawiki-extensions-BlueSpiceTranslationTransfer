@@ -1,0 +1,9 @@
+.bs-tag-translation_ignore,
+.bs-tag-deepl_ignore {
+	text-decoration: underline dotted;
+	text-decoration-thickness: from-font;
+}
+
+.oo-ui-icon-no-translation {
+	background-image: url( ./images/noTranslation.svg );
+}
