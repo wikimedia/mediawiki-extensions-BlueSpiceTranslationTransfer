@@ -11,5 +11,6 @@ class AddModules implements BeforePageDisplayHook {
 		if ( $out->getTitle() && $out->getTitle()->isSpecial( 'BlueSpiceConfigManager' ) ) {
 			$out->addModules( 'ext.translate.transfer.config' );
 		}
+		$out->addModuleStyles( 'ext.translate.transfer.nodes.styles' );
 	}
 }
