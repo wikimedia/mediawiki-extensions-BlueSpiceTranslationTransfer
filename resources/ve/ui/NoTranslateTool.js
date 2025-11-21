@@ -8,7 +8,7 @@ OO.inheritClass( translationTransfer.ve.ui.NoTranslateTool, ve.ui.FragmentWindow
 
 translationTransfer.ve.ui.NoTranslateTool.static.name = 'notranslateTool';
 translationTransfer.ve.ui.NoTranslateTool.static.group = 'insert';
-translationTransfer.ve.ui.NoTranslateTool.static.icon = 'translation';
+translationTransfer.ve.ui.NoTranslateTool.static.icon = 'no-translation';
 translationTransfer.ve.ui.NoTranslateTool.static.title = mw.message( 'bs-translation-transfer-no-translate-tool-label' ).text();
 
 translationTransfer.ve.ui.NoTranslateTool.static.modelClasses = [ translationTransfer.ve.dm.NoTranslateNode ];
