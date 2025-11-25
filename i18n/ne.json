@@ -75,6 +75,6 @@
 	"bs-translation-transfer-config-column-target-language": "भाषा",
 	"bs-translation-transfer-config-column-target-namespace": "पृष्ठको नामपद",
 	"bs-translation-transfer-config-column-delete-title": "मेट्ने",
-	"bs-translation-transfer-config-namespaces-enabled": "अनुवादका लागि नामस्थानहरू सक्षम गरियो",
-	"bs-translation-transfer-no-translate-tool-label": "कुनै अनुवाद छैन"
+	"bs-translation-transfer-config-namespaces-enabled": "अनुवादका लागि नामपदहरू सक्षम गरियो",
+	"bs-translation-transfer-no-translate-tool-label": "अनुवादबाट अलग गर्नुहोस्"
 }
