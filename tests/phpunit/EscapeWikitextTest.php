@@ -43,7 +43,9 @@ class EscapeWikitextTest extends TestCase {
 			]
 		] );
 
-		$escapeWikitext = new EscapeWikitext( $wikitext, $englishLanguageMock, $contentLanguageMock );
+		$targetLang = 'en';
+
+		$escapeWikitext = new EscapeWikitext( $wikitext, $englishLanguageMock, $contentLanguageMock, $targetLang );
 		$escapeWikitext->process();
 
 		$actualEscapedWikitext = $escapeWikitext->getResultWikitext();
