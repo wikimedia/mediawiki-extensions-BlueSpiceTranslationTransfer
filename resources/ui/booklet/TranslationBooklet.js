@@ -12,12 +12,21 @@ OO.inheritClass( translationTransfer.ui.TranslationBooklet, OO.ui.BookletLayout 
 translationTransfer.ui.TranslationBooklet.prototype.makePages = function () {
 	this.pages = {
 		languageSelection: new translationTransfer.ui.LanguageSelectionPageLayout( {
-			languages: this.languages
+			languages: this.languages,
+			expanded: false
 		} ),
-		translation: new translationTransfer.ui.TranslationPageLayout(),
-		targetTitle: new translationTransfer.ui.TargetTitlePageLayout(),
-		preview: new translationTransfer.ui.PreviewPageLayout(),
-		transfer: new translationTransfer.ui.TransferPageLayout()
+		translation: new translationTransfer.ui.TranslationPageLayout( {
+			expanded: false
+		} ),
+		targetTitle: new translationTransfer.ui.TargetTitlePageLayout( {
+			expanded: false
+		} ),
+		preview: new translationTransfer.ui.PreviewPageLayout( {
+			expanded: false
+		} ),
+		transfer: new translationTransfer.ui.TransferPageLayout( {
+			expanded: false
+		} )
 	};
 
 	this.addPages( Object.values( this.pages ) );

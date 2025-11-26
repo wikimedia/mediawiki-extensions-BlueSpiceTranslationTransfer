@@ -100,8 +100,16 @@ translationTransfer.ui.TranslationPageLayout.prototype.setStepState = function (
 		};
 
 		this.$element.append( new OO.ui.HorizontalLayout( {
-			items: [ this.stepStateWidgets[ step ].icon, this.stepStateWidgets[ step ].label ]
+			items: [ this.stepStateWidgets[ step ].icon, this.stepStateWidgets[ step ].label ],
+			classes: [ 'tt-translate-state-layout' ]
 		} ).$element );
+
+		// To update dialog size in case with dynamically added elements,
+		// to avoid appearing of scrollbar.
+		const windowManager = OO.ui.getWindowManager();
+		if ( windowManager && windowManager.getCurrentWindow() ) {
+			windowManager.getCurrentWindow().updateSize();
+		}
 	}
 
 	this.stepStateWidgets[ step ].icon.setIcon( this.steps[ step ].icons[ state ] );
