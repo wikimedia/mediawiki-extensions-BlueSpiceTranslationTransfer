@@ -69,7 +69,7 @@ translationTransfer.ui.TranslateDialog.prototype.initialize = function () {
 		languages: this.languages,
 		outlined: false,
 		showMenu: false,
-		expanded: true
+		expanded: false
 	} );
 
 	this.$body.append( this.booklet.$element );
@@ -91,7 +91,7 @@ translationTransfer.ui.TranslateDialog.prototype.getSetupProcess = function ( da
 };
 
 translationTransfer.ui.TranslateDialog.prototype.getBodyHeight = function () {
-	return translationTransfer.ui.TranslateDialog.parent.prototype.getBodyHeight.call( this ) + 150;
+	return this.booklet.$element.outerHeight( true ) + 30;
 };
 
 translationTransfer.ui.TranslateDialog.prototype.switchPanel = function ( name ) {
@@ -164,7 +164,6 @@ translationTransfer.ui.TranslateDialog.prototype.switchPanel = function ( name )
 			this.setSize( 'larger' );
 
 			page.setData( this.transferData );
-			this.updateSize();
 			break;
 		case 'transfer':
 			this.pushPending();
@@ -178,8 +177,12 @@ translationTransfer.ui.TranslateDialog.prototype.switchPanel = function ( name )
 					this.actions.setAbilities( { translateAnother: true, done: true } );
 				}
 				this.popPending();
+
+				this.updateSize();
 			} );
 	}
+
+	this.updateSize();
 };
 
 translationTransfer.ui.TranslateDialog.prototype.getActionProcess = function ( action ) {
@@ -280,7 +283,8 @@ translationTransfer.ui.TranslateDialog.prototype.insertTranslationIntoDictionary
 			{
 				sourcePrefixedDbKey: this.sourcePrefixedDbKey,
 				newTranslationText: newTranslationText
-			} ).done( ( response ) => { // eslint-disable-line no-unused-vars
+			}
+		).done( ( response ) => { // eslint-disable-line no-unused-vars
 			dfd.resolve();
 		} ).fail( ( errorText ) => {
 			dfd.reject( errorText );
