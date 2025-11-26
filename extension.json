@@ -355,6 +355,10 @@
 		"TranslateTransferLeadingLanguage": {
 			"description": "False if there is no leading language in the wiki farm, otherwise language code of leading language. Dictionary and glossary special pages will work only for leading language.",
 			"value": false
+		},
+		"TranslateTransferBetaFeatures": {
+			"description": "True if there is a need to enable features which are not fully in product yet. Currently that's improved templates processing.",
+			"value": false
 		}
 	},
 	"Hooks": {

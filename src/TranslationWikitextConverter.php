@@ -94,7 +94,7 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 		// We should also translate "display title" if it is specified in the page content
 		$this->translateDisplayTitle( $wikitext, $lang );
 
-		$this->escapeWikitext( $wikitext );
+		$this->escapeWikitext( $wikitext, $lang );
 
 		return $wikitext;
 	}
@@ -567,15 +567,16 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 
 	/**
 	 * @param string &$wikitext
+	 * @param string $targetLang
 	 * @return void
 	 */
-	private function escapeWikitext( string &$wikitext ): void {
+	private function escapeWikitext( string &$wikitext, string $targetLang ): void {
 		$services = MediaWikiServices::getInstance();
 
 		$contentLang = $services->getContentLanguage();
 		$englishLang = $services->getLanguageFactory()->getLanguage( 'en' );
 
-		$escapeWikitext = new EscapeWikitext( $wikitext, $englishLang, $contentLang );
+		$escapeWikitext = new EscapeWikitext( $wikitext, $englishLang, $contentLang, $targetLang );
 		$escapeWikitext->setLogger( $this->logger );
 
 		$escapeWikitext->process();

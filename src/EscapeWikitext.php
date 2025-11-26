@@ -31,6 +31,11 @@ class EscapeWikitext implements LoggerAwareInterface {
 	private $contentLang;
 
 	/**
+	 * @var string
+	 */
+	private $targetLang;
+
+	/**
 	 * @var array
 	 */
 	private $lines;
@@ -50,7 +55,11 @@ class EscapeWikitext implements LoggerAwareInterface {
 		'===' => '###HEADING_3###',
 		'====' => '###HEADING_4###',
 		'=====' => '###HEADING_5###',
-		'======' => '###HEADING_6###'
+		'======' => '###HEADING_6###',
+		// These are used only in "ComplexWikitextParser" for now,
+		// but still we need these masks here to "unmask" wikitext in the end of escaping process
+		'{{' => '###TEMPLATE_OPEN###',
+		'}}' => '###TEMPLATE_CLOSE###'
 	];
 
 	/**
@@ -74,12 +83,15 @@ class EscapeWikitext implements LoggerAwareInterface {
 	 * @param string $wikitext
 	 * @param Language $enLang
 	 * @param Language $contentLang
+	 * @param string $targetLang
 	 */
-	public function __construct( string $wikitext, Language $enLang, Language $contentLang ) {
+	public function __construct( string $wikitext, Language $enLang, Language $contentLang, string $targetLang ) {
 		$this->lines = explode( "\n", $wikitext );
 
 		$this->enLang = $enLang;
 		$this->contentLang = $contentLang;
+
+		$this->targetLang = $targetLang;
 
 		$this->logger = new NullLogger();
 	}
@@ -300,11 +312,21 @@ class EscapeWikitext implements LoggerAwareInterface {
 	 * @return void
 	 */
 	private function processComplexWikitext() {
+		$this->logger->debug( 'Start processing complex wikitext...' );
+
 		$wikitext = implode( "\n", $this->lines );
 
-		// TODO: Bad approach, does not take in account nested structures
-		// Also we probably should translate arguments values in some cases...
-		// To change!
+		// Just a temporary solution, this variable and whole condition will be removed later.
+		// That is for enabling improved templates processing (translating specific arguments of specific templates).
+		if ( $GLOBALS['bsgTranslateTransferBetaFeatures'] === true ) {
+			$complexWikitextParser = new ComplexWikitextParser( $this->targetLang );
+			$wikitext = $complexWikitextParser->parse( $wikitext );
+		}
+
+		// Not 100% cases are covered in "ComplexWikitextParser".
+		// For all other cases for now we'll just wrap entire structures in "<deepl:ignore>" tag,
+		// to make sure they'll not break after translation.
+		// TODO: Cover all possible cases in parser above, then line below can be removed
 		$wikitext = preg_replace( '#{{.*?}}#sm', '<deepl:ignore>$0</deepl:ignore>', $wikitext );
 
 		$this->lines = explode( "\n", $wikitext );

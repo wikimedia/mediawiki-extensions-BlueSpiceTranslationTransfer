@@ -25,6 +25,8 @@ In case if some shared tables configuration already takes place (for example, `u
 - `$mwsgDeeplTranslateServiceAuth` - auth token - must be set!
 - `$mwsgDeeplTranslateServiceUrl` - DeepL URL
 
+- `$bsgTranslateTransferBetaFeatures` - configuration for enabling some "beta features", which are not fully in product yet. For example, improved templates processing. Temporary solution, will be removed later.
+
 - `$bsgDeeplTranslateConversionConfig` - configuration for the translation behaviour. Defaults are set, no need to change anything unless needed
 
   `translatePageTitle` - default `false` -  whether to translate page title. If false, page name at target will be the same as origin
