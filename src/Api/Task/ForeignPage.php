@@ -143,8 +143,11 @@ class ForeignPage extends BSApiTasksBase {
 			$target
 		);
 
+		$transferredResources = [];
 		if ( $status->isOK() ) {
 			$this->addSpecialLogEntry( $target );
+
+			$transferredResources = $status->getValue();
 		}
 
 		/** @var TargetRecognizer $targetRecognizer */
@@ -166,7 +169,8 @@ class ForeignPage extends BSApiTasksBase {
 		$result->payload = [
 			'targetTitleHref' => $targetRecognizer->composeTargetTitleLink(
 				$targetLang, $targetTitlePrefixedKey
-			)
+			),
+			'transferredResources' => $transferredResources
 		];
 		$result->success = $status->isOK();
 		$result->errors = $status->isOK() ? [] : $status->getErrors();

@@ -14,11 +14,13 @@ use File;
 use MediaWiki\Config\Config;
 use MediaWiki\Content\TextContent;
 use MediaWiki\HookContainer\HookContainer;
+use MediaWiki\Json\FormatJson;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
+use Message;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -86,6 +88,18 @@ class TranslationPusher implements LoggerAwareInterface {
 	 * @var LoggerInterface
 	 */
 	private $logger;
+
+	/**
+	 * Timestamp of previous translation push.
+	 *
+	 * It is filled before current push and is used later for logic deciding if some specific
+	 * file/template/transcluded page should be pushed as well.
+	 *
+	 * @var string|null
+	 *
+	 * @see TranslationPusher::shouldTransferRelatedTitle()
+	 */
+	private $previousPushTimestamp = null;
 
 	/**
 	 * @param Config $config
@@ -174,6 +188,14 @@ class TranslationPusher implements LoggerAwareInterface {
 
 		$targetLang = array_search( $targetKey, $langWikiMap );
 
+		// Save timestamp of previous translation push,
+		// will need that further for deciding if some specific file/template should be transferred.
+		if ( $this->translationsDao->getTranslation( $targetTitlePrefixedKey, $targetLang ) ) {
+			$this->previousPushTimestamp = $this->translationsDao->getReleaseTimestamp(
+				$targetTitlePrefixedKey, $targetLang
+			);
+		}
+
 		// Update/insert new translation.
 		// We need to do that before pushing the page because after page creation on the target wiki
 		// hook handler for "PageContentSaveComplete" hook will update target's last change timestamp.
@@ -255,7 +277,7 @@ class TranslationPusher implements LoggerAwareInterface {
 	 * @return Status
 	 * @throws Exception
 	 */
-	public function transferRelatedResources(
+	private function transferRelatedResources(
 		Title $sourceTitle, string $targetLang,
 		AuthenticatedRequestHandler $requestHandler
 	): Status {
@@ -263,6 +285,8 @@ class TranslationPusher implements LoggerAwareInterface {
 
 		// Get all included files and templates/transcluded pages
 		[ $relatedFiles, $transcludedTitles ] = $this->getRelatedResources( $sourceTitle );
+
+		$transferredFiles = [];
 
 		// Push files
 		foreach ( $relatedFiles as $fileTitle ) {
@@ -280,6 +304,12 @@ class TranslationPusher implements LoggerAwareInterface {
 				$file = $contentProvider->getFile();
 				if ( !$file ) {
 					$this->logger->error( "Error while pushing file: $fileTitle does not exist on the source" );
+
+					$transferredFiles['fail'][] = [
+						'title' => $fileTitle->getPrefixedText(),
+						'reason' => Message::newFromKey( 'bs-translation-transfer-related-file-push-fail-does-not-exist' )->text()
+					];
+
 					continue;
 				}
 
@@ -298,6 +328,12 @@ class TranslationPusher implements LoggerAwareInterface {
 					$this->logger->error(
 						"File exists on the source but does not have correct local path - '$filename'"
 					);
+
+					$transferredFiles['fail'][] = [
+						'title' => $fileTitle->getPrefixedText(),
+						'reason' => Message::newFromKey( 'bs-translation-transfer-related-file-push-fail-local-path' )->text()
+					];
+
 					continue;
 				}
 
@@ -313,11 +349,30 @@ class TranslationPusher implements LoggerAwareInterface {
 				] );
 
 				if ( !$shouldPushFile ) {
+					$transferredFiles['fail'][] = [
+						'title' => $fileTitle->getPrefixedText(),
+						'reason' => Message::newFromKey( 'bs-translation-transfer-related-file-push-fail-integrations' )->text()
+					];
+
+					continue;
+				}
+
+				// Some more logic to decide if we should really push that related file
+				[ $shouldTransfer, $reason ] = $this->shouldTransferRelatedTitle(
+					$file->getTitle(), $requestHandler, $targetLang
+				);
+
+				if ( !$shouldTransfer ) {
+					$transferredFiles['fail'][] = [
+						'title' => $fileTitle->getPrefixedText(),
+						'reason' => $reason
+					];
+
 					continue;
 				}
 
 				// Actually transfer that specific file.
-				// Also whole content of file description page will be translated, as a regular title.
+				// Also, whole content of file description page will be translated, as a regular title.
 				$status = $this->transferFile(
 					$requestHandler, $sourceTitle, $file,
 					$contentProvider->getContent(), $filename,
@@ -327,8 +382,25 @@ class TranslationPusher implements LoggerAwareInterface {
 				if ( !$status->isOK() ) {
 					$this->logger->error( "Error while pushing file: {$file->getName()}. Status: $status" );
 
-					// TODO: Should we break if one of related resources failed to push?
-					break;
+					$transferredFiles['fail'][] = [
+						'title' => $fileTitle->getPrefixedText(),
+						'reason' => Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-generic-error' )->text()
+					];
+				} else {
+					// In order to create correct link to that resource on the target wiki,
+					// we need to translate NS to the target language at first.
+					$targetNs = $this->wtConverter->getNsText( NS_FILE, $targetLang );
+
+					$resourceTargetPrefixedDbKey = $targetNs . ':' . $fileTitle->getDBkey();
+
+					$targetHref = $this->targetRecognizer->composeTargetTitleLink(
+						$targetLang, $resourceTargetPrefixedDbKey
+					);
+
+					$transferredFiles['success'][] = [
+						'title' => $fileTitle->getPrefixedText(),
+						'href' => $targetHref
+					];
 				}
 			} else {
 				$this->logger->warning( "Skipping, because not a file..." );
@@ -337,19 +409,76 @@ class TranslationPusher implements LoggerAwareInterface {
 
 		$this->logger->debug( "Pushing transcluded titles..." );
 
+		$transferredTransclusions = [];
+
 		// Push templates or transcluded pages from other (not NS_TEMPLATE) namespaces
+		/** @var Title $transcludedTitle */
 		foreach ( $transcludedTitles as $transcludedTitle ) {
+			$this->logger->debug( "Processing transcluded title '$transcludedTitle'..." );
+
+			if ( $transcludedTitle->getPrefixedDBkey() === $sourceTitle->getPrefixedDBkey() ) {
+				// For some reason title which we are translating - may sometimes be included among transcluded ones.
+				// We already translated and pushed it, so no need to transfer it once more.
+				$this->logger->debug( "Source title! Skipping..." );
+
+				// No need to indicate for user that there was a problem with that page,
+				// as soon as it anyway should not be transferred as related title.
+				continue;
+			}
+
+			// Some more logic to decide if we should really push that transcluded title
+			[ $shouldTransfer, $reason ] = $this->shouldTransferRelatedTitle(
+				$transcludedTitle, $requestHandler, $targetLang
+			);
+
+			if ( !$shouldTransfer ) {
+				$transferredFiles['fail'][] = [
+					'title' => $transcludedTitle->getPrefixedText(),
+					'reason' => $reason
+				];
+
+				continue;
+			}
+
 			$status = $this->transferTranscludedTitle( $requestHandler, $sourceTitle, $transcludedTitle, $targetLang );
 
 			if ( !$status->isOK() ) {
 				$this->logger->error( "Error while pushing transcluded title: $transcludedTitle. Status: $status" );
 
-				// TODO: Should we break if one of related resources failed to push?
-				break;
+				$transferredTransclusions['fail'][] = [
+					'title' => $transcludedTitle->getPrefixedText(),
+					'reason' => Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-generic-error' )->text()
+				];
+			} else {
+				// In order to create correct link to that resource on the target wiki,
+				// we need to translate NS to the target language at first.
+				if ( $transcludedTitle->getNamespace() !== NS_MAIN ) {
+					$targetNs = $this->wtConverter->getNsText( $transcludedTitle->getNamespace(), $targetLang );
+
+					$resourceTargetPrefixedDbKey = $targetNs . ':' . $transcludedTitle->getDBkey();
+				} else {
+					$resourceTargetPrefixedDbKey = $transcludedTitle->getDBkey();
+				}
+
+				$targetHref = $this->targetRecognizer->composeTargetTitleLink(
+					$targetLang, $resourceTargetPrefixedDbKey
+				);
+
+				$transferredTransclusions['success'][] = [
+					'title' => $transcludedTitle->getPrefixedText(),
+					'href' => $targetHref
+				];
 			}
 		}
 
-		return Status::newGood();
+		$transferredResources = [];
+
+		if ( !empty( $transferredTransclusions ) || !empty( $transferredFiles ) ) {
+			// We do not separate related files and transclusions for now
+			$transferredResources = array_merge_recursive( $transferredFiles, $transferredTransclusions );
+		}
+
+		return Status::newGood( $transferredResources );
 	}
 
 	/**
@@ -468,12 +597,12 @@ class TranslationPusher implements LoggerAwareInterface {
 		Title $sourceTitle, Title $transcludedTitle,
 		string $targetLang
 	): Status {
-		$this->logger->debug( "Processing template '$transcludedTitle'..." );
-
 		$wikiPage = $this->wikiPageFactory->newFromTitle( $transcludedTitle );
 		$content = $wikiPage->getContent();
 		if ( !$content instanceof TextContent ) {
 			$this->logger->error( 'Cannot translate non-text content' );
+
+			return Status::newFatal( 'Cannot translate non-text content' );
 		}
 		$wikitext = $content->getText();
 
@@ -597,5 +726,170 @@ class TranslationPusher implements LoggerAwareInterface {
 		}
 
 		return $noAutomaticDocumentTranslation;
+	}
+
+	/**
+	 * Decide if specified related title (file/template/transcluded page) should be transferred.
+	 *
+	 * It is designed TO NOT OVERWRITE template/file/transcluded page on the target wiki if:
+	 *              * It already exists on the target and:
+	 *              *       *       either that page was already modified by user,
+	 *              *       *       or there that page was not changed on the source wiki after previous push.
+	 *
+	 * In all other cases related title is transferred.
+	 *
+	 * @param Title $transcludedTitle
+	 * @param AuthenticatedRequestHandler $requestHandler
+	 * @param string $targetLang
+	 * @return array Array containing both decision if we should transfer that specific related title (bool)
+	 * 					and reason why we decided to not transfer it (string), as a list.
+	 * 					So like that: [ <shouldTransfer> (bool), <reason> (string) ].
+	 * 					Reason is translate-able message, later may be displayed to user.
+	 * 					For cases when we decide to transfer title - there is no need for reason string.
+	 * 					Also, probably reason also can be empty in cases when related title was not transferred,
+	 * 					but reason will probably make no sense for user.
+	 * 					For such cases more info should be written in the logs for developer.
+	 */
+	private function shouldTransferRelatedTitle(
+		Title $transcludedTitle, AuthenticatedRequestHandler $requestHandler,
+		string $targetLang
+	): array {
+		if ( $transcludedTitle->getNamespace() !== NS_MAIN ) {
+			$targetNsText = $this->wtConverter->getNsText( $transcludedTitle->getNamespace(), $targetLang );
+
+			$relatedTitleTargetPrefixedDbKey = $targetNsText . ':' . $transcludedTitle->getDBkey();
+		} else {
+			$relatedTitleTargetPrefixedDbKey = $transcludedTitle->getDBkey();
+		}
+
+		// Reset "page props", because they are cached inside
+		$requestHandler->setPageProps( null );
+
+		// Check if related title already exists on the target wiki
+		$props = $requestHandler->getPageProps( $relatedTitleTargetPrefixedDbKey );
+
+		if ( !isset( $props['pageid'] ) || isset( $props['missing'] ) ) {
+			// If it does not exist - just transfer
+			$this->logger->debug( "Does not exist on target." );
+
+			return [ true, '' ];
+		}
+
+		// If it exists - check if that title was changed on the source wiki after previous push
+		$revision = $this->revisionStore->getRevisionByTitle( $transcludedTitle );
+		if ( !$revision ) {
+			return [
+				false,
+				Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-no-revision' )->text()
+			];
+		}
+
+		$relatedTitleSourceLastChangeTimestamp = $revision->getTimestamp();
+
+		if (
+			$this->previousPushTimestamp &&
+			( $this->previousPushTimestamp < $relatedTitleSourceLastChangeTimestamp )
+		) {
+			// If transcluded title was changed after the last push -
+			// - then we probably need to update it on the target wiki.
+			$this->logger->debug( "Was changed after previous push. Should probably be updated." );
+
+			// But at first check if it was not changed by user on the target wiki.
+			// If yes - we'll not automatically overwrite such modifications.
+			// For that, get SHA1 of the latest revision on the target wiki.
+			// Later we'll compare it with SHA1 of the latest transferred revision from the source wiki.
+			$requestData = [
+				'action' => 'query',
+				'prop' => 'revisions',
+				'rvprop' => 'sha1',
+				'format' => 'json',
+				'titles' => $relatedTitleTargetPrefixedDbKey
+			];
+
+			$request = $requestHandler->getRequest( $requestData );
+			$status = $request->execute();
+
+			if ( !$status->isOK() ) {
+				$this->logger->error(
+					"Failed to get revision sha1 from target wiki! Bad status: $status"
+				);
+
+				return [
+					false,
+					Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-sha1-bad-status' )->text()
+				];
+			}
+
+			$response = FormatJson::decode( $request->getContent(), true );
+
+			if ( !$response || count( $response['query']['pages'] ) === 0 ) {
+				$this->logger->error(
+					"Failed to get revision sha1 from target wiki! Bad response: " . print_r( $response, true )
+				);
+
+				return [
+					false,
+					Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-sha1-bad-response' )->text()
+				];
+			}
+
+			// We do not know ID of related title on the target wiki, so need a little hack here.
+			// In "pages" array there should be only one entry - with data about specified title.
+			foreach ( $response['query']['pages'] as $page ) {
+				// We already checked if that title exists on the target wiki -
+				// - so no need in futher checks here.
+				$targetSha1 = $page['revisions'][0]['sha1'];
+
+				break;
+			}
+
+			// Now when we got SHA1 of the latest revision on the target wiki -
+			// - look for the revision which was pushed from the source latest time, and compare their SHA1.
+			while ( true ) {
+				// To find revision which we most likely pushed during the latest push -
+				// look for the first revision with timestamp earlier than the latest push
+				$prevRevision = $this->revisionStore->getPreviousRevision( $revision );
+				if ( !$prevRevision ) {
+					// Current push is the first one, but that related title already exists on the target wiki.
+					// Probably title was created by user?
+					// So do not transfer and display user info about that.
+					return [
+						false,
+						Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-target-exists' )->text(),
+					];
+				}
+
+				$prevRevisionTimestamp = $prevRevision->getTimestamp();
+
+				if ( $prevRevisionTimestamp < $this->previousPushTimestamp ) {
+					$sourceSha1 = $prevRevision->getSha1();
+
+					break;
+				}
+			}
+
+			// IDE may complain, but both variables should logically be correctly set at this point.
+			if ( $sourceSha1 !== $targetSha1 ) {
+				// If specified title was changed on the target wiki after previous push -
+				// - we should not overwrite it.
+				$this->logger->debug( "Changed on the target wiki after previous push. Do not overwrite." );
+
+				return [
+					false,
+					Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-user-changes' )->text()
+				];
+			} else {
+				// Otherwise overwrite.
+				return [ true, '' ];
+			}
+		} else {
+			// If that related title was not changed after previous push - no need to transfer it again.
+			$this->logger->debug( "Was not changed after previous push." );
+
+			return [
+				false,
+				Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-no-change' )->text()
+			];
+		}
 	}
 }

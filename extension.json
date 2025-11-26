@@ -130,11 +130,20 @@
 				"bs-translation-transfer-ui-dialog-action-wikitext",
 				"bs-translation-transfer-ui-dialog-action-translate-another",
 				"bs-translation-transfer-ui-dialog-action-done",
-				"bs-translation-transfer-ui-dialog-title-preview"
+				"bs-translation-transfer-ui-dialog-title-preview",
+				"bs-translation-transfer-ui-related-resources-notice",
+				"bs-translation-transfer-ui-related-resources-transferred-title",
+				"bs-translation-transfer-ui-related-resources-transferred-title-aria",
+				"bs-translation-transfer-ui-related-resources-transferred-notice",
+				"bs-translation-transfer-ui-related-resources-not-transferred-title",
+				"bs-translation-transfer-ui-related-resources-not-transferred-title-aria",
+				"bs-translation-transfer-ui-related-resources-not-transferred-notice",
+				"bs-translation-transfer-ui-related-resources-fail-reason"
 			],
 			"dependencies": [
 				"ext.bluespice",
 				"oojs-ui",
+				"oojs-ui.styles.icons-alerts",
 				"mediawiki.api"
 			]
 		},
