@@ -74,7 +74,7 @@ class TranslateTransferNamespaces extends ArraySetting {
 	 * @inheritDoc
 	 */
 	public function getHelpMessageKey() {
-		return 'bs-translation-transfer-config-namespaces-enabled-help';
+		return 'bs-translation-transfer-config-namespaces-enabled-help-label';
 	}
 
 	/**

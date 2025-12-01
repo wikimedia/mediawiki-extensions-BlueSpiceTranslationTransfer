@@ -209,7 +209,7 @@
 				"bs-translation-transfer-ui-add",
 				"bs-translation-transfer-ui-add-namespace-mapping",
 				"bs-translation-transfer-config-column-target-language",
-				"bs-translation-transfer-config-column-target-namespace",
+				"bs-translation-transfer-config-column-target-namespace-label",
 				"bs-translation-transfer-config-column-delete-title"
 			],
 			"styles": [

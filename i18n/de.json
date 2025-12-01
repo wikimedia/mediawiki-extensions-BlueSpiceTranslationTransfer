@@ -110,5 +110,7 @@
 	"bs-translation-transfer-config-column-target-language": "Sprache",
 	"bs-translation-transfer-config-column-target-namespace": "Ziel-Namensraum",
 	"bs-translation-transfer-config-namespaces-enabled": "Für die Übersetzung aktivierte Namensräume",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Namensräume, die Teil des Übersetzungsworkflows für diese Wiki-Instanz sein sollen, auswählen"
+	"bs-translation-transfer-config-namespaces-enabled-help": "Namensräume, die Teil des Übersetzungsworkflows für diese Wiki-Instanz sein sollen, auswählen",
+	"bs-translation-transfer-config-namespaces-enabled-help-label": "Die Namensräume, die in den Übersetzungsworkflow für dieses Wiki aufgenommen werden sollen, auswählen",
+	"bs-translation-transfer-config-column-target-namespace-label": "Übersetzung des Namensraums"
 }

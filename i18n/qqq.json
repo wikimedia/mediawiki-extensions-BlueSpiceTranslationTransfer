@@ -99,11 +99,11 @@
 	"bs-translation-transfer-ui-add": "Button label to add a new entry in the namespace mapping configuration form",
 	"bs-translation-transfer-ui-add-namespace-mapping": "Section label for adding a new namespace mapping",
 	"bs-translation-transfer-config-column-target-language": "Column header for target language in configuration tables",
-	"bs-translation-transfer-config-column-target-namespace": "Column header for target namespace in configuration tables",
 	"bs-translation-transfer-config-column-delete-title": "Column header for delete action in configuration tables",
 	"bs-translation-transfer-config-namespaces-enabled": "Label for config variable to enable namespaces for translation",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Help message for the config variable to enable namespaces for translation",
+	"bs-translation-transfer-config-namespaces-enabled-help-label": "Help message for the config variable to enable namespaces for translation",
 	"translationglossary": "Name of special page",
 	"translationoverview": "Name of special page",
-	"bs-translation-transfer-no-translate-tool-label": "Label for a VisualEditor tool that prevents text from being translated"
+	"bs-translation-transfer-no-translate-tool-label": "Label for a VisualEditor tool that prevents text from being translated",
+	"bs-translation-transfer-config-column-target-namespace-label": "Column header for target namespace in configuration tables"
 }

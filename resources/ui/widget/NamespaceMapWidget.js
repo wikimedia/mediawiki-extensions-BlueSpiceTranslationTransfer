@@ -71,7 +71,7 @@ translationTransfer.ui.NamespaceMapWidget.prototype.addNamespace = function ( ns
 				width: 100
 			},
 			target: {
-				headerText: mw.msg( 'bs-translation-transfer-config-column-target-namespace' ),
+				headerText: mw.msg( 'bs-translation-transfer-config-column-target-namespace-label' ),
 				type: 'text'
 			},
 			delete: {
