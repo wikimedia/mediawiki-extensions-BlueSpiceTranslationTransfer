@@ -298,7 +298,7 @@ class EscapeWikitext implements LoggerAwareInterface {
 						}
 					}
 
-					return "<deepl:ignore>{$openBracketMask}$link{$closeBracketMask}</deepl:ignore>";
+					return "<deepl:ignore>{$openBracketMask}File:$link{$closeBracketMask}</deepl:ignore>";
 				},
 				$line
 			);
