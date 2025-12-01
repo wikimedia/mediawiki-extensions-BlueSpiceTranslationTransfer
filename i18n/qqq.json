@@ -99,9 +99,9 @@
 	"bs-translation-transfer-special-page-not-configured": "Warning shown on BlueSpiceTranslationTransfer special page when configuration is missing",
 	"bs-translation-transfer-glossary-sync-error": "Error message shown when glossary synchronisation fails",
 	"bs-translation-transfer-config-column-target-language": "Column header for target language in configuration tables",
-	"bs-translation-transfer-config-column-target-namespace": "Column header for target namespace in configuration tables",
 	"bs-translation-transfer-config-column-delete-title": "Column header for delete action in configuration tables",
 	"bs-translation-transfer-config-namespaces-enabled": "Label for config variable to enable namespaces for translation",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Help message for the config variable to enable namespaces for translation",
-	"bs-translation-transfer-no-translate-tool-label": "Label for a VisualEditor tool that prevents text from being translated"
+	"bs-translation-transfer-config-namespaces-enabled-help-label": "Help message for the config variable to enable namespaces for translation",
+	"bs-translation-transfer-no-translate-tool-label": "Label for a VisualEditor tool that prevents text from being translated",
+	"bs-translation-transfer-config-column-target-namespace-label": "Column header for target namespace in configuration tables"
 }

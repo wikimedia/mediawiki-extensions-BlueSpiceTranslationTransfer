@@ -98,9 +98,9 @@
 	"bs-translation-transfer-special-page-not-configured": "It looks that you are missing some BlueSpiceTranslationTransfer configuration. Please contact your administrator to properly do that.",
 	"bs-translation-transfer-glossary-sync-error": "There was an error during glossary synchronization",
 	"bs-translation-transfer-config-column-target-language": "Language",
-	"bs-translation-transfer-config-column-target-namespace": "Target namespace",
 	"bs-translation-transfer-config-column-delete-title": "Delete",
 	"bs-translation-transfer-config-namespaces-enabled": "Namespaces enabled for translation",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Select namespaces which should be part of translation workflow, for that wiki instance",
-	"bs-translation-transfer-no-translate-tool-label": "Exclude from translation"
+	"bs-translation-transfer-config-namespaces-enabled-help-label": "Select the namespaces to include in the translation workflow for this wiki",
+	"bs-translation-transfer-no-translate-tool-label": "Exclude from translation",
+	"bs-translation-transfer-config-column-target-namespace-label": "Translation of the namespace"
 }
