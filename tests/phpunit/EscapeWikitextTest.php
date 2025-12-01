@@ -201,6 +201,8 @@ HERE
 
 			'Files links' => [
 				<<<HERE
+[[File:Some file.png]]
+
 [[File:Some file.png|Some label]]
 
 [[:File:Some file.pdf|Some label]]
@@ -213,6 +215,8 @@ HERE
 HERE
 ,
 				<<<HERE
+<deepl:ignore>[[File:Some file.png]]</deepl:ignore>
+
 <deepl:ignore>[[File:Some file.png|</deepl:ignore>Some label<deepl:ignore>]]</deepl:ignore>
 
 <deepl:ignore>[[:File:Some file.pdf|</deepl:ignore>Some label<deepl:ignore>]]</deepl:ignore>
