@@ -54,7 +54,7 @@
 	"bs-translation-transfer-config-namespace-map-help": "Auswahl der Namen von Namensräumen, die für die Übersetzung verwendet werden sollen",
 	"bs-translation-transfer-ui-source-namespace": "Namensraum im Quell-Wiki",
 	"bs-translation-transfer-ui-source-namespace-help": "Wählt den Namensraum aus dem Quell-Wiki aus, der für Übersetzungen verwendet wird",
-	"bs-translation-transfer-ui-target-namespace": "Übersetzung des Namensraum",
+	"bs-translation-transfer-ui-target-namespace": "Übersetzung des Namensraums",
 	"bs-translation-transfer-ui-target-namespace-help": "Legt fest, wie der Quell-Namensraum in der ausgewählten Sprache benannt wird",
 	"bs-translation-transfer-ui-target-lang": "Zielsprache",
 	"bs-translation-transfer-ui-target-lang-help": "Definiert die Sprache, die für die Übersetzung des Namensraums verwendet wird",
