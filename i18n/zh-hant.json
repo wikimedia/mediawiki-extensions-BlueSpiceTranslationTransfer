@@ -56,8 +56,11 @@
 	"bs-translation-transfer-config-namespace-map": "命名空間對應",
 	"bs-translation-transfer-config-namespace-map-help": "選擇應用於翻譯的命名空間名稱",
 	"bs-translation-transfer-ui-source-namespace": "來源 wiki 的命名空間",
+	"bs-translation-transfer-ui-source-namespace-help": "從用於翻譯的來源 wiki 中選擇命名空間",
 	"bs-translation-transfer-ui-target-namespace": "命名空間的翻譯",
+	"bs-translation-transfer-ui-target-namespace-help": "指定所選語言中來源命名空間的命名方式",
 	"bs-translation-transfer-ui-target-lang": "目標語言",
+	"bs-translation-transfer-ui-target-lang-help": "定義用於翻譯命名空間的語言",
 	"bs-translation-transfer-ui-add": "新增",
 	"bs-translation-transfer-ui-add-namespace-mapping": "新增的命名空間對應",
 	"bs-translation-transfer-dictionary-desc": "所有的現有翻譯內容均列於此處，您可以編輯或刪除。新的翻譯內容可在頁面翻譯過程中分別新增。",
@@ -97,8 +100,5 @@
 	"bs-translation-transfer-config-column-delete-title": "刪除",
 	"bs-translation-transfer-config-namespaces-enabled": "啟用翻譯的命名空間",
 	"bs-translation-transfer-config-namespaces-enabled-help": "選擇用於該 wiki 實例，應作為翻譯流程一部分的命名空間",
-	"bs-translation-transfer-ui-source-namespace-help": "從用於翻譯的來源 wiki 中選擇命名空間",
-	"bs-translation-transfer-ui-target-namespace-help": "指定所選語言中來源命名空間的命名方式",
-	"bs-translation-transfer-ui-target-lang-help": "定義用於翻譯命名空間的語言",
 	"bs-translation-transfer-no-translate-tool-label": "從翻譯中排除"
 }
