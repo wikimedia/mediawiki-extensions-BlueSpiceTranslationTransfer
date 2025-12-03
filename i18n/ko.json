@@ -34,6 +34,5 @@
 	"bs-translation-transfer-glossary-edit-dialog-title": "번역 편집",
 	"bs-translation-transfer-glossary-edit-dialog-save": "저장",
 	"bs-translation-transfer-config-column-target-language": "언어",
-	"bs-translation-transfer-config-column-target-namespace": "대상 이름공간",
 	"bs-translation-transfer-config-column-delete-title": "삭제"
 }

@@ -96,9 +96,7 @@
 	"bs-translation-transfer-special-page-not-configured": "Pare que manca un parte del configuration BlueSpiceTranslationTransfer. Contacta tu administrator pro facer corriger isto.",
 	"bs-translation-transfer-glossary-sync-error": "Un error ha occurrite durante le synchronisation del glossario",
 	"bs-translation-transfer-config-column-target-language": "Lingua",
-	"bs-translation-transfer-config-column-target-namespace": "Spatio de nomines de destination",
 	"bs-translation-transfer-config-column-delete-title": "Deler",
 	"bs-translation-transfer-config-namespaces-enabled": "Spatios de nomines activate pro traduction",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Selige le spatios de nomines que debe facer parte del processo de traduction pro ille servitor wiki",
 	"bs-translation-transfer-no-translate-tool-label": "Excluder del traduction"
 }

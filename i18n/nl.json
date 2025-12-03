@@ -97,9 +97,7 @@
 	"bs-translation-transfer-special-page-not-configured": "Het lijkt erop dat een deel van de BlueSpiceTranslationTransfer-instellingen ontbreekt. Neem contact op met uw beheerder om dit correct te laten doen.",
 	"bs-translation-transfer-glossary-sync-error": "Er is een fout opgetreden tijdens de synchronisatie van de woordenlijst",
 	"bs-translation-transfer-config-column-target-language": "Taal",
-	"bs-translation-transfer-config-column-target-namespace": "Doelnaamruimte",
 	"bs-translation-transfer-config-column-delete-title": "Verwijderen",
 	"bs-translation-transfer-config-namespaces-enabled": "Naamruimten die zijn toegestaan voor vertaling",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Selecteer naamruimten die voor die wiki-server deel moeten uitmaken van de vertaalprocedure",
 	"bs-translation-transfer-no-translate-tool-label": "Geen vertaling"
 }

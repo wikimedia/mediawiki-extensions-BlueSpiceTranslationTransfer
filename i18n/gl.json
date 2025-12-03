@@ -96,9 +96,9 @@
 	"bs-translation-transfer-special-page-not-configured": "Semella que che falta algunha configuración de BlueSpiceTranslationTransfer. Ponte en contacto coa administración para facelo correctamente.",
 	"bs-translation-transfer-glossary-sync-error": "Houbo un erro durante a sincronización do glosario",
 	"bs-translation-transfer-config-column-target-language": "Lingua",
-	"bs-translation-transfer-config-column-target-namespace": "Espazo de nomes de destino",
 	"bs-translation-transfer-config-column-delete-title": "Borrar",
 	"bs-translation-transfer-config-namespaces-enabled": "Espazos de nomes habilitados para a tradución",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Selecciona os espazos de nomes que deberían formar parte do fluxo de traballo de tradución para esa instancia wiki",
-	"bs-translation-transfer-no-translate-tool-label": "Excluír da tradución"
+	"bs-translation-transfer-config-namespaces-enabled-help-label": "Selecciona os espazos de nomes que queres incluír no fluxo de traballo de tradución deste wiki",
+	"bs-translation-transfer-no-translate-tool-label": "Excluír da tradución",
+	"bs-translation-transfer-config-column-target-namespace-label": "Tradución do espazo de nomes"
 }

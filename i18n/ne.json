@@ -73,7 +73,6 @@
 	"bs-translation-transfer-glossary-edit-dialog-save": "सङ्ग्रह गर्नुहोस्",
 	"bs-translation-transfer-glossary-edit-dialog-cancel": "रद्द गर्नुहोस्",
 	"bs-translation-transfer-config-column-target-language": "भाषा",
-	"bs-translation-transfer-config-column-target-namespace": "पृष्ठको नामपद",
 	"bs-translation-transfer-config-column-delete-title": "मेट्ने",
 	"bs-translation-transfer-config-namespaces-enabled": "अनुवादका लागि नामपदहरू सक्षम गरियो",
 	"bs-translation-transfer-no-translate-tool-label": "अनुवादबाट अलग गर्नुहोस्"

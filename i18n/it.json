@@ -25,6 +25,5 @@
 	"bs-translation-transfer-ui-dialog-action-translate-another": "Traduci in un’altra lingua",
 	"bs-translation-transfer-ui-add": "Aggiungi",
 	"bs-translation-transfer-glossary-edit-dialog-save": "Salva",
-	"bs-translation-transfer-config-column-target-namespace": "Namespace di destinazione",
 	"bs-translation-transfer-no-translate-tool-label": "Escludi dalla traduzione"
 }
