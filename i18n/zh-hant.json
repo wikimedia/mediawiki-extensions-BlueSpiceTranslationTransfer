@@ -100,5 +100,7 @@
 	"bs-translation-transfer-config-column-delete-title": "刪除",
 	"bs-translation-transfer-config-namespaces-enabled": "啟用翻譯的命名空間",
 	"bs-translation-transfer-config-namespaces-enabled-help": "選擇用於該 wiki 實例，應作為翻譯流程一部分的命名空間",
-	"bs-translation-transfer-no-translate-tool-label": "從翻譯中排除"
+	"bs-translation-transfer-no-translate-tool-label": "從翻譯中排除",
+	"bs-translation-transfer-config-namespaces-enabled-help-label": "選擇包含對此 wiki 翻譯工作流程的命名空間",
+	"bs-translation-transfer-config-column-target-namespace-label": "命名空間的翻譯"
 }
