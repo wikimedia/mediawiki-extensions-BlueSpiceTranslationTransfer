@@ -1,8 +1,49 @@
 {
 	"@metadata": {
 		"authors": [
-			"ExoHyper2026"
+			"ExoHyper2026",
+			"Peterxy12"
 		]
 	},
-	"bs-translation-transfer-no-translate-tool-label": "从翻译中移除"
+	"translationdictionary": "翻译字典",
+	"action-translation-transfer": "翻译",
+	"log-name-bs-translation-transfer": "翻译",
+	"bs-translation-transfer-ui-transfer-failed": "转移失败",
+	"bs-translation-transfer-ui-translate-success": "翻译成功",
+	"bs-translation-transfer-ui-transfer-preview-wt": "Wikitext",
+	"bs-translation-transfer-ui-dialog-title": "翻译页面",
+	"bs-translation-transfer-ui-dialog-action-translate": "翻译",
+	"bs-translation-transfer-ui-dialog-action-cancel": "取消",
+	"bs-translation-transfer-ui-dialog-action-back": "返回",
+	"bs-translation-transfer-ui-dialog-action-save": "保存",
+	"bs-translation-transfer-ui-dialog-action-wikitext": "Wikitext",
+	"bs-translation-transfer-ui-dialog-action-translate-another": "翻译成别的语言",
+	"bs-translation-transfer-ui-dialog-action-done": "完成",
+	"bs-translation-transfer-local-layout-label": "翻译此页面",
+	"bs-translation-transfer-overview-source-page-column": "来源页面",
+	"bs-translation-transfer-banner-dismiss": "关闭",
+	"bs-translation-transfer-ui-add": "添加",
+	"bs-translation-transfer-dictionary-switch-main-language": "主要语言",
+	"bs-translation-transfer-dictionary-switch-select-language": "选择语言",
+	"bs-translation-transfer-dictionary-action-edit": "编辑",
+	"bs-translation-transfer-dictionary-action-remove": "移除",
+	"bs-translation-transfer-dictionary-edit-dialog-title": "编辑翻译",
+	"bs-translation-transfer-dictionary-edit-dialog-save": "保存",
+	"bs-translation-transfer-dictionary-edit-dialog-cancel": "取消",
+	"bs-translation-transfer-dictionary-edit-dialog-back": "返回",
+	"bs-translation-transfer-dictionary-remove-dialog-title": "移除翻译",
+	"bs-translation-transfer-dictionary-remove-dialog-delete": "移除",
+	"bs-translation-transfer-dictionary-remove-dialog-cancel": "取消",
+	"bs-translation-transfer-ui-dialog-title-preview": "预览",
+	"bs-translation-transfer-glossary-action-edit": "编辑",
+	"bs-translation-transfer-glossary-action-remove": "移除",
+	"bs-translation-transfer-glossary-source-text-placeholder": "源文本",
+	"bs-translation-transfer-glossary-translation-text-placeholder": "翻译文本",
+	"bs-translation-transfer-glossary-edit-dialog-title": "编辑翻译",
+	"bs-translation-transfer-glossary-edit-dialog-save": "保存",
+	"bs-translation-transfer-glossary-edit-dialog-cancel": "取消",
+	"bs-translation-transfer-config-column-target-language": "语言",
+	"bs-translation-transfer-config-column-delete-title": "删除",
+	"bs-translation-transfer-no-translate-tool-label": "从翻译中移除",
+	"bs-translation-transfer-config-column-target-namespace-label": "命名空间的翻译"
 }
