@@ -51,6 +51,5 @@
 	"bs-translation-transfer-glossary-edit-dialog-cancel": "Ofbriechen",
 	"bs-translation-transfer-glossary-edit-dialog-change-translation-label": "Iwwersetzung ännere fir: <b>$1</b>",
 	"bs-translation-transfer-config-column-target-language": "Sprooch",
-	"bs-translation-transfer-config-column-target-namespace": "Zilnummraum",
 	"bs-translation-transfer-config-column-delete-title": "Läschen"
 }

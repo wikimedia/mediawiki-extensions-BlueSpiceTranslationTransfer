@@ -101,6 +101,5 @@
 	"bs-translation-transfer-glossary-sync-error": "Une erreur s'est produite lors de la synchronisation du glossaire",
 	"bs-translation-transfer-config-column-target-language": "Langue",
 	"bs-translation-transfer-config-column-delete-title": "Supprimer",
-	"bs-translation-transfer-config-namespaces-enabled": "Espaces de noms activés pour la traduction",
-	"bs-translation-transfer-config-namespaces-enabled-help": "Sélectionnez les espaces de noms qui doivent faire partie du flux de travail de traduction, pour cette instance wiki"
+	"bs-translation-transfer-config-namespaces-enabled": "Espaces de noms activés pour la traduction"
 }

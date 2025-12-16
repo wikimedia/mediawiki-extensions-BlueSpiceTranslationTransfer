@@ -24,6 +24,5 @@
 	"bs-translation-transfer-glossary-edit-dialog-title": "Уреди превод",
 	"bs-translation-transfer-glossary-edit-dialog-save": "Сачувај",
 	"bs-translation-transfer-glossary-edit-dialog-cancel": "Откажи",
-	"bs-translation-transfer-config-column-target-language": "Језик",
-	"bs-translation-transfer-config-column-target-namespace": "Циљни именски простор"
+	"bs-translation-transfer-config-column-target-language": "Језик"
 }

@@ -78,7 +78,6 @@
 	"bs-translation-transfer-glossary-edit-dialog-save": "सहेजें",
 	"bs-translation-transfer-glossary-edit-dialog-cancel": "रद्द करें",
 	"bs-translation-transfer-config-column-target-language": "भाषा",
-	"bs-translation-transfer-config-column-target-namespace": "लक्ष्य नामस्थान",
 	"bs-translation-transfer-config-column-delete-title": "हटाएँ",
 	"bs-translation-transfer-config-namespaces-enabled": "अनुवाद के लिए सक्षम नामस्थान"
 }

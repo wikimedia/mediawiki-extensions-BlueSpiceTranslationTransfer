@@ -5,7 +5,6 @@
 			"Peterxy12"
 		]
 	},
-	"bs-translation-transfer-no-translate-tool-label": "从翻译中移除",
 	"translationdictionary": "翻译字典",
 	"action-translation-transfer": "翻译",
 	"log-name-bs-translation-transfer": "翻译",
@@ -45,5 +44,6 @@
 	"bs-translation-transfer-glossary-edit-dialog-cancel": "取消",
 	"bs-translation-transfer-config-column-target-language": "语言",
 	"bs-translation-transfer-config-column-delete-title": "删除",
+	"bs-translation-transfer-no-translate-tool-label": "从翻译中移除",
 	"bs-translation-transfer-config-column-target-namespace-label": "命名空间的翻译"
 }
