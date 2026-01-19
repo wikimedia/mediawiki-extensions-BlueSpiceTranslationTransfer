@@ -93,6 +93,7 @@
 	"bs-translation-transfer-config-column-target-language": "Sprache",
 	"bs-translation-transfer-config-namespaces-enabled": "Für die Übersetzung aktivierte Namensräume",
 	"bs-translation-transfer-config-namespaces-enabled-help-label": "Die Namensräume, die in den Übersetzungsworkflow für dieses Wiki aufgenommen werden sollen, auswählen",
+	"bs-translation-transfer-no-translate-tool-label": "Von der Übersetzung ausschließen",
 	"bs-translation-transfer-config-column-target-namespace-label": "Übersetzung des Namensraums",
 	"bs-translation-transfer-ui-related-resources-notice": "Es wurden zusätzliche Ressourcen übertragen.",
 	"bs-translation-transfer-ui-related-resources-transferred-title": "Übertragen",
