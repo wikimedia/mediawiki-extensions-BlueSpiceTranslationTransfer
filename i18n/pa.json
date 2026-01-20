@@ -4,5 +4,9 @@
 			"Cabal"
 		]
 	},
-	"bs-translation-transfer-dictionary-switch-main-language": "ਮੁੱਢਲੀ ਬੋਲੀ"
+	"bs-translation-transfer-dictionary-switch-main-language": "ਮੁੱਢਲੀ ਬੋਲੀ",
+	"action-translation-transfer": "ਉਲਥਾ ਕਰੋ",
+	"bs-translation-transfer-ui-dialog-action-translate": "ਉਲਥਾ ਕਰੋ",
+	"bs-translation-transfer-ui-dialog-action-translate-another": "ਕਿਸੇ ਹੋਰ ਬੋਲੀ ਵਿੱਚ ਉਲਥਾ ਕਰੋ",
+	"bs-translation-transfer-local-layout-label": "ਇਸ ਵਰਕੇ ਦਾ ਉਲਥਾ ਕਰੋ"
 }
