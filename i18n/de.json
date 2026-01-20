@@ -93,6 +93,7 @@
 	"bs-translation-transfer-config-column-target-language": "Sprache",
 	"bs-translation-transfer-config-namespaces-enabled": "Für die Übersetzung aktivierte Namensräume",
 	"bs-translation-transfer-config-namespaces-enabled-help-label": "Die Namensräume, die in den Übersetzungsworkflow für dieses Wiki aufgenommen werden sollen, auswählen",
+	"bs-translation-transfer-no-translate-tool-label": "Von der Übersetzung ausschließen",
 	"bs-translation-transfer-config-column-target-namespace-label": "Übersetzung des Namensraums",
 	"bs-translation-transfer-ui-related-resources-notice": "Es wurden zusätzliche Ressourcen übertragen.",
 	"bs-translation-transfer-ui-related-resources-transferred-title": "Übertragen",
@@ -111,6 +112,5 @@
 	"bs-translation-transfer-related-title-push-fail-target-exists": "Eine Seite mit diesem Titel existiert bereits im Ziel-Wiki und steht in keinem Zusammenhang mit der Quellseite.",
 	"bs-translation-transfer-related-title-push-fail-no-change": "Die Seite existiert bereits im Ziel-Wiki und seit der letzten Übertragung hat sich im Quell-Wiki nichts geändert.",
 	"bs-translation-transfer-related-title-push-fail-user-changes": "Die Seite existiert bereits im Ziel-Wiki und wurde geändert.",
-	"bs-translation-transfer-related-title-push-fail-generic-error": "Die Übertragung ist aufgrund eines unerwarteten Fehlers fehlgeschlagen. Bitte {{#FORMAL:wende dich| wenden Sie sich}} an {{#FORMAL: deinen|Ihren}} Administrator.",
-	"bs-translation-transfer-no-translate-tool-label": "Von der Übersetzung ausschließen"
+	"bs-translation-transfer-related-title-push-fail-generic-error": "Die Übertragung ist aufgrund eines unerwarteten Fehlers fehlgeschlagen. Bitte {{#FORMAL:wende dich| wenden Sie sich}} an {{#FORMAL: deinen|Ihren}} Administrator."
 }
