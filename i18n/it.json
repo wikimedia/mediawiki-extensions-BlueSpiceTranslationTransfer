@@ -25,5 +25,18 @@
 	"bs-translation-transfer-ui-dialog-action-translate-another": "Traduci in un’altra lingua",
 	"bs-translation-transfer-ui-add": "Aggiungi",
 	"bs-translation-transfer-glossary-edit-dialog-save": "Salva",
-	"bs-translation-transfer-no-translate-tool-label": "Escludi dalla traduzione"
+	"bs-translation-transfer-no-translate-tool-label": "Escludi dalla traduzione",
+	"bs-translation-transfer-ui-related-resources-notice": "Sono state trasferite risorse aggiuntive.",
+	"bs-translation-transfer-ui-related-resources-transferred-title": "Trasferito",
+	"bs-translation-transfer-ui-related-resources-transferred-title-aria": "Pagine trasferite",
+	"bs-translation-transfer-ui-related-resources-transferred-notice": "Queste pagine sono state trasferite con successo e non necessitano di ulteriori modifiche.",
+	"bs-translation-transfer-ui-related-resources-not-transferred-title": "Non trasferito",
+	"bs-translation-transfer-ui-related-resources-not-transferred-title-aria": "Pagine non trasferite",
+	"bs-translation-transfer-ui-related-resources-fail-reason": "Mostra il motivo per cui la pagina non è stata trasferita",
+	"bs-translation-transfer-related-file-push-fail-does-not-exist": "Il file non esiste nel wiki di origine",
+	"bs-translation-transfer-related-title-push-fail-no-revision": "Non è stata trovata alcuna versione per il titolo di origine.",
+	"bs-translation-transfer-related-title-push-fail-sha1-bad-status": "Non è stato possibile recuperare le informazioni sulla versione dal wiki di destinazione.",
+	"bs-translation-transfer-related-title-push-fail-sha1-bad-response": "Non è stato possibile recuperare le informazioni sulla versione a causa di una risposta non valida.",
+	"bs-translation-transfer-related-title-push-fail-user-changes": "La pagina esiste già sul wiki di destinazione ed è stata modificata.",
+	"bs-translation-transfer-related-title-push-fail-generic-error": "Il trasferimento non è riuscito a causa di un errore imprevisto. Contatta l'amministratore."
 }
