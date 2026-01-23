@@ -101,5 +101,13 @@
 	"bs-translation-transfer-config-namespaces-enabled": "启用翻译的命名空间",
 	"bs-translation-transfer-config-namespaces-enabled-help-label": "选择包含对此wiki翻译工作流程的命名空间",
 	"bs-translation-transfer-no-translate-tool-label": "从翻译中移除",
-	"bs-translation-transfer-config-column-target-namespace-label": "命名空间的翻译"
+	"bs-translation-transfer-config-column-target-namespace-label": "命名空间的翻译",
+	"bs-translation-transfer-ui-related-resources-notice": "已转移额外资源。",
+	"bs-translation-transfer-ui-related-resources-transferred-title": "已转移",
+	"bs-translation-transfer-ui-related-resources-transferred-title-aria": "已转移页面",
+	"bs-translation-transfer-ui-related-resources-transferred-notice": "已成功转移这些页面，无需进一步调整。",
+	"bs-translation-transfer-ui-related-resources-not-transferred-title": "尚未转移",
+	"bs-translation-transfer-ui-related-resources-not-transferred-title-aria": "尚未转移页面",
+	"bs-translation-transfer-ui-related-resources-not-transferred-notice": "这些页面无法自动转移。请检查内容并进行必要的调整。",
+	"bs-translation-transfer-ui-related-resources-fail-reason": "显示页面未转移的原因"
 }
