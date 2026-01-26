@@ -109,5 +109,15 @@
 	"bs-translation-transfer-ui-related-resources-not-transferred-title": "尚未转移",
 	"bs-translation-transfer-ui-related-resources-not-transferred-title-aria": "尚未转移页面",
 	"bs-translation-transfer-ui-related-resources-not-transferred-notice": "这些页面无法自动转移。请检查内容并进行必要的调整。",
-	"bs-translation-transfer-ui-related-resources-fail-reason": "显示页面未转移的原因"
+	"bs-translation-transfer-ui-related-resources-fail-reason": "显示页面未转移的原因",
+	"bs-translation-transfer-related-file-push-fail-integrations": "由于其他扩展干扰到过程导致无法推送文件。请检查您的扩展或联系您的管理员。",
+	"bs-translation-transfer-related-file-push-fail-local-path": "文件存在于来源wiki里，但本地端路径不正确。",
+	"bs-translation-transfer-related-file-push-fail-does-not-exist": "来源wiki中不存在该文件。",
+	"bs-translation-transfer-related-title-push-fail-no-revision": "未找到来源标题的修订。",
+	"bs-translation-transfer-related-title-push-fail-sha1-bad-status": "无法从目标wiki中检索修订信息。",
+	"bs-translation-transfer-related-title-push-fail-sha1-bad-response": "由于响应无效，无法检索修订信息。",
+	"bs-translation-transfer-related-title-push-fail-target-exists": "目标wiki中已存在此标题相同的页面，且与来源页面无关。",
+	"bs-translation-transfer-related-title-push-fail-no-change": "目标wiki上已存在该页面，并自上次转移后，来源wiki上的任何内容均未发生更改。",
+	"bs-translation-transfer-related-title-push-fail-user-changes": "该页面已存在目标wiki上，且已被修改。",
+	"bs-translation-transfer-related-title-push-fail-generic-error": "出于意外错误导致转移失败。请联系您的管理员。"
 }
