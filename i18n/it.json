@@ -33,14 +33,14 @@
 	"bs-translation-transfer-ui-related-resources-transferred-notice": "Queste pagine sono state trasferite con successo e non necessitano di ulteriori modifiche.",
 	"bs-translation-transfer-ui-related-resources-not-transferred-title": "Non trasferito",
 	"bs-translation-transfer-ui-related-resources-not-transferred-title-aria": "Pagine non trasferite",
+	"bs-translation-transfer-ui-related-resources-not-transferred-notice": "Non è stato possibile trasferire queste pagine automaticamente. Si prega di controllare il contenuto e apportare qualsiasi modifica necessaria.",
 	"bs-translation-transfer-ui-related-resources-fail-reason": "Mostra il motivo per cui la pagina non è stata trasferita",
+	"bs-translation-transfer-related-file-push-fail-local-path": "Il file esiste nella wiki sorgente ma il percorso locale non è corretto.",
 	"bs-translation-transfer-related-file-push-fail-does-not-exist": "Il file non esiste nel wiki di origine",
 	"bs-translation-transfer-related-title-push-fail-no-revision": "Non è stata trovata alcuna versione per il titolo di origine.",
 	"bs-translation-transfer-related-title-push-fail-sha1-bad-status": "Non è stato possibile recuperare le informazioni sulla versione dal wiki di destinazione.",
 	"bs-translation-transfer-related-title-push-fail-sha1-bad-response": "Non è stato possibile recuperare le informazioni sulla versione a causa di una risposta non valida.",
+	"bs-translation-transfer-related-title-push-fail-target-exists": "Una pagina con questo titolo esiste già nella wiki di destinazione e non è correlata alla pagina di sorgente.",
 	"bs-translation-transfer-related-title-push-fail-user-changes": "La pagina esiste già sul wiki di destinazione ed è stata modificata.",
-	"bs-translation-transfer-related-title-push-fail-generic-error": "Il trasferimento non è riuscito a causa di un errore imprevisto. Contatta l'amministratore.",
-	"bs-translation-transfer-ui-related-resources-not-transferred-notice": "Non è stato possibile trasferire queste pagine automaticamente. Si prega di controllare il contenuto e apportare qualsiasi modifica necessaria.",
-	"bs-translation-transfer-related-file-push-fail-local-path": "Il file esiste nella wiki sorgente ma il percorso locale non è corretto.",
-	"bs-translation-transfer-related-title-push-fail-target-exists": "Una pagina con questo titolo esiste già nella wiki di destinazione e non è correlata alla pagina di sorgente."
+	"bs-translation-transfer-related-title-push-fail-generic-error": "Il trasferimento non è riuscito a causa di un errore imprevisto. Contatta l'amministratore."
 }
