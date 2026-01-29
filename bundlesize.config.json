@@ -1,0 +1,10 @@
+[
+	{
+		"resourceModule": "ext.translate.transfer.nodes.styles",
+		"maxSize": "2 kB"
+	},
+	{
+		"resourceModule": "ext.translate.transfer.bootstrap",
+		"maxSize": "2 kB"
+	}
+]
