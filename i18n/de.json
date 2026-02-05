@@ -91,6 +91,7 @@
 	"bs-translation-transfer-glossary-edit-dialog-cancel": "Abbrechen",
 	"bs-translation-transfer-glossary-edit-dialog-change-translation-label": "Übersetzung ändern für: <b>$1</b>",
 	"bs-translation-transfer-config-column-target-language": "Sprache",
+	"bs-translation-transfer-config-column-delete-title": "Löschen",
 	"bs-translation-transfer-config-namespaces-enabled": "Für die Übersetzung aktivierte Namensräume",
 	"bs-translation-transfer-config-namespaces-enabled-help-label": "Die Namensräume, die in den Übersetzungsworkflow für dieses Wiki aufgenommen werden sollen, auswählen",
 	"bs-translation-transfer-no-translate-tool-label": "Von der Übersetzung ausschließen",
