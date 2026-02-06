@@ -211,6 +211,8 @@ class TargetRecognizer {
 	 * @return array
 	 */
 	public function getLangToTargetKeyMap(): array {
+		$this->assertTargetsLoaded();
+
 		return $this->langTargetKeyMap;
 	}
 
