@@ -99,5 +99,15 @@
 	"bs-translation-transfer-config-column-target-language": "Taal",
 	"bs-translation-transfer-config-column-delete-title": "Verwijderen",
 	"bs-translation-transfer-config-namespaces-enabled": "Naamruimten die zijn toegestaan voor vertaling",
-	"bs-translation-transfer-no-translate-tool-label": "Niet vertalen"
+	"bs-translation-transfer-config-namespaces-enabled-help-label": "Selecteer de naamruimten die u wilt opnemen in de vertaalworkflow voor deze wiki.",
+	"bs-translation-transfer-no-translate-tool-label": "Niet vertalen",
+	"bs-translation-transfer-config-column-target-namespace-label": "Vertaling van de naamruimte",
+	"bs-translation-transfer-ui-related-resources-notice": "Er zijn extra middelen overgedragen.",
+	"bs-translation-transfer-ui-related-resources-transferred-title": "Overgedragen",
+	"bs-translation-transfer-ui-related-resources-transferred-title-aria": "Overgedragen pagina's",
+	"bs-translation-transfer-ui-related-resources-transferred-notice": "Deze pagina's zijn overgezet en behoeven geen verdere aanpassingen.",
+	"bs-translation-transfer-ui-related-resources-not-transferred-title": "Niet overgedragen",
+	"bs-translation-transfer-ui-related-resources-not-transferred-title-aria": "Niet overgedragen pagina's",
+	"bs-translation-transfer-ui-related-resources-not-transferred-notice": "Deze pagina's konden niet automatisch worden overgezet. Controleer de inhoud en breng indien nodig aanpassingen aan.",
+	"bs-translation-transfer-ui-related-resources-fail-reason": "Geeft de reden aan waarom de pagina niet is overgedragen."
 }
