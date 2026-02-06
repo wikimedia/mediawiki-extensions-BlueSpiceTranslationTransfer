@@ -14,7 +14,7 @@
 	},
 	"require": {
 		"composer/installers": "~1.0|~2",
-		"mwstake/mediawiki-component-commonuserinterface": "~6",
+		"mwstake/mediawiki-component-commonuserinterface": "^7.0",
 		"mwstake/mediawiki-component-deepl-translator": "~1",
 		"mwstake/mediawiki-component-commonwebapis": "~3"
 	},
