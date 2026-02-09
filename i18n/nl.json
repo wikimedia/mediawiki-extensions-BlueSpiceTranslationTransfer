@@ -109,5 +109,15 @@
 	"bs-translation-transfer-ui-related-resources-not-transferred-title": "Niet overgedragen",
 	"bs-translation-transfer-ui-related-resources-not-transferred-title-aria": "Niet overgedragen pagina's",
 	"bs-translation-transfer-ui-related-resources-not-transferred-notice": "Deze pagina's konden niet automatisch worden overgezet. Controleer de inhoud en breng indien nodig aanpassingen aan.",
-	"bs-translation-transfer-ui-related-resources-fail-reason": "Geeft de reden aan waarom de pagina niet is overgedragen."
+	"bs-translation-transfer-ui-related-resources-fail-reason": "Geeft de reden aan waarom de pagina niet is overgedragen.",
+	"bs-translation-transfer-related-file-push-fail-integrations": "Het bestand kon niet worden geüpload omdat andere extensies het proces verstoren. Controleer uw uitbreidingen of neem contact op met uw beheerder.",
+	"bs-translation-transfer-related-file-push-fail-local-path": "Het bestand bestaat wel in de bronwiki, maar het lokale pad is onjuist.",
+	"bs-translation-transfer-related-file-push-fail-does-not-exist": "Het bestand bestaat niet in de bronwiki.",
+	"bs-translation-transfer-related-title-push-fail-no-revision": "Er kon geen versie worden gevonden voor de brontitel.",
+	"bs-translation-transfer-related-title-push-fail-sha1-bad-status": "De versiegegevens konden niet worden opgehaald van de betreffende wiki.",
+	"bs-translation-transfer-related-title-push-fail-sha1-bad-response": "De versiegegevens konden niet worden opgehaald vanwege een onjuist antwoord.",
+	"bs-translation-transfer-related-title-push-fail-target-exists": "Er bestaat al een pagina met deze titel in de doelwiki, en deze pagina is niet gerelateerd aan de bronpagina.",
+	"bs-translation-transfer-related-title-push-fail-no-change": "De pagina bestaat al op de doelwiki en er is niets veranderd op de bronwiki sinds de laatste overdracht.",
+	"bs-translation-transfer-related-title-push-fail-user-changes": "De pagina bestaat al op de betreffende wiki en is aangepast.",
+	"bs-translation-transfer-related-title-push-fail-generic-error": "De overdracht is mislukt vanwege een onverwachte fout. Neem contact op met uw beheerder."
 }
