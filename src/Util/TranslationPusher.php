@@ -528,12 +528,16 @@ class TranslationPusher implements LoggerAwareInterface {
 		File $file, string $content, string $filename, string $targetLang
 	): Status {
 		// Translate content of file description page.
-		try {
-			$translatedWikitext = $this->translator->translateWikitext( $content, $targetLang );
-		} catch ( Exception $e ) {
-			return Status::newFatal(
-				$e->getMessage()
-			);
+		if ( !empty( $content ) ) {
+			try {
+				$translatedWikitext = $this->translator->translateWikitext( $content, $targetLang );
+			} catch ( Exception $e ) {
+				return Status::newFatal(
+					$e->getMessage()
+				);
+			}
+		} else {
+			$translatedWikitext = '';
 		}
 
 		$upload = $requestHandler->uploadFile(
