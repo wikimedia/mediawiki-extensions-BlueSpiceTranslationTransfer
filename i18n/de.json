@@ -1,10 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Dejan Savuljesku",
-			"Patric Wirth",
 			"Brettchenweber",
-			"Mschlindwein"
+			"Dejan Savuljesku",
+			"Mschlindwein",
+			"Patric Wirth"
 		]
 	},
 	"bs-translationtransfer-desc": "Ermöglicht das Übersetzen und Übertragen von Seiten zwischen Wiki-Instanzen",
@@ -39,7 +39,7 @@
 	"bs-translation-transfer-local-layout-label": "Diese Seite übersetzen",
 	"bs-translation-transfer-local-no-languages": "Keine gültigen Übersetzungssprachen vorhanden",
 	"bs-translation-transfer-local-progress": "Inhalt wird übersetzt…",
-	"bs-translation-transfer-outdated-translation-label": "Diese Übersetzung ist veraltet. Bitte überprüfe die '''[$1 Quellsprache]'''",
+	"bs-translation-transfer-outdated-translation-label": "Diese Übersetzung ist veraltet. Bitte {{#FORMAL:überprüfe|überprüfen Sie}} die '''[$1 Quellsprache]'''",
 	"bs-translation-transfer-overview-source-page-column": "Quellseite",
 	"bs-translation-transfer-overview-source-lang-column": "Quellsprache",
 	"bs-translation-transfer-overview-target-page-column": "Zielseite",
@@ -54,7 +54,7 @@
 	"bs-translation-transfer-config-namespace-map-help": "Auswahl der Namen von Namensräumen, die für die Übersetzung verwendet werden sollen",
 	"bs-translation-transfer-ui-source-namespace": "Namensraum im Quell-Wiki",
 	"bs-translation-transfer-ui-source-namespace-help": "Wählt den Namensraum aus dem Quell-Wiki aus, der für Übersetzungen verwendet wird",
-	"bs-translation-transfer-ui-target-namespace": "Übersetzung des Namensraum",
+	"bs-translation-transfer-ui-target-namespace": "Übersetzung des Namensraums",
 	"bs-translation-transfer-ui-target-namespace-help": "Legt fest, wie der Quell-Namensraum in der ausgewählten Sprache benannt wird",
 	"bs-translation-transfer-ui-target-lang": "Zielsprache",
 	"bs-translation-transfer-ui-target-lang-help": "Definiert die Sprache, die für die Übersetzung des Namensraums verwendet wird",
@@ -71,15 +71,15 @@
 	"bs-translation-transfer-dictionary-edit-dialog-save": "Speichern",
 	"bs-translation-transfer-dictionary-edit-dialog-cancel": "Abbrechen",
 	"bs-translation-transfer-dictionary-edit-dialog-back": "Zurück",
-	"bs-translation-transfer-dictionary-edit-dialog-message": "Bitte sei bei der Bearbeitung von Übersetzungen vorsichtig. Bei Änderungen wird der Seitentitel geändert und alle Links zu dieser Seite müssen manuell aktualisiert werden",
+	"bs-translation-transfer-dictionary-edit-dialog-message": "Bitte {{#FORMAL:sei|seien Sie}} bei der Bearbeitung von Übersetzungen vorsichtig. Bei Änderungen wird der Seitentitel geändert und alle Links zu dieser Seite müssen manuell aktualisiert werden",
 	"bs-translation-transfer-dictionary-edit-dialog-affected-pages": "{{PLURAL:$1|Eine Seite|$1 Seiten}} {{PLURAL:$1|muss|müssen}} manuell aktualisiert werden. [$2 Alle betroffenen Seiten] ansehen.",
 	"bs-translation-transfer-dictionary-edit-dialog-change-translation-label": "Übersetzung ändern für: <b>$1</b>",
-	"bs-translation-transfer-dictionary-edit-dialog-confirmation-label": "Bist du dir sicher, dass du die Übersetzung von <b>$1</b> in <b>$2</b>ändern möchtest?",
+	"bs-translation-transfer-dictionary-edit-dialog-confirmation-label": "{{#FORMAL:Bist du dir|Sind Sie sich}} sicher, dass {{#FORMAL:du|Sie}} die Übersetzung von <b>$1</b> in <b>$2</b>ändern {{#FORMAL:möchtest|möchten}}?",
 	"bs-translation-transfer-dictionary-translation-exists": "Vorgeschlagene Übersetzung existiert bereits für eine andere Quelle im gleichen Namensraum.",
 	"bs-translation-transfer-dictionary-remove-dialog-title": "Übersetzung entfernen",
 	"bs-translation-transfer-dictionary-remove-dialog-delete": "Entfernen",
 	"bs-translation-transfer-dictionary-remove-dialog-cancel": "Abbrechen",
-	"bs-translation-transfer-dictionary-remove-dialog-confirmation-label": "Bist du dir sicher, dass du die Übersetzung für <b>$1</b> entfernen möchtest?",
+	"bs-translation-transfer-dictionary-remove-dialog-confirmation-label": "{{#FORMAL:Bist du dir|Sind Sie sich}} sicher, dass {{#FORMAL:du|Sie}} die Übersetzung für <b>$1</b> entfernen {{#FORMAL:möchtest|möchten}}?",
 	"bs-translation-transfer-ui-dialog-target-title-input-label": "Name der Zielseite festlegen",
 	"bs-translation-transfer-ui-dialog-title-preview": "Vorschau",
 	"bs-translation-transfer-glossary-action-edit": "Bearbeiten",
@@ -98,10 +98,10 @@
 	"bs-translation-transfer-config-column-target-namespace-label": "Übersetzung des Namensraums",
 	"bs-translation-transfer-ui-related-resources-notice": "Es wurden zusätzliche Ressourcen übertragen.",
 	"bs-translation-transfer-ui-related-resources-transferred-title": "Übertragen",
-	"bs-translation-transfer-ui-related-resources-transferred-title-aria": "Übertragen Seiten",
+	"bs-translation-transfer-ui-related-resources-transferred-title-aria": "Übertragene Seiten",
 	"bs-translation-transfer-ui-related-resources-transferred-notice": "Diese Seiten wurden erfolgreich übertragen und erfordern keine weiteren Anpassungen.",
 	"bs-translation-transfer-ui-related-resources-not-transferred-title": "Nicht übertragen",
-	"bs-translation-transfer-ui-related-resources-not-transferred-title-aria": "Nicht übertragen Seiten",
+	"bs-translation-transfer-ui-related-resources-not-transferred-title-aria": "Nicht übertragene Seiten",
 	"bs-translation-transfer-ui-related-resources-not-transferred-notice": "Diese Seiten konnten nicht automatisch übertragen werden. Bitte prüfe die Inhalte und nimm bei Bedarf Anpassungen vor.",
 	"bs-translation-transfer-ui-related-resources-fail-reason": "Zeigt den Grund an, warum die Seite nicht übertragen wurde",
 	"bs-translation-transfer-related-file-push-fail-integrations": "Die Datei konnte nicht übertragen werden, da andere Erweiterungen den Vorgang blockieren. Bitte {{#FORMAL: prüfe|prüfen Sie}} {{#FORMAL: deine |Ihre}} Erweiterungen oder {{#FORMAL: wende dich|wenden Sie sich}} an {{#FORMAL: deinen|Ihren}} Administrator.",
@@ -113,5 +113,7 @@
 	"bs-translation-transfer-related-title-push-fail-target-exists": "Eine Seite mit diesem Titel existiert bereits im Ziel-Wiki und steht in keinem Zusammenhang mit der Quellseite.",
 	"bs-translation-transfer-related-title-push-fail-no-change": "Die Seite existiert bereits im Ziel-Wiki und seit der letzten Übertragung hat sich im Quell-Wiki nichts geändert.",
 	"bs-translation-transfer-related-title-push-fail-user-changes": "Die Seite existiert bereits im Ziel-Wiki und wurde geändert.",
-	"bs-translation-transfer-related-title-push-fail-generic-error": "Die Übertragung ist aufgrund eines unerwarteten Fehlers fehlgeschlagen. Bitte {{#FORMAL:wende dich| wenden Sie sich}} an {{#FORMAL: deinen|Ihren}} Administrator."
+	"bs-translation-transfer-related-title-push-fail-generic-error": "Die Übertragung ist aufgrund eines unerwarteten Fehlers fehlgeschlagen. Bitte {{#FORMAL:wende dich| wenden Sie sich}} an {{#FORMAL: deinen|Ihren}} Administrator.",
+	"bs-translation-transfer-config-column-delete-title": "Löschen",
+	"bs-translation-transfer-no-translate-tool-label": "Von der Übersetzung ausschließen"
 }
