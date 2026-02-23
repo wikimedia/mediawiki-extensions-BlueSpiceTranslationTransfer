@@ -5,6 +5,9 @@
 		]
 	},
 	"log-name-bs-translation-transfer": "Jorgalusat",
+	"bs-translation-transfer-ui-dialog-action-save": "Vurke",
 	"bs-translation-transfer-ui-add": "Lasit",
-	"bs-translation-transfer-dictionary-switch-select-language": "Vállje giela"
+	"bs-translation-transfer-dictionary-switch-select-language": "Vállje giela",
+	"bs-translation-transfer-dictionary-edit-dialog-save": "Vurke",
+	"bs-translation-transfer-glossary-edit-dialog-save": "Vurke"
 }

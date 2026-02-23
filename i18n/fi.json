@@ -5,5 +5,8 @@
 		]
 	},
 	"log-name-bs-translation-transfer": "Käännökset",
-	"bs-translation-transfer-dictionary-switch-select-language": "Valitse kieli"
+	"bs-translation-transfer-ui-dialog-action-save": "Tallenna",
+	"bs-translation-transfer-dictionary-switch-select-language": "Valitse kieli",
+	"bs-translation-transfer-dictionary-edit-dialog-save": "Tallenna",
+	"bs-translation-transfer-glossary-edit-dialog-save": "Tallenna"
 }
