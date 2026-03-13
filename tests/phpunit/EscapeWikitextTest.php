@@ -3,6 +3,7 @@
 namespace BlueSpice\TranslationTransfer\Tests;
 
 use BlueSpice\TranslationTransfer\EscapeWikitext;
+use BlueSpice\TranslationTransfer\TranslationWikitextConverter;
 use MediaWiki\Language\Language;
 use PHPUnit\Framework\TestCase;
 
@@ -45,7 +46,9 @@ class EscapeWikitextTest extends TestCase {
 
 		$targetLang = 'en';
 
-		$escapeWikitext = new EscapeWikitext( $wikitext, $englishLanguageMock, $contentLanguageMock, $targetLang );
+		$wtConverterMock = $this->createMock( TranslationWikitextConverter::class );
+
+		$escapeWikitext = new EscapeWikitext( $wikitext, $englishLanguageMock, $contentLanguageMock, $targetLang, $wtConverterMock );
 		$escapeWikitext->process();
 
 		$actualEscapedWikitext = $escapeWikitext->getResultWikitext();

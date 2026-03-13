@@ -313,8 +313,8 @@ class TranslationPusher implements LoggerAwareInterface {
 					continue;
 				}
 
-				$existsOnTarget = $this->fileExists( $fileTitle, $requestHandler );
-				$filename = $file->getName();
+				$existsOnTarget = $this->fileExists( $fileTitle, $requestHandler, $targetLang );
+				$filename = $this->translateFilenameNamespace( $file->getName(), $targetLang );
 				if ( $this->config->get( 'TranslateTransferFilesToDraft' ) && $existsOnTarget ) {
 					$filename = $this->makeResourceTitleFilename(
 						$this->targetRecognizer->getDraftNamespace( $targetLang ) ?? 'Draft',
@@ -326,7 +326,7 @@ class TranslationPusher implements LoggerAwareInterface {
 
 				if ( !$file->getLocalRefPath() ) {
 					$this->logger->error(
-						"File exists on the source but does not have correct local path - '$filename'"
+						"File exists on the source but does not have correct local path - '{$file->getName()}'"
 					);
 
 					$transferredFiles['fail'][] = [
@@ -389,16 +389,19 @@ class TranslationPusher implements LoggerAwareInterface {
 				} else {
 					// In order to create correct link to that resource on the target wiki,
 					// we need to translate NS to the target language at first.
+					// For NSFileRepo files the DB key also contains a namespace prefix that must
+					// be translated (e.g. "Foo:Bar.png" → "Foo_DE:Bar.png").
 					$targetNs = $this->wtConverter->getNsText( NS_FILE, $targetLang );
+					$translatedDbKey = $this->translateFilenameNamespace( $fileTitle->getDBkey(), $targetLang );
 
-					$resourceTargetPrefixedDbKey = $targetNs . ':' . $fileTitle->getDBkey();
+					$resourceTargetPrefixedDbKey = $targetNs . ':' . $translatedDbKey;
 
 					$targetHref = $this->targetRecognizer->composeTargetTitleLink(
 						$targetLang, $resourceTargetPrefixedDbKey
 					);
 
 					$transferredFiles['success'][] = [
-						'title' => $fileTitle->getPrefixedText(),
+						'title' => $resourceTargetPrefixedDbKey,
 						'href' => $targetHref
 					];
 				}
@@ -655,13 +658,61 @@ class TranslationPusher implements LoggerAwareInterface {
 	/**
 	 * @param Title $fileTitle
 	 * @param AuthenticatedRequestHandler $requestHandler
+	 * @param string $targetLang
 	 *
 	 * @return bool
 	 */
-	private function fileExists( Title $fileTitle, AuthenticatedRequestHandler $requestHandler ): bool {
-		$props = $requestHandler->getPageProps( 'File:' . $fileTitle->getDBkey() );
+	private function fileExists(
+		Title $fileTitle,
+		AuthenticatedRequestHandler $requestHandler,
+		string $targetLang
+	): bool {
+		$dbKey = $this->translateFilenameNamespace( $fileTitle->getDBkey(), $targetLang );
+		$props = $requestHandler->getPageProps( 'File:' . $dbKey );
 
 		return isset( $props['pageid'] ) && !isset( $props['missing'] );
+	}
+
+	/**
+	 * NSFileRepo stores files with a namespace prefix baked into the filename
+	 * (e.g. getName() returns "Foo:Bar.png" for a file in the "Foo" namespace).
+	 * When pushing to the target wiki the namespace prefix must be translated to its target-language
+	 * equivalent (e.g. "Foo_DE:Bar.png"), otherwise the upload API rejects it with
+	 * "illegal-filename" because an untranslated / unknown namespace prefix contains a colon that
+	 * MediaWiki cannot resolve to NS_FILE via Title::makeTitleSafe().
+	 *
+	 * The mapping is read from DeeplTranslateConversionConfig → namespaceMap, the same source used
+	 * everywhere else in this extension for namespace translation.
+	 *
+	 * If the filename has no colon, or the prefix is not a recognized namespace on the source wiki,
+	 * the filename is returned unchanged.
+	 *
+	 * @param string $filename Value returned by File::getName()
+	 * @param string $targetLang Target wiki language code
+	 * @return string
+	 */
+	private function translateFilenameNamespace( string $filename, string $targetLang ): string {
+		$colonPos = strpos( $filename, ':' );
+		if ( $colonPos === false ) {
+			return $filename;
+		}
+
+		$nsPrefix = substr( $filename, 0, $colonPos );
+		$bareFilename = substr( $filename, $colonPos + 1 );
+
+		// Resolve the prefix text to a namespace ID via a dummy title
+		$dummyTitle = $this->titleFactory->newFromText( $nsPrefix . ':Dummy' );
+		if ( !$dummyTitle || $dummyTitle->getNamespace() === NS_MAIN ) {
+			// Not a recognized namespace — leave the filename as-is
+			return $filename;
+		}
+
+		$translatedNs = $this->wtConverter->getNsText( $dummyTitle->getNamespace(), $targetLang );
+		if ( !$translatedNs ) {
+			return $filename;
+		}
+
+		return $translatedNs . ':' . $bareFilename;
 	}
 
 	/**
@@ -761,7 +812,15 @@ class TranslationPusher implements LoggerAwareInterface {
 		if ( $transcludedTitle->getNamespace() !== NS_MAIN ) {
 			$targetNsText = $this->wtConverter->getNsText( $transcludedTitle->getNamespace(), $targetLang );
 
-			$relatedTitleTargetPrefixedDbKey = $targetNsText . ':' . $transcludedTitle->getDBkey();
+			$dbKey = $transcludedTitle->getDBkey();
+			// For NSFileRepo files the DB key contains a namespace prefix (e.g. "Foo:Bar.png")
+			// that must be translated to the target-wiki equivalent so the existence check
+			// and SHA1 lookup use the correct page title on the target wiki.
+			if ( $transcludedTitle->getNamespace() === NS_FILE ) {
+				$dbKey = $this->translateFilenameNamespace( $dbKey, $targetLang );
+			}
+
+			$relatedTitleTargetPrefixedDbKey = $targetNsText . ':' . $dbKey;
 		} else {
 			$relatedTitleTargetPrefixedDbKey = $transcludedTitle->getDBkey();
 		}
