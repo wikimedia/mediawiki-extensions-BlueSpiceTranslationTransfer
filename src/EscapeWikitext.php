@@ -36,6 +36,11 @@ class EscapeWikitext implements LoggerAwareInterface {
 	private $targetLang;
 
 	/**
+	 * @var TranslationWikitextConverter
+	 */
+	private $wtConverter;
+
+	/**
 	 * @var array
 	 */
 	private $lines;
@@ -84,14 +89,25 @@ class EscapeWikitext implements LoggerAwareInterface {
 	 * @param Language $enLang
 	 * @param Language $contentLang
 	 * @param string $targetLang
+	 * @param TranslationWikitextConverter $wtConverter Used to translate NSFileRepo namespace
+	 *        prefixes embedded in file names (e.g. "Foo:Bar.png" →
+	 *        "Foo_DE:Bar.png") so the escaped wikitext references the correct namespace
+	 *        on the target wiki.
 	 */
-	public function __construct( string $wikitext, Language $enLang, Language $contentLang, string $targetLang ) {
+	public function __construct(
+		string $wikitext,
+		Language $enLang,
+		Language $contentLang,
+		string $targetLang,
+		TranslationWikitextConverter $wtConverter
+	) {
 		$this->lines = explode( "\n", $wikitext );
 
 		$this->enLang = $enLang;
 		$this->contentLang = $contentLang;
 
 		$this->targetLang = $targetLang;
+		$this->wtConverter = $wtConverter;
 
 		$this->logger = new NullLogger();
 	}
@@ -160,16 +176,37 @@ class EscapeWikitext implements LoggerAwareInterface {
 		$openBracketMask = $this->wikitextMasks['[['];
 		$closeBracketMask = $this->wikitextMasks[']]'];
 
+		// Capture only the scalar/object values needed for NSFileRepo prefix translation,
+		// so the closure below can remain static (no implicit $this binding).
+		$wtConverter = $this->wtConverter;
+		$targetLang = $this->targetLang;
+
 		foreach ( $this->lines as $index => &$line ) {
 			$line = preg_replace_callback(
 				// We already translated all NS_FILE links to English variant "File" previously
 				// So now we can use that to reduce number of matches
 				'/\[\[File:(.*?)]]/',
-				static function ( $matches ) use ( $contentLangMagic, $enMagic, $openBracketMask, $closeBracketMask ) {
+				static function ( $matches ) use ( $contentLangMagic, $enMagic, $openBracketMask, $closeBracketMask, $wtConverter, $targetLang ) {
 					$link = $matches[1];
 
 					$mainBits = explode( '|', $link );
 					$target = array_shift( $mainBits );
+
+					// Translate NSFileRepo namespace prefix in the filename, e.g.
+					// "Foo:Bar.png" → "Foo_DE:Bar.png" for the target wiki.
+					// Logic mirrors TranslationPusher::translateFilenameNamespace().
+					$colonPos = strpos( $target, ':' );
+					if ( $colonPos !== false ) {
+						$nsPrefix = substr( $target, 0, $colonPos );
+						$bareFilename = substr( $target, $colonPos + 1 );
+						$dummyTitle = Title::newFromText( $nsPrefix . ':Dummy' );
+						if ( $dummyTitle && $dummyTitle->getNamespace() !== NS_MAIN ) {
+							$translatedNs = $wtConverter->getNsText( $dummyTitle->getNamespace(), $targetLang );
+							if ( $translatedNs ) {
+								$target = $translatedNs . ':' . $bareFilename;
+							}
+						}
+					}
 
 					if ( !empty( $mainBits ) ) {
 						$options = [];
@@ -298,7 +335,7 @@ class EscapeWikitext implements LoggerAwareInterface {
 						}
 					}
 
-					return "<deepl:ignore>{$openBracketMask}File:$link{$closeBracketMask}</deepl:ignore>";
+					return "<deepl:ignore>{$openBracketMask}File:$target{$closeBracketMask}</deepl:ignore>";
 				},
 				$line
 			);
@@ -599,6 +636,15 @@ class EscapeWikitext implements LoggerAwareInterface {
 				$mainBits = explode( '|', $line );
 				$target = array_shift( $mainBits );
 
+				// $target is "File:Namespace:Foo.png" — translate the NSFileRepo namespace prefix
+				// (the part after "File:") so it resolves correctly on the target wiki.
+				$firstColon = strpos( $target, ':' );
+				if ( $firstColon !== false ) {
+					$fileNsPrefix = substr( $target, 0, $firstColon + 1 );
+					$nsFileRepoPart = substr( $target, $firstColon + 1 );
+					$target = $fileNsPrefix . $this->translateNsFileRepoPrefix( $nsFileRepoPart );
+				}
+
 				if ( !empty( $mainBits ) ) {
 					$label = implode( '|', $mainBits );
 
@@ -643,6 +689,44 @@ class EscapeWikitext implements LoggerAwareInterface {
 			}
 		}
 		unset( $line );
+	}
+
+	/**
+	 * NSFileRepo stores files with a namespace prefix baked into the filename
+	 * (e.g. "Foo:Bar.png" for a file in the "Foo" namespace).
+	 * This method translates that prefix to its target-language equivalent
+	 * (e.g. "Foo_DE:Bar.png") using the namespaceMap from DeeplTranslateConversionConfig,
+	 * so the escaped wikitext points to the correctly named file on the target wiki.
+	 *
+	 * Pass the filename WITHOUT the leading "File:" namespace prefix.
+	 * If there is no colon, or the prefix is not a recognized namespace, the input is returned
+	 * unchanged (safe for regular non-NSFileRepo filenames).
+	 *
+	 * @param string $nsFileRepoFilename e.g. "Foo:Bar.png" or plain "Bar.png"
+	 * @return string
+	 */
+	private function translateNsFileRepoPrefix( string $nsFileRepoFilename ): string {
+		$colonPos = strpos( $nsFileRepoFilename, ':' );
+		if ( $colonPos === false ) {
+			return $nsFileRepoFilename;
+		}
+
+		$nsPrefix = substr( $nsFileRepoFilename, 0, $colonPos );
+		$bareFilename = substr( $nsFileRepoFilename, $colonPos + 1 );
+
+		// Resolve the prefix text to a namespace ID via a dummy title
+		$dummyTitle = Title::newFromText( $nsPrefix . ':Dummy' );
+		if ( !$dummyTitle || $dummyTitle->getNamespace() === NS_MAIN ) {
+			// Not a recognized namespace — leave the filename as-is
+			return $nsFileRepoFilename;
+		}
+
+		$translatedNs = $this->wtConverter->getNsText( $dummyTitle->getNamespace(), $this->targetLang );
+		if ( !$translatedNs ) {
+			return $nsFileRepoFilename;
+		}
+
+		return $translatedNs . ':' . $bareFilename;
 	}
 
 	private function unmaskWikitext(): void {

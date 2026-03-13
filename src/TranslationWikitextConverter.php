@@ -576,7 +576,7 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 		$contentLang = $services->getContentLanguage();
 		$englishLang = $services->getLanguageFactory()->getLanguage( 'en' );
 
-		$escapeWikitext = new EscapeWikitext( $wikitext, $englishLang, $contentLang, $targetLang );
+		$escapeWikitext = new EscapeWikitext( $wikitext, $englishLang, $contentLang, $targetLang, $this );
 		$escapeWikitext->setLogger( $this->logger );
 
 		$escapeWikitext->process();
