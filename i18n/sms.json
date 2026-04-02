@@ -6,5 +6,11 @@
 	},
 	"log-name-bs-translation-transfer": "Jåårǥlõõzz",
 	"bs-translation-transfer-ui-add": "Lââʹzzet",
-	"bs-translation-transfer-dictionary-switch-select-language": "Vaʹlljed ǩiõl"
+	"bs-translation-transfer-dictionary-switch-select-language": "Vaʹlljed ǩiõl",
+	"bs-translation-transfer-ui-dialog-action-save": "Ruõkk",
+	"bs-translation-transfer-dictionary-action-remove": "Jaukkâd",
+	"bs-translation-transfer-dictionary-edit-dialog-save": "Ruõkk",
+	"bs-translation-transfer-dictionary-remove-dialog-delete": "Jaukkâd",
+	"bs-translation-transfer-glossary-action-remove": "Jaukkâd",
+	"bs-translation-transfer-glossary-edit-dialog-save": "Ruõkk"
 }
