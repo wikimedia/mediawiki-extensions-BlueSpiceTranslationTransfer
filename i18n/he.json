@@ -1,10 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80"
+			"Amire80",
+			"Neriah"
 		]
 	},
 	"bs-translation-transfer-ui-transfer-preview-wt": "קוד ויקי",
 	"bs-translation-transfer-ui-dialog-action-wikitext": "קוד ויקי",
-	"bs-translation-transfer-ui-dialog-action-done": "בוצע"
+	"bs-translation-transfer-ui-dialog-action-done": "בוצע",
+	"bs-translation-transfer-glossary-edit-dialog-save": "שמירה",
+	"bs-translation-transfer-glossary-edit-dialog-cancel": "ביטול",
+	"bs-translation-transfer-config-column-target-language": "שפה",
+	"bs-translation-transfer-config-column-delete-title": "מחיקה"
 }

@@ -5,5 +5,9 @@
 		]
 	},
 	"bs-translation-transfer-dictionary-switch-select-language": "Valjii kielâ",
-	"bs-translation-transfer-ui-add": "Lasseet"
+	"bs-translation-transfer-ui-add": "Lasseet",
+	"log-name-bs-translation-transfer": "Jurgâlusah",
+	"bs-translation-transfer-ui-dialog-action-save": "Vuorkkii",
+	"bs-translation-transfer-dictionary-edit-dialog-save": "Vuorkkii",
+	"bs-translation-transfer-glossary-edit-dialog-save": "Vuorkkii"
 }
