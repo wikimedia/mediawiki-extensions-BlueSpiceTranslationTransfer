@@ -16,7 +16,7 @@
 		"composer/installers": "~1.0|~2",
 		"mwstake/mediawiki-component-commonuserinterface": "^8.0",
 		"mwstake/mediawiki-component-deepl-translator": "~1",
-		"mwstake/mediawiki-component-commonwebapis": "~3"
+		"mwstake/mediawiki-component-commonwebapis": "~4"
 	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "45.0.0",
