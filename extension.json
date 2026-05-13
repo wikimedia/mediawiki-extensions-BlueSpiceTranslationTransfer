@@ -373,6 +373,14 @@
 		"TranslateTransferBetaFeatures": {
 			"description": "True if there is a need to enable features which are not fully in product yet. Currently that's improved templates processing.",
 			"value": false
+		},
+		"TranslateTransferUsePipeline": {
+			"description": "When true, use the new placeholder-based translation pipeline instead of the legacy ignore_tags approach. The new pipeline sends only inline HTML fragments to DeepL, avoiding structural wikitext corruption. By default: true, as the legacy pipeline is deprecated and will eventually be removed. Set to false to temporarily disable the new pipeline if you encounter issues.",
+			"value": true
+		},
+		"TranslateTransferTemplateArgs": {
+			"description": "Registry of template arguments that should be translated. Keys are template names, values are maps of argument name to translation method ('text' for regular DeepL translation, 'title' for wiki page title translation via TitleDictionary). Example: {\"Hint box\": {\"Note text\": \"text\"}, \"ButtonLink\": {\"label\": \"text\", \"target\": \"title\"}}",
+			"value": {}
 		}
 	},
 	"Hooks": {
