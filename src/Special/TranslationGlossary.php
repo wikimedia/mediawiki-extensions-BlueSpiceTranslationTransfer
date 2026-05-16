@@ -8,7 +8,12 @@ use MediaWiki\SpecialPage\SpecialPage;
 class TranslationGlossary extends SpecialPage {
 
 	public function __construct() {
-		parent::__construct( 'TranslationGlossary', 'edit' );
+		parent::__construct( 'TranslationGlossary' );
+	}
+
+	/** @inheritDoc */
+	public function getRestriction(): string {
+		return 'edit';
 	}
 
 	/**

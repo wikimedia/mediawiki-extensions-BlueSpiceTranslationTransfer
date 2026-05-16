@@ -15,9 +15,14 @@ class TranslationOverview extends SpecialPage {
 	private $configFactory;
 
 	public function __construct() {
-		parent::__construct( 'TranslationOverview', 'edit' );
+		parent::__construct( 'TranslationOverview' );
 
 		$this->configFactory = MediaWikiServices::getInstance()->getConfigFactory();
+	}
+
+	/** @inheritDoc */
+	public function getRestriction(): string {
+		return 'edit';
 	}
 
 	/**

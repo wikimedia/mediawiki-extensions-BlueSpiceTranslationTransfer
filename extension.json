@@ -8,7 +8,7 @@
 	"url": "https://en.wiki.bluespice.com/wiki/Reference:BlueSpiceTranslationTransfer",
 	"descriptionmsg": "bs-translationtransfer-desc",
 	"requires": {
-		"MediaWiki": ">= 1.43.0",
+		"MediaWiki": ">= 1.46.0",
 		"extensions": {
 			"BlueSpiceFoundation": ">= 5.0.0",
 			"BlueSpiceVisualEditorConnector": "*",

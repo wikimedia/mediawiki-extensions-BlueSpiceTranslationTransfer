@@ -9,7 +9,12 @@ use MediaWiki\SpecialPage\SpecialPage;
 class TranslationDictionary extends SpecialPage {
 
 	public function __construct() {
-		parent::__construct( 'TranslationDictionary', 'edit' );
+		parent::__construct( 'TranslationDictionary' );
+	}
+
+	/** @inheritDoc */
+	public function getRestriction(): string {
+		return 'edit';
 	}
 
 	/**
