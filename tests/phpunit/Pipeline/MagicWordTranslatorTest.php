@@ -4,11 +4,11 @@ namespace BlueSpice\TranslationTransfer\Tests\Pipeline;
 
 use BlueSpice\TranslationTransfer\Pipeline\MagicWordTranslator;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWikiIntegrationTestCase;
 use MWStake\MediaWiki\Component\DeeplTranslator\DeepLTranslator;
 use Status;
-use Title;
 
 /**
  * Tests for MagicWordTranslator.
