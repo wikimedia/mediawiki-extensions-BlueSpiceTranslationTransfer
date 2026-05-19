@@ -3,6 +3,7 @@
 namespace BlueSpice\TranslationTransfer\Pipeline;
 
 use MediaWiki\Languages\LanguageFactory;
+use MediaWiki\Parser\MagicWordFactory;
 use MediaWiki\Title\TitleFactory;
 use MWStake\MediaWiki\Component\DeepLTranslator\DeepLTranslator;
 use Psr\Log\LoggerAwareInterface;
@@ -40,7 +41,7 @@ class MagicWordTranslator implements LoggerAwareInterface {
 	/** @var DeepLTranslator */
 	private $deepL;
 
-	/** @var \MagicWordFactory */
+	/** @var MagicWordFactory */
 	private $magicWordFactory;
 
 	/** @var bool */
@@ -56,14 +57,14 @@ class MagicWordTranslator implements LoggerAwareInterface {
 	 * @param LanguageFactory $languageFactory
 	 * @param TitleFactory $titleFactory
 	 * @param DeepLTranslator $deepL
-	 * @param \MagicWordFactory $magicWordFactory
+	 * @param MagicWordFactory $magicWordFactory
 	 * @param bool $enabled Whether magic word translation is enabled (translateMagicWords config)
 	 */
 	public function __construct(
 		LanguageFactory $languageFactory,
 		TitleFactory $titleFactory,
 		DeepLTranslator $deepL,
-		\MagicWordFactory $magicWordFactory,
+		MagicWordFactory $magicWordFactory,
 		bool $enabled
 	) {
 		$this->languageFactory = $languageFactory;
