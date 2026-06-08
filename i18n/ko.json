@@ -29,7 +29,7 @@
 	"bs-translation-transfer-ui-translate-working": "문서 번역 중...",
 	"bs-translation-transfer-ui-translate-success": "번역 성공",
 	"bs-translation-transfer-ui-translate-fail": "문서 번역에 실패했습니다",
-	"bs-translation-transfer-ui-check-target-working": "대상 검증중...",
+	"bs-translation-transfer-ui-check-target-working": "대상 확인중...",
 	"bs-translation-transfer-ui-check-target-success": "대상 검증됨",
 	"bs-translation-transfer-ui-check-target-fail": "대상을 검증하는 데 실패했습니다",
 	"bs-translation-transfer-ui-transfer-preview-wt": "위키텍스트",
