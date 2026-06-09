@@ -71,7 +71,7 @@
 	"apihelp-bs-translation-transfer-convert-param-to": "대상 형식 (예: 'html') 입니다.",
 	"bs-translation-transfer-ui-transfer-working": "문서가 전송되는 중입니다...",
 	"bs-translation-transfer-ui-translate-fail": "문서 번역에 실패했습니다",
-	"bs-translation-transfer-ui-check-target-working": "대상 검증중...",
+	"bs-translation-transfer-ui-check-target-working": "대상 확인중...",
 	"bs-translation-transfer-ui-check-target-success": "대상 검증됨",
 	"bs-translation-transfer-ui-check-target-fail": "대상을 검증하는 데 실패했습니다",
 	"bs-translation-transfer-local-no-languages": "번역에 사용할 수 있는 유효한 언어가 없습니다",
