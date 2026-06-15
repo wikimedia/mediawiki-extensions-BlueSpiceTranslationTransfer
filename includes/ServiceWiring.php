@@ -43,12 +43,17 @@ return [
 		$deepL = $services->getService( 'DeepL' );
 		$titleDictionary = TitleDictionary::factory();
 
+		$targetNamespaceMapping = $config->has( 'TranslateTransferTargetNamespaceMapping' )
+			? $config->get( 'TranslateTransferTargetNamespaceMapping' )
+			: [];
+
 		$linkTranslator = new LinkTranslator(
 			$conversionConfig,
 			$deepL,
 			$titleDictionary,
 			$services->getTitleFactory(),
-			$services->getLanguageFactory()
+			$services->getLanguageFactory(),
+			$targetNamespaceMapping
 		);
 		$linkTranslator->setLogger( $logger );
 
@@ -124,14 +129,16 @@ return [
 
 		// Use new pipeline when $bsgTranslateTransferUsePipeline is true
 		$wikitextTranslator = null;
+		$conversionConfig = null;
 		$bsgConfig = $services->getConfigFactory()->makeConfig( 'bsg' );
 		if ( $bsgConfig->get( 'TranslateTransferUsePipeline' ) ) {
 			$wikitextTranslator = $services->getService( 'TranslationsTransferWikitextTranslator' );
+			$conversionConfig = new HashConfig( $bsgConfig->get( 'DeeplTranslateConversionConfig' ) );
 		}
 
 		$translator = new Translator(
 			$deepL, $wfConverter, $wikiPageFactory, $translationsDao, $titleDictionary,
-			$wikitextTranslator
+			$wikitextTranslator, $conversionConfig
 		);
 		$translator->setLogger(
 			LoggerFactory::getInstance( 'BlueSpiceTranslationTransfer' )
