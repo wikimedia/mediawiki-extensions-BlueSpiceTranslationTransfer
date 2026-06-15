@@ -68,6 +68,69 @@ class LinkTranslatorTest extends TestCase {
 	}
 
 	/**
+	 * Regression test: category links must not be double-processed by title/namespace
+	 * translation steps. After translateCategories() converts [[Category:X]] to
+	 * [[Kategorie:X_DE]], subsequent steps must not re-translate the "Kategorie:X_DE"
+	 * part as if it were a page title (which would produce [[Kategorie:Kategorie:X_DE]]).
+	 *
+	 * The bug occurs because on an English source wiki, TitleFactory doesn't recognize
+	 * "Kategorie" as a namespace, so it falls through to NS_MAIN and gets treated as
+	 * a page title to translate.
+	 *
+	 * @return void
+	 */
+	public function testCategoryNotDoubleProcessedWithTitleTranslation(): void {
+		$wikitext = '[[Category:SomeCategory1]]';
+
+		$translator = $this->makeLinkTranslator(
+			[
+				'translatePageTitle' => true,
+				'translateNamespaces' => true,
+			],
+			[ 'Category:SomeCategory1' => 'EineKategorie1' ]
+		);
+
+		$result = $translator->translateLinks( $wikitext, 'en', 'de' );
+
+		// Should be translated exactly once: [[Kategorie:EineKategorie1]]
+		$this->assertStringContainsString( '[[Kategorie:EineKategorie1]]', $result );
+		// Must NOT have doubled namespace like [[Kategorie:Kategorie:...]]
+		$this->assertStringNotContainsString( 'Kategorie:Kategorie:', $result );
+	}
+
+	/**
+	 * Same regression test but with multiple categories and regular links together.
+	 *
+	 * @return void
+	 */
+	public function testCategoryNotDoubleProcessedMixedContent(): void {
+		$wikitext = "[[Category:Animals]]\nSome text with [[Help:FAQ]] link.\n[[Category:Plants]]";
+
+		$translator = $this->makeLinkTranslator(
+			[
+				'translatePageTitle' => true,
+				'translateNamespaces' => true,
+			],
+			[
+				'Category:Animals' => 'Tiere',
+				'Category:Plants' => 'Pflanzen',
+				'Help:FAQ' => 'FAQ DE',
+			]
+		);
+
+		$result = $translator->translateLinks( $wikitext, 'en', 'de' );
+
+		// Categories should be translated once
+		$this->assertStringContainsString( '[[Kategorie:Tiere]]', $result );
+		$this->assertStringContainsString( '[[Kategorie:Pflanzen]]', $result );
+		// No doubled namespace
+		$this->assertStringNotContainsString( 'Kategorie:Kategorie:', $result );
+		// Help link should be translated normally
+		$this->assertStringContainsString( 'Hilfe:', $result );
+		$this->assertStringContainsString( 'FAQ DE', $result );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function testNamespaceTranslatedWhenConfigured(): void {

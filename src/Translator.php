@@ -8,6 +8,7 @@ use BlueSpice\TranslationTransfer\Tests\TranslatorTest;
 use BlueSpice\TranslationTransfer\Util\TranslationsDao;
 use Exception;
 use LogicException;
+use MediaWiki\Config\Config;
 use MediaWiki\Content\TextContent;
 use MediaWiki\Message\Message;
 use MediaWiki\Page\WikiPageFactory;
@@ -59,17 +60,24 @@ class Translator implements LoggerAwareInterface {
 	private $wikitextTranslator;
 
 	/**
+	 * @var Config|null
+	 */
+	private $conversionConfig;
+
+	/**
 	 * @param DeepL $deepL
 	 * @param TranslationWikitextConverter $wtConverter
 	 * @param WikiPageFactory $wikiPageFactory
 	 * @param TranslationsDao $translationsDao
 	 * @param TitleDictionary $titleDictionary
 	 * @param WikitextTranslator|null $wikitextTranslator
+	 * @param Config|null $conversionConfig
 	 */
 	public function __construct(
 		DeepL $deepL, TranslationWikitextConverter $wtConverter,
 		WikiPageFactory $wikiPageFactory, TranslationsDao $translationsDao, TitleDictionary $titleDictionary,
-		?WikitextTranslator $wikitextTranslator = null
+		?WikitextTranslator $wikitextTranslator = null,
+		?Config $conversionConfig = null
 	) {
 		$this->deepL = $deepL;
 		$this->wtConverter = $wtConverter;
@@ -77,6 +85,7 @@ class Translator implements LoggerAwareInterface {
 		$this->translationsDao = $translationsDao;
 		$this->titleDictionary = $titleDictionary;
 		$this->wikitextTranslator = $wikitextTranslator;
+		$this->conversionConfig = $conversionConfig;
 
 		$this->logger = new NullLogger();
 	}
@@ -162,6 +171,13 @@ class Translator implements LoggerAwareInterface {
 			$title, $deeplTitleTranslation, $targetLang, $addToDictionary
 		);
 
+		// When page title is NOT translated (keeps source-language URL) but addDisplayTitleToContent
+		// is enabled, prepend {{DISPLAYTITLE:translatedTitle}} so the page visually displays the
+		// translated title. Only adds it if the content doesn't already contain a DISPLAYTITLE.
+		$translatedWikitext = $this->maybeAddDisplayTitle(
+			$translatedWikitext, $deeplTitleTranslation
+		);
+
 		$this->checkIfTranslationExists( $title, $translatedTitlePrefixedText, $targetLang );
 
 		return [
@@ -169,6 +185,46 @@ class Translator implements LoggerAwareInterface {
 			'wikitext' => $translatedWikitext,
 			'dictionaryUsed' => $dictionaryUsed
 		];
+	}
+
+	/**
+	 * Prepend {{DISPLAYTITLE:...}} to translated content when configured.
+	 *
+	 * Condition: `translatePageTitle` is false (page URL stays in source language)
+	 * AND `addDisplayTitleToContent` is true. Only adds DISPLAYTITLE if the content
+	 * does not already contain one (the MagicWordTranslator may have translated an
+	 * existing one).
+	 *
+	 * Uses only the last subpage segment for the display title value (ERM 22078).
+	 *
+	 * @param string $wikitext Translated page content
+	 * @param string $translatedTitle DeepL-translated title text
+	 * @return string Wikitext with DISPLAYTITLE prepended if applicable
+	 */
+	private function maybeAddDisplayTitle( string $wikitext, string $translatedTitle ): string {
+		if ( $this->conversionConfig === null ) {
+			return $wikitext;
+		}
+
+		$translatePageTitle = $this->conversionConfig->get( 'translatePageTitle' );
+		$addDisplayTitle = $this->conversionConfig->get( 'addDisplayTitleToContent' );
+
+		if ( $translatePageTitle || !$addDisplayTitle ) {
+			return $wikitext;
+		}
+
+		// Check if content already contains a DISPLAYTITLE (in any language form — after
+		// MagicWordTranslator it will be in English form)
+		if ( preg_match( '/\{\{DISPLAYTITLE:/i', $wikitext ) ) {
+			return $wikitext;
+		}
+
+		// Use only the last subpage segment as display title (ERM 22078)
+		$title = rtrim( $translatedTitle, '/' );
+		$titleBits = explode( '/', $title );
+		$displayTitle = array_pop( $titleBits );
+
+		return "{{DISPLAYTITLE:$displayTitle}}\n\n" . $wikitext;
 	}
 
 	/**
