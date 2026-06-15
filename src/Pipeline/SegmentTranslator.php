@@ -261,31 +261,56 @@ class SegmentTranslator implements LoggerAwareInterface {
 		$options = [
 			'method' => 'POST',
 			'timeout' => 120,
+			'connectTimeout' => 30,
 			'postData' => FormatJson::encode( $postData ),
 			'sslVerifyHost' => 0,
 			'sslVerifyCert' => false,
 			'followRedirects' => true,
 		];
 
-		$req = $this->requestFactory->create( $url, $options );
-		$req->setHeader( 'Content-Type', 'application/json' );
-		$req->setHeader( 'Authorization', 'DeepL-Auth-Key ' . $this->config->get( 'DeeplTranslateServiceAuth' ) );
+		// Retry once on HTTP 0 (connection timeout/failure). This handles cold-start issues
+		// in Docker environments where the first outbound HTTPS request may fail due to
+		// DNS resolution, TLS handshake, or proxy initialization delays.
+		$maxAttempts = 2;
+		$lastException = null;
 
-		$status = $req->execute();
-		if ( !$status->isOK() ) {
-			throw new Exception(
-				'DeepL API error: HTTP ' . $req->getStatus() . ' — ' . $req->getContent()
+		for ( $attempt = 1; $attempt <= $maxAttempts; $attempt++ ) {
+			$req = $this->requestFactory->create( $url, $options );
+			$req->setHeader( 'Content-Type', 'application/json' );
+			$req->setHeader( 'Authorization', 'DeepL-Auth-Key ' . $this->config->get( 'DeeplTranslateServiceAuth' ) );
+
+			$status = $req->execute();
+			if ( $status->isOK() ) {
+				$response = FormatJson::decode( $req->getContent(), true );
+				if ( !isset( $response['translations'] ) || !is_array( $response['translations'] ) ) {
+					throw new Exception( 'Invalid DeepL response format' );
+				}
+
+				return array_map( static function ( $t ) {
+					return $t['text'] ?? '';
+				}, $response['translations'] );
+			}
+
+			$httpStatus = $req->getStatus();
+			$lastException = new Exception(
+				'DeepL API error: HTTP ' . $httpStatus . ' — ' . $req->getContent()
 			);
+
+			// Only retry on HTTP 0 (connection failure) — not on real API errors
+			if ( $httpStatus !== 0 ) {
+				throw $lastException;
+			}
+
+			if ( $attempt < $maxAttempts ) {
+				$this->logger->warning(
+					'SegmentTranslator: HTTP 0 on attempt {attempt}, retrying...', [
+						'attempt' => $attempt,
+					]
+				);
+			}
 		}
 
-		$response = FormatJson::decode( $req->getContent(), true );
-		if ( !isset( $response['translations'] ) || !is_array( $response['translations'] ) ) {
-			throw new Exception( 'Invalid DeepL response format' );
-		}
-
-		return array_map( static function ( $t ) {
-			return $t['text'] ?? '';
-		}, $response['translations'] );
+		throw $lastException;
 	}
 
 	/**

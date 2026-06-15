@@ -6,6 +6,7 @@ use BlueSpice\TranslationTransfer\IDictionary;
 use Exception;
 use MediaWiki\Config\Config;
 use MediaWiki\Languages\LanguageFactory;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MWStake\MediaWiki\Component\DeepLTranslator\DeepLTranslator;
@@ -56,24 +57,38 @@ class LinkTranslator implements LoggerAwareInterface {
 	private $sourceLang;
 
 	/**
+	 * @var array Namespace name mapping from bsgTranslateTransferTargetNamespaceMapping.
+	 * Format: [ 'SourceNsName' => [ 'lang' => 'TranslatedNsName', ... ], ... ]
+	 */
+	private $targetNamespaceMapping;
+
+	/**
+	 * @var array|null Cached set of image option keywords (built from source language magic words).
+	 */
+	private $imageOptions;
+
+	/**
 	 * @param Config $conversionConfig DeeplTranslateConversionConfig values
 	 * @param DeepLTranslator $deepL
 	 * @param IDictionary $titleDictionary
 	 * @param TitleFactory $titleFactory
 	 * @param LanguageFactory $languageFactory
+	 * @param array $targetNamespaceMapping bsgTranslateTransferTargetNamespaceMapping value
 	 */
 	public function __construct(
 		Config $conversionConfig,
 		DeepLTranslator $deepL,
 		IDictionary $titleDictionary,
 		TitleFactory $titleFactory,
-		LanguageFactory $languageFactory
+		LanguageFactory $languageFactory,
+		array $targetNamespaceMapping = []
 	) {
 		$this->conversionConfig = $conversionConfig;
 		$this->deepL = $deepL;
 		$this->titleDictionary = $titleDictionary;
 		$this->titleFactory = $titleFactory;
 		$this->languageFactory = $languageFactory;
+		$this->targetNamespaceMapping = $targetNamespaceMapping;
 		$this->logger = new NullLogger();
 		$this->sourceLang = '';
 	}
@@ -89,7 +104,8 @@ class LinkTranslator implements LoggerAwareInterface {
 	 * Translate all internal links in the assembled wikitext.
 	 *
 	 * Processes [[...]] links across the entire output, including inside templates,
-	 * tables, and other structural elements. Order: categories → titles → namespaces → galleries.
+	 * tables, and other structural elements.
+	 * Order: categories → titles → namespaces → galleries → file link labels.
 	 *
 	 * @param string $wikitext Assembled wikitext (output of SkeletonAssembler)
 	 * @param string $sourceLang Source language code
@@ -98,6 +114,7 @@ class LinkTranslator implements LoggerAwareInterface {
 	 */
 	public function translateLinks( string $wikitext, string $sourceLang, string $targetLang ): string {
 		$this->sourceLang = $sourceLang;
+		$this->imageOptions = null;
 
 		// 1. Categories — always translated
 		$wikitext = $this->translateCategories( $wikitext, $targetLang );
@@ -113,6 +130,9 @@ class LinkTranslator implements LoggerAwareInterface {
 			// 4. Gallery file namespace prefixes
 			$wikitext = $this->translateGalleryNamespaces( $wikitext, $targetLang );
 		}
+
+		// 5. Translate labels/captions in [[File:...]] links
+		$wikitext = $this->translateFileLinkLabels( $wikitext, $targetLang );
 
 		return $wikitext;
 	}
@@ -253,9 +273,29 @@ class LinkTranslator implements LoggerAwareInterface {
 			return null;
 		}
 
+		// Skip Special and Template namespaces — only NS is translated, not the title
+		if ( $ns === NS_SPECIAL || $ns === NS_TEMPLATE ) {
+			return null;
+		}
+
 		// Skip interwiki/language links
 		if ( $title->isExternal() ) {
 			return null;
+		}
+
+		// Skip links whose prefix matches the target-language category namespace name.
+		// After translateCategories() converts [[Category:X]] to [[Kategorie:X_DE]],
+		// TitleFactory on an English source wiki won't recognize "Kategorie" as NS_CATEGORY,
+		// so it falls through to NS_MAIN. We must detect this by comparing the prefix text.
+		if ( !$mainNs ) {
+			$colonPos = strpos( $target, ':' );
+			if ( $colonPos !== false ) {
+				$prefixText = substr( $target, 0, $colonPos );
+				$targetCatNs = $this->getNsText( NS_CATEGORY, $targetLang );
+				if ( strcasecmp( $prefixText, $targetCatNs ) === 0 ) {
+					return null;
+				}
+			}
 		}
 
 		// Extract namespace prefix for non-main-NS links
@@ -393,10 +433,25 @@ class LinkTranslator implements LoggerAwareInterface {
 			return null;
 		}
 
+		// Also skip if the prefix text matches the target language's category name
+		// (handles case where TitleFactory on source wiki doesn't recognize
+		// the already-translated category namespace as NS_CATEGORY)
+		$targetCatNs = $this->getNsText( NS_CATEGORY, $targetLang );
+		$colonPos = strpos( $target, ':' );
+		$prefixText = substr( $target, 0, $colonPos );
+		if ( strcasecmp( $prefixText, $targetCatNs ) === 0 ) {
+			return null;
+		}
+
 		$translatedNs = $this->getNsText( $ns, $targetLang );
 		$titleWithFragment = $title->getText();
 		if ( $title->getFragment() !== '' ) {
 			$titleWithFragment .= '#' . $title->getFragment();
+		}
+
+		// For NS_FILE links inside [[...]], translate NSFileRepo custom NS prefix in the filename
+		if ( $ns === NS_FILE || $ns === NS_MEDIA ) {
+			$titleWithFragment = $this->translateNsFileRepoPrefix( $titleWithFragment, $targetLang );
 		}
 
 		$result = '';
@@ -469,11 +524,17 @@ class LinkTranslator implements LoggerAwareInterface {
 		$colonPos = strpos( $fileRef, ':' );
 		$originalNs = substr( $fileRef, 0, $colonPos );
 
-		if ( $translatedNs === $originalNs ) {
+		$newFileRef = $translatedNs . ':' . $title->getText();
+
+		// Translate NSFileRepo custom namespace prefix inside the filename
+		$fileText = $title->getText();
+		$translatedFileText = $this->translateNsFileRepoPrefix( $fileText, $targetLang );
+		$newFileRef = $translatedNs . ':' . $translatedFileText;
+
+		if ( $newFileRef === $fileRef ) {
 			return $line;
 		}
 
-		$newFileRef = $translatedNs . ':' . $title->getText();
 		if ( isset( $parts[1] ) ) {
 			return $newFileRef . '|' . $parts[1];
 		}
@@ -481,21 +542,207 @@ class LinkTranslator implements LoggerAwareInterface {
 	}
 
 	/**
+	 * Translate labels/captions in [[File:...]] links via DeepL.
+	 *
+	 * In a file link like [[File:X.jpg|thumb|center|200px|Surfing on big waves]],
+	 * the last pipe-separated segment that is NOT a recognized image option
+	 * (and not NNNpx, not key=value) is the label/caption. This label should be translated.
+	 *
+	 * Uses a heuristic: the label is the last segment that doesn't match known patterns.
+	 * Image options are identified by: dimensions (NNNpx), key=value pairs (alt=..., link=...),
+	 * and known image magic words (thumb, center, frameless, etc.).
+	 *
+	 * @param string $wikitext
+	 * @param string $targetLang
+	 * @return string
+	 */
+	private function translateFileLinkLabels( string $wikitext, string $targetLang ): string {
+		return preg_replace_callback(
+			'/\[\[([^\]]*)\]\]/s',
+			function ( $matches ) use ( $targetLang ) {
+				$linkContent = $matches[1];
+				if ( strpos( $linkContent, '|' ) === false ) {
+					return $matches[0];
+				}
+
+				$bits = explode( '|', $linkContent );
+				$target = $bits[0];
+
+				// Check if this is a File link
+				$title = $this->titleFactory->newFromText( $target );
+				if ( !$title || $title->getNamespace() !== NS_FILE ) {
+					return $matches[0];
+				}
+
+				if ( count( $bits ) < 2 ) {
+					return $matches[0];
+				}
+
+				// Find the label: last segment that is not a recognized image option
+				$labelIndex = $this->findFileLinkLabelIndex( $bits );
+				if ( $labelIndex === null ) {
+					return $matches[0];
+				}
+
+				$label = $bits[$labelIndex];
+				if ( trim( $label ) === '' ) {
+					return $matches[0];
+				}
+
+				$translated = $this->translateText( $label, $targetLang );
+				if ( $translated === $label ) {
+					return $matches[0];
+				}
+
+				$bits[$labelIndex] = $translated;
+				return '[[' . implode( '|', $bits ) . ']]';
+			},
+			$wikitext
+		);
+	}
+
+	/**
+	 * Find the index of the label/caption in file link pipe-separated segments.
+	 *
+	 * The label is the last segment (after the file target) that is NOT:
+	 * - A dimension pattern (NNNpx, NNNxNNNpx, xNNNpx)
+	 * - A key=value option (alt=..., link=..., class=...)
+	 * - A recognized image keyword from source/English language magic words (img_*)
+	 *
+	 * Image option detection uses Language::getMagicWords() matching the legacy
+	 * EscapeWikitext::processFileLinks() approach.
+	 *
+	 * @param array $bits All pipe-separated parts of the link (including target at index 0)
+	 * @return int|null Index of the label segment, or null if no label found
+	 */
+	private function findFileLinkLabelIndex( array $bits ): ?int {
+		// Start from the last segment and work backwards
+		for ( $i = count( $bits ) - 1; $i >= 1; $i-- ) {
+			$segment = trim( $bits[$i] );
+			if ( $segment === '' ) {
+				continue;
+			}
+
+			// Skip dimensions (NNNpx, NNNxNNNpx, xNNNpx)
+			if ( preg_match( '/^(\d+x)?\d+px$/i', $segment ) ) {
+				continue;
+			}
+
+			// Skip key=value options (alt=..., link=..., class=..., upright=...)
+			if ( strpos( $segment, '=' ) !== false ) {
+				continue;
+			}
+
+			// Skip known image options (from source language + English magic words)
+			if ( $this->isImageOption( $segment ) ) {
+				continue;
+			}
+
+			// This segment is the label/caption
+			return $i;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Check if a segment matches a known image option keyword.
+	 *
+	 * Uses magic words from the source language (same approach as legacy
+	 * EscapeWikitext::processFileLinks). Collects all synonyms of `img_*`
+	 * magic words from the content language and English as a fallback.
+	 *
+	 * @param string $text
+	 * @return bool
+	 */
+	private function isImageOption( string $text ): bool {
+		if ( $this->imageOptions === null ) {
+			$this->imageOptions = $this->buildImageOptions();
+		}
+
+		return isset( $this->imageOptions[strtolower( $text )] );
+	}
+
+	/**
+	 * Build the set of known image option keywords from content language magic words.
+	 *
+	 * Gathers all synonyms of `img_*` magic words from both the source (content) language
+	 * and English. Options that contain `=` (like `alt=`) are stored without the `=` part
+	 * so key=value segments are handled by the separate `strpos('=')` check.
+	 *
+	 * @return array Map of lowercase keyword => true (for isset() lookup)
+	 */
+	private function buildImageOptions(): array {
+		$options = [];
+
+		$sourceLang = $this->languageFactory->getLanguage( $this->sourceLang );
+		$englishLang = $this->languageFactory->getLanguage( 'en' );
+
+		$magicWordSets = [ $sourceLang->getMagicWords(), $englishLang->getMagicWords() ];
+
+		foreach ( $magicWordSets as $magicWords ) {
+			foreach ( $magicWords as $key => $synonyms ) {
+				if ( strpos( $key, 'img_' ) !== 0 ) {
+					continue;
+				}
+
+				// Synonyms array: index 0 is case-sensitivity flag, 1+ are actual synonyms
+				for ( $i = 1, $len = count( $synonyms ); $i < $len; $i++ ) {
+					$synonym = $synonyms[$i];
+
+					// Options with '=' (like "alt=") are key=value pairs;
+					// the key part is extracted so we can recognize it
+					if ( strpos( $synonym, '=' ) !== false ) {
+						$synonym = explode( '=', $synonym )[0];
+					}
+
+					$options[strtolower( $synonym )] = true;
+				}
+			}
+		}
+
+		return $options;
+	}
+
+	/**
 	 * Get the translated namespace text for a target language.
 	 *
-	 * Checks config namespaceMap first, then falls back to MediaWiki language NS names.
-	 * File/Media namespaces are forced to English for compatibility.
+	 * Lookup order:
+	 * 1. bsgTranslateTransferTargetNamespaceMapping (by NS name, exposed in Config Manager UI)
+	 * 2. DeeplTranslateConversionConfig.namespaceMap (by NS ID, internal config)
+	 * 3. Force English for File/Media namespaces
+	 * 4. MediaWiki Language NS names as fallback
 	 *
 	 * @param int $nsId
 	 * @param string $targetLang
 	 * @return string
 	 */
 	private function getNsText( int $nsId, string $targetLang ): string {
-		$map = $this->conversionConfig->get( 'namespaceMap' );
-		if ( isset( $map[$nsId] ) && isset( $map[$nsId][$targetLang] ) ) {
-			return $map[$nsId][$targetLang];
+		// 1. Check bsgTranslateTransferTargetNamespaceMapping (by namespace name)
+		if ( !empty( $this->targetNamespaceMapping ) ) {
+			// Get the canonical/source NS name to look up in the mapping
+			$language = $this->languageFactory->getLanguage( $this->sourceLang ?: 'en' );
+			$sourceNsName = $language->getNsText( $nsId );
+			if ( $sourceNsName && isset( $this->targetNamespaceMapping[$sourceNsName][$targetLang] ) ) {
+				return $this->targetNamespaceMapping[$sourceNsName][$targetLang];
+			}
+			// Also try canonical English name
+			$canonicalName = MediaWikiServices::getInstance()
+				->getNamespaceInfo()->getCanonicalName( $nsId );
+			if ( $canonicalName && isset( $this->targetNamespaceMapping[$canonicalName][$targetLang] ) ) {
+				return $this->targetNamespaceMapping[$canonicalName][$targetLang];
+			}
 		}
 
+		// 2. Check DeeplTranslateConversionConfig.namespaceMap (by NS ID)
+		if ( $this->conversionConfig->has( 'namespaceMap' ) ) {
+			$map = $this->conversionConfig->get( 'namespaceMap' );
+			if ( isset( $map[$nsId] ) && isset( $map[$nsId][$targetLang] ) ) {
+				return $map[$nsId][$targetLang];
+			}
+		}
+
+		// 3. Force English for File/Media
 		if ( $nsId === NS_FILE ) {
 			return 'File';
 		}
@@ -503,8 +750,44 @@ class LinkTranslator implements LoggerAwareInterface {
 			return 'Media';
 		}
 
+		// 4. Fallback to MediaWiki language NS names
 		$language = $this->languageFactory->getLanguage( $targetLang );
 		return $language->getNsText( $nsId );
+	}
+
+	/**
+	 * Translate NSFileRepo custom namespace prefix in a filename.
+	 *
+	 * NSFileRepo stores files with a namespace prefix baked into the filename
+	 * (e.g., "CustomNS:Bar.png"). This translates the prefix to its target-language
+	 * equivalent using the namespace mapping.
+	 *
+	 * @param string $filename Filename without the leading "File:" prefix (e.g., "CustomNS:Bar.png")
+	 * @param string $targetLang
+	 * @return string Filename with translated prefix, or unchanged if no prefix found
+	 */
+	private function translateNsFileRepoPrefix( string $filename, string $targetLang ): string {
+		$colonPos = strpos( $filename, ':' );
+		if ( $colonPos === false ) {
+			return $filename;
+		}
+
+		$nsPrefix = substr( $filename, 0, $colonPos );
+		$bareFilename = substr( $filename, $colonPos + 1 );
+
+		// Resolve the prefix text to a namespace ID via a dummy title
+		$dummyTitle = $this->titleFactory->newFromText( $nsPrefix . ':Dummy' );
+		if ( !$dummyTitle || $dummyTitle->getNamespace() === NS_MAIN ) {
+			// Not a recognized namespace — leave unchanged
+			return $filename;
+		}
+
+		$translatedNs = $this->getNsText( $dummyTitle->getNamespace(), $targetLang );
+		if ( !$translatedNs || $translatedNs === $nsPrefix ) {
+			return $filename;
+		}
+
+		return $translatedNs . ':' . $bareFilename;
 	}
 
 	/**
