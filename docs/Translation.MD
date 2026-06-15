@@ -43,6 +43,24 @@ In case if some shared tables configuration already takes place (for example, `u
 
   `translateMagicWords` - default `true` - whether to translate magic words, eg `__KEININHALTVERZEICHNIS__ => __NOTOC__`. This also applies to image attributes, eg. `gerahmt => framed`. All magic words are translated to English instead of target language, to minimize errors, since English is understood by all wikis.
 
+- `$bsgTranslateTransferUsePipeline` - default `true` - whether to use the new placeholder-based translation pipeline. When enabled, wikitext is segmented into structural skeleton and translatable segments; DeepL only receives small inline HTML fragments. When disabled, falls back to the legacy `EscapeWikitext` + `ignore_tags` approach.
+
+- `$bsgTranslateTransferTemplateArgs` - default `{}` - registry of template arguments to translate. Keys are template names, values are objects mapping argument names to translation types (`"text"` for prose via DeepL, `"title"` for title via TitleDictionary). Example:
+
+      $bsgTranslateTransferTemplateArgs = [
+          'Hint box' => [ 'text' => 'text', 'heading' => 'text' ],
+          'ButtonLink' => [ 'title' => 'title', 'label' => 'text' ]
+      ];
+
+- `$bsgTranslateTransferTargetNamespaceMapping` - default `{}` - namespace name mapping for translation, exposed in Config Manager UI. Maps source namespace names to target namespace names per language. Example:
+
+      $bsgTranslateTransferTargetNamespaceMapping = [
+          'Help' => [ 'de' => 'Hilfe', 'fr' => 'Aide' ],
+          'Book' => [ 'de' => 'Buch', 'fr' => 'Livre' ]
+      ];
+
+  This has higher priority than `namespaceMap` from `$bsgDeeplTranslateConversionConfig` (which uses NS IDs as keys).
+
 - `$bsgTranslateTransferFilesToDraft` - If true, files will be included in the review process (pushed to draft NS first)
 - `$bsgTranslateTransferTargets` - Map of language and target wikis. Key is the language code, and value an array with such structure:
 		[ 'key' => <target_key>, 'url' => <client_url>, 'pushToDraft' => 'regular', 'draftNamespace' => 'Draft' ]
