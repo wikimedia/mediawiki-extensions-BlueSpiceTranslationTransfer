@@ -104,7 +104,7 @@ translationTransfer.ui.panel.Glossary = function ( cfg ) {
 			this.sourceTextInput.setValue( null );
 			this.translationTextInput.setValue( null );
 
-			this.store.reload();
+			this.jumpToPageOf( sourceText );
 		} ).fail( ( error ) => {
 			OO.ui.alert( error );
 		} );
@@ -226,6 +226,118 @@ translationTransfer.ui.panel.Glossary.prototype.updateTranslationLanguageHeader 
 		$( '#translate-transfer-glossary th.oojsplus-data-gridWidget-column-header[data-field="translation_normalized"]' );
 
 	$translationLanguageHeader.find( '.header-button .oo-ui-labelElement-label' ).text( languageLabel );
+};
+
+/**
+ * Finds the index (0-based, in alphabetical order) that the given source text currently has
+ * among all glossary entries for the selected language. Used to figure out which page an entry
+ * is/will be on, since entries are sorted alphabetically rather than by insertion order.
+ *
+ * @param {string} sourceText
+ * @return {jQuery.Promise} Resolves with the 0-based index, or -1 if not found/on error.
+ */
+translationTransfer.ui.panel.Glossary.prototype.findIndexOf = function ( sourceText ) {
+	const dfd = $.Deferred();
+	const normalized = sourceText.trim().toLowerCase();
+	const sortedByAllSourceTexts = {
+		filter: {},
+		sort: { source_normalized: { direction: 'ASC' } } // eslint-disable-line camelcase
+	};
+
+	translationTransfer._internal._getApi().done( ( api ) => { // eslint-disable-line no-underscore-dangle
+		// First find out how many entries there are in total, so the follow-up request can ask
+		// for exactly that many, instead of guessing at an upper bound.
+		api.getGlossaryEntries(
+			this.selectedLanguage,
+			Object.assign( { start: 0, limit: 1 }, sortedByAllSourceTexts )
+		).done( ( countResponse ) => {
+			const total = countResponse.total || 0;
+			if ( total === 0 ) {
+				dfd.resolve( -1 );
+				return;
+			}
+
+			api.getGlossaryEntries(
+				this.selectedLanguage,
+				Object.assign( { start: 0, limit: total }, sortedByAllSourceTexts )
+			).done( ( response ) => {
+				if ( !response.hasOwnProperty( 'results' ) ) {
+					dfd.resolve( -1 );
+					return;
+				}
+				dfd.resolve( response.results.findIndex(
+					( row ) => row.source_normalized === normalized
+				) );
+			} ).fail( () => {
+				dfd.resolve( -1 );
+			} );
+		} ).fail( () => {
+			dfd.resolve( -1 );
+		} );
+	} );
+
+	return dfd.promise();
+};
+
+/**
+ * Reloads the grid and jumps to the given (0-based) page index.
+ *
+ * @param {number} pageIndex
+ * @return {jQuery.Promise}
+ */
+translationTransfer.ui.panel.Glossary.prototype.jumpToPage = function ( pageIndex ) {
+	const dfd = $.Deferred();
+
+	this.store.reload().done( () => {
+		this.advanceToPage( pageIndex ).done( () => {
+			dfd.resolve();
+		} );
+	} );
+
+	return dfd.promise();
+};
+
+/**
+ * Repeatedly triggers the grid's paginator "next" action until the given (0-based) page index
+ * is reached.
+ *
+ * @param {number} pageIndex
+ * @return {jQuery.Promise}
+ */
+translationTransfer.ui.panel.Glossary.prototype.advanceToPage = function ( pageIndex ) {
+	const dfd = $.Deferred();
+
+	if ( !this.grid.paginator || pageIndex <= 0 ) {
+		dfd.resolve();
+		return dfd.promise();
+	}
+
+	$.when( this.grid.paginator.next() ).done( () => {
+		this.advanceToPage( pageIndex - 1 ).done( () => {
+			dfd.resolve();
+		} );
+	} );
+
+	return dfd.promise();
+};
+
+/**
+ * Reloads the grid and jumps to whichever page the given source text ends up on. Entries are
+ * sorted alphabetically, so a newly added/edited entry can land on a different page than the one
+ * currently shown - simply staying on (or returning to) the previous page is not correct.
+ *
+ * @param {string} sourceText
+ * @return {jQuery.Promise}
+ */
+translationTransfer.ui.panel.Glossary.prototype.jumpToPageOf = function ( sourceText ) {
+	const dfd = $.Deferred();
+
+	this.findIndexOf( sourceText ).done( ( index ) => {
+		const targetPageIndex = index >= 0 ? Math.floor( index / this.store.limit ) : 0;
+		this.jumpToPage( targetPageIndex ).done( () => dfd.resolve() );
+	} );
+
+	return dfd.promise();
 };
 
 translationTransfer.ui.panel.Glossary.prototype.disableNotSupportedLanguages = function () {
