@@ -19,7 +19,7 @@ $( function () {
 			} );
 			dialog.connect( glossaryPanel, {
 				translationUpdated: function () {
-					this.store.reload();
+					this.jumpToPageOf( data.sourceText );
 
 					translationTransfer._internal._getApi().done( ( api ) => { // eslint-disable-line no-underscore-dangle
 						api.syncRemoteGlossary( data.targetLanguage ).fail( ( error ) => {
@@ -33,20 +33,26 @@ $( function () {
 			windowManager.openWindow( dialog );
 		},
 		remove: function ( data ) {
-			translationTransfer._internal._getApi().done( ( api ) => { // eslint-disable-line no-underscore-dangle
-				api.removeGlossaryEntry(
-					data.targetLanguage,
-					{
-						sourceText: data.sourceText
-					}
-				).done( ( response ) => { // eslint-disable-line no-unused-vars
-					glossaryPanel.store.reload();
+			// Look up the entry's page before removing it - afterwards it won't be found
+			// in the list anymore.
+			glossaryPanel.findIndexOf( data.sourceText ).done( ( index ) => {
+				const targetPageIndex = index >= 0 ? Math.floor( index / glossaryPanel.store.limit ) : 0;
 
-					api.syncRemoteGlossary( data.targetLanguage ).fail( ( error ) => {
-						OO.ui.alert( error );
+				translationTransfer._internal._getApi().done( ( api ) => { // eslint-disable-line no-underscore-dangle
+					api.removeGlossaryEntry(
+						data.targetLanguage,
+						{
+							sourceText: data.sourceText
+						}
+					).done( ( response ) => { // eslint-disable-line no-unused-vars
+						glossaryPanel.jumpToPage( targetPageIndex );
+
+						api.syncRemoteGlossary( data.targetLanguage ).fail( ( error ) => {
+							OO.ui.alert( error );
+						} );
+					} ).fail( ( error ) => {
+						console.dir( error ); // eslint-disable-line no-console
 					} );
-				} ).fail( ( error ) => {
-					console.dir( error ); // eslint-disable-line no-console
 				} );
 			} );
 		}
