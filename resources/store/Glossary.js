@@ -11,7 +11,7 @@ translationTransfer.store.Glossary = function ( cfg ) {
 	translationTransfer.store.Glossary.parent.call( this, cfg );
 };
 
-OO.inheritClass( translationTransfer.store.Glossary, OOJSPlus.ui.data.store.Store );
+OO.inheritClass( translationTransfer.store.Glossary, OOJSPlus.ui.data.store.RemoteStore );
 
 translationTransfer.store.Glossary.prototype.doLoadData = function () {
 	const dfd = $.Deferred();
@@ -29,8 +29,7 @@ translationTransfer.store.Glossary.prototype.doLoadData = function () {
 				return;
 			}
 
-			this.total = response.total;
-			dfd.resolve( this.indexData( response.results ) );
+			dfd.resolve( this.processResponse( response ) );
 		} ).fail( ( jqXHR, statusText, error ) => {
 			console.dir( jqXHR ); // eslint-disable-line no-console
 			console.dir( statusText ); // eslint-disable-line no-console
