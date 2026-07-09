@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"SaraiSan-WMF"
+		]
+	},
+	"bs-translation-transfer-dictionary-switch-main-language": "Idioma principal",
+	"bs-translation-transfer-dictionary-switch-select-language": "Seleccionar un idioma",
+	"bs-translation-transfer-config-column-target-language": "Idioma"
+}
