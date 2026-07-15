@@ -92,7 +92,9 @@ class TranslatorTest extends TestCase {
 
 		$titleDictionaryMock = $this->createMock( TitleDictionary::class );
 
-		$translator = new Translator( $deeplMock, $wtConverterMock, $wikiPageFactoryMock, $translationsDaoMock, $titleDictionaryMock );
+		$translator = new Translator(
+			$deeplMock, $wtConverterMock, $wikiPageFactoryMock, $translationsDaoMock, $titleDictionaryMock
+		);
 
 		$titleMock = $this->createMock( Title::class );
 		$titleMock->method( 'exists' )->willReturn( true );

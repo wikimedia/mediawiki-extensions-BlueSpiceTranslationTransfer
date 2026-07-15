@@ -32,7 +32,8 @@ class AddDictionaryTable implements LoadExtensionSchemaUpdatesHook {
 			NormalizeTitleDictionary::class
 		);
 
-		// TODO: Add "LoggedUpdate" maintenance script for migrating "category dictionary" (aka "nv_translation_category") records BELOW
+		// TODO: Add "LoggedUpdate" maintenance script for migrating "category dictionary"
+		// (aka "nv_translation_category") records BELOW
 
 		return true;
 	}

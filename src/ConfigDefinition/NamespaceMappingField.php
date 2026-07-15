@@ -4,7 +4,6 @@ namespace BlueSpice\TranslationTransfer\ConfigDefinition;
 
 class NamespaceMappingField extends \HTMLTextField {
 	/**
-	 *
 	 * @param string $value
 	 * @return NamespaceMappingWidget
 	 */

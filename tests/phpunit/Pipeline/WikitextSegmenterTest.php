@@ -176,7 +176,7 @@ class WikitextSegmenterTest extends TestCase {
 	}
 
 	public function testSkeletonRoundTrip(): void {
-		$input = "== Introduction ==\n\nThis is the '''first''' paragraph.\n\n* Item one\n* Item two\n\n== Details ==\n\nAnother paragraph with [[a link]].";
+		$input = "== Introduction ==\n\nThis is the '''first''' paragraph.\n\n* Item one\n* Item two\n\n== Details ==\n\nAnother paragraph with [[a link]]."; // phpcs:ignore Generic.Files.LineLength.TooLong
 		[ $skeleton, $segments ] = $this->segmenter->segment( $input );
 
 		// Replace markers with source text to reproduce original
