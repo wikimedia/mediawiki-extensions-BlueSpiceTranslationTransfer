@@ -23,7 +23,6 @@ class Translate extends BSApiTasksBase {
 	];
 
 	/**
-	 *
 	 * @return array
 	 */
 	protected function getRequiredTaskPermissions() {
@@ -33,12 +32,11 @@ class Translate extends BSApiTasksBase {
 	}
 
 	/**
-	 *
 	 * @param stdClass $taskData
 	 * @param array $params
 	 * @return Standard
 	 */
-	public function task_translate( $taskData, $params ) { // phpcs:ignore MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
+	public function task_translate( $taskData, $params ) { // phpcs:ignore MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName, Generic.Files.LineLength.TooLong
 		$targetLang = empty( $taskData->lang ) ? '' : $taskData->lang;
 		$result = $this->makeStandardReturn();
 		$this->checkPermissions();

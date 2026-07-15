@@ -123,7 +123,9 @@ class TargetRecognizerTest extends TestCase {
 	public function testRecognizeTarget( $urlToRecognize, $expectedResult ) {
 		$this->init();
 
-		$targetRecognizer = new TargetRecognizer( $this->configFactoryMock, $this->mainConfigMock, $this->targetManager );
+		$targetRecognizer = new TargetRecognizer(
+			$this->configFactoryMock, $this->mainConfigMock, $this->targetManager
+		);
 
 		$actualResult = $targetRecognizer->recognizeTarget( $urlToRecognize );
 
@@ -155,7 +157,9 @@ class TargetRecognizerTest extends TestCase {
 	public function testComposeTargetLink( $targetLang, $titleDbKey, $expectedRes ) {
 		$this->init();
 
-		$targetRecognizer = new TargetRecognizer( $this->configFactoryMock, $this->mainConfigMock, $this->targetManager );
+		$targetRecognizer = new TargetRecognizer(
+			$this->configFactoryMock, $this->mainConfigMock, $this->targetManager
+		);
 
 		$actualRes = $targetRecognizer->composeTargetTitleLink( $targetLang, $titleDbKey );
 

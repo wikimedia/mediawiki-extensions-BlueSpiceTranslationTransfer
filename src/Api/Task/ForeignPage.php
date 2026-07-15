@@ -34,7 +34,7 @@ class ForeignPage extends BSApiTasksBase {
 	 *
 	 * @return Standard
 	 */
-	public function task_getPageInfo( $taskData, $params ) { // phpcs:ignore MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
+	public function task_getPageInfo( $taskData, $params ) { // phpcs:ignore MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName, Generic.Files.LineLength.TooLong
 		$title = $taskData->title;
 		$target = FormatJson::decode( $taskData->target, 1 );
 		$target = $this->getFullTarget( $target );
@@ -86,7 +86,7 @@ class ForeignPage extends BSApiTasksBase {
 	 * @return Standard
 	 * @throws Exception
 	 */
-	public function task_push( $taskData, $params ) { // phpcs:ignore MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
+	public function task_push( $taskData, $params ) { // phpcs:ignore MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName, Generic.Files.LineLength.TooLong
 		/** @var TranslationPusher $translationPusher */
 		$translationPusher = MediaWikiServices::getInstance()->getService(
 			'TranslationTransferTranslationPusher'
@@ -201,7 +201,6 @@ class ForeignPage extends BSApiTasksBase {
 	}
 
 	/**
-	 *
 	 * @return array
 	 */
 	protected function getRequiredTaskPermissions() {

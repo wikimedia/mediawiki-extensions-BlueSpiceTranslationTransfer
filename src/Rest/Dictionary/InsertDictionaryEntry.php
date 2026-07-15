@@ -15,9 +15,6 @@ class InsertDictionaryEntry extends Handler {
 	 */
 	private $titleDictionary;
 
-	/**
-	 *
-	 */
 	public function __construct() {
 		$this->titleDictionary = TitleDictionary::factory();
 	}

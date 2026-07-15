@@ -327,7 +327,9 @@ class ComplexWikitextParser {
 		if ( empty( $this->stack ) ) {
 			return self::TEXT;
 		} else {
-			return $this->stack[ array_key_last( $this->stack ) ]['type'] === 'template' ? self::TEMPLATE : self::INTERNAL_LINK;
+			return $this->stack[ array_key_last( $this->stack ) ]['type'] === 'template'
+				? self::TEMPLATE
+				: self::INTERNAL_LINK;
 		}
 	}
 }
