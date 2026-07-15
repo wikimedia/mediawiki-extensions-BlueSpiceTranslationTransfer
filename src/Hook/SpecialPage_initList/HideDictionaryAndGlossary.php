@@ -1,6 +1,6 @@
 <?php
 
-namespace BlueSpice\TranslationTransfer\Hook\SpecialPage_initList;
+namespace BlueSpice\TranslationTransfer\Hook\SpecialPage_initList; // phpcs:ignore MediaWiki.NamingConventions.NamespaceName.NamespaceUnderscore, Generic.Files.LineLength.TooLong
 
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;

@@ -307,7 +307,9 @@ class TranslationPusher implements LoggerAwareInterface {
 
 					$transferredFiles['fail'][] = [
 						'title' => $fileTitle->getPrefixedText(),
-						'reason' => Message::newFromKey( 'bs-translation-transfer-related-file-push-fail-does-not-exist' )->text()
+						'reason' => Message::newFromKey(
+							'bs-translation-transfer-related-file-push-fail-does-not-exist'
+						)->text()
 					];
 
 					continue;
@@ -331,7 +333,9 @@ class TranslationPusher implements LoggerAwareInterface {
 
 					$transferredFiles['fail'][] = [
 						'title' => $fileTitle->getPrefixedText(),
-						'reason' => Message::newFromKey( 'bs-translation-transfer-related-file-push-fail-local-path' )->text()
+						'reason' => Message::newFromKey(
+							'bs-translation-transfer-related-file-push-fail-local-path'
+						)->text()
 					];
 
 					continue;
@@ -351,7 +355,9 @@ class TranslationPusher implements LoggerAwareInterface {
 				if ( !$shouldPushFile ) {
 					$transferredFiles['fail'][] = [
 						'title' => $fileTitle->getPrefixedText(),
-						'reason' => Message::newFromKey( 'bs-translation-transfer-related-file-push-fail-integrations' )->text()
+						'reason' => Message::newFromKey(
+							'bs-translation-transfer-related-file-push-fail-integrations'
+						)->text()
 					];
 
 					continue;
@@ -384,7 +390,9 @@ class TranslationPusher implements LoggerAwareInterface {
 
 					$transferredFiles['fail'][] = [
 						'title' => $fileTitle->getPrefixedText(),
-						'reason' => Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-generic-error' )->text()
+						'reason' => Message::newFromKey(
+							'bs-translation-transfer-related-title-push-fail-generic-error'
+						)->text()
 					];
 				} else {
 					// In order to create correct link to that resource on the target wiki,
@@ -450,7 +458,9 @@ class TranslationPusher implements LoggerAwareInterface {
 
 				$transferredTransclusions['fail'][] = [
 					'title' => $transcludedTitle->getPrefixedText(),
-					'reason' => Message::newFromKey( 'bs-translation-transfer-related-title-push-fail-generic-error' )->text()
+					'reason' => Message::newFromKey(
+						'bs-translation-transfer-related-title-push-fail-generic-error'
+					)->text()
 				];
 			} else {
 				// In order to create correct link to that resource on the target wiki,

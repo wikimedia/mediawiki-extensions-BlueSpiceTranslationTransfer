@@ -186,7 +186,9 @@ class EscapeWikitext implements LoggerAwareInterface {
 				// We already translated all NS_FILE links to English variant "File" previously
 				// So now we can use that to reduce number of matches
 				'/\[\[File:(.*?)]]/',
-				static function ( $matches ) use ( $contentLangMagic, $enMagic, $openBracketMask, $closeBracketMask, $wtConverter, $targetLang ) {
+				static function ( $matches ) use (
+					$contentLangMagic, $enMagic, $openBracketMask, $closeBracketMask, $wtConverter, $targetLang
+				) {
 					$link = $matches[1];
 
 					$mainBits = explode( '|', $link );
@@ -329,9 +331,9 @@ class EscapeWikitext implements LoggerAwareInterface {
 						}
 
 						if ( $translatedString ) {
-							return "<deepl:ignore>{$openBracketMask}File:$target|$optionsString</deepl:ignore>$translatedString<deepl:ignore>{$closeBracketMask}</deepl:ignore>";
+							return "<deepl:ignore>{$openBracketMask}File:$target|$optionsString</deepl:ignore>$translatedString<deepl:ignore>{$closeBracketMask}</deepl:ignore>"; // phpcs:ignore Generic.Files.LineLength.TooLong
 						} else {
-							return "<deepl:ignore>{$openBracketMask}File:$target|$optionsString{$closeBracketMask}</deepl:ignore>";
+							return "<deepl:ignore>{$openBracketMask}File:$target|$optionsString{$closeBracketMask}</deepl:ignore>"; // phpcs:ignore Generic.Files.LineLength.TooLong
 						}
 					}
 
@@ -522,7 +524,7 @@ class EscapeWikitext implements LoggerAwareInterface {
 					if ( !empty( $mainBits ) & !( count( $mainBits ) === 1 && $mainBits[0] === ' ' ) ) {
 						$label = implode( '|', $mainBits );
 
-						return "<deepl:ignore>{$openBracketMask}$target|</deepl:ignore>$label<deepl:ignore>{$closeBracketMask}</deepl:ignore>";
+						return "<deepl:ignore>{$openBracketMask}$target|</deepl:ignore>$label<deepl:ignore>{$closeBracketMask}</deepl:ignore>"; // phpcs:ignore Generic.Files.LineLength.TooLong
 					}
 
 					return "<deepl:ignore>{$openBracketMask}$link{$closeBracketMask}</deepl:ignore>";
@@ -555,7 +557,7 @@ class EscapeWikitext implements LoggerAwareInterface {
 					if ( !empty( $mainBits ) ) {
 						$label = implode( ' ', $mainBits );
 
-						return "<deepl:ignore>{$openBracketMask}$target </deepl:ignore>$label<deepl:ignore>$closeBracketMask</deepl:ignore>";
+						return "<deepl:ignore>{$openBracketMask}$target </deepl:ignore>$label<deepl:ignore>$closeBracketMask</deepl:ignore>"; // phpcs:ignore Generic.Files.LineLength.TooLong
 					}
 
 					return "<deepl:ignore>{$openBracketMask}$link{$closeBracketMask}</deepl:ignore>";

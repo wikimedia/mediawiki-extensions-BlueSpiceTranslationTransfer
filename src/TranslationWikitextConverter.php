@@ -27,6 +27,9 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 	 */
 	private $logger;
 
+	/**
+	 * @inheritDoc
+	 */
 	public static function factory() {
 		$services = MediaWikiServices::getInstance();
 		$config = $services->getConfigFactory()->makeConfig( 'bsg' );
@@ -181,7 +184,9 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 
 					$this->titleDictionary->insert( $original->getPrefixedText(), $lang, $translatedText );
 				} else {
-					$this->logger->debug( "Such translation was not found in the dictionary. Using proposed by DeepL..." );
+					$this->logger->debug(
+						"Such translation was not found in the dictionary. Using proposed by DeepL..."
+					);
 				}
 			} else {
 				$this->logger->debug( "Translation found in the dictionary - '$cachedTranslation'" );
@@ -202,7 +207,9 @@ class TranslationWikitextConverter implements LoggerAwareInterface {
 				}
 			}
 
-			$translatedPrefixedText = $this->getNsTextInternal( $original->getNamespace(), $lang ) . ':' . $translatedText;
+			$translatedPrefixedText = $this->getNsTextInternal(
+				$original->getNamespace(), $lang
+			) . ':' . $translatedText;
 
 			$this->logger->debug( "Translated with NS to: '$translatedPrefixedText'" );
 
