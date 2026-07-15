@@ -180,7 +180,8 @@ class AddTranslateAction implements SkinTemplateNavigation__UniversalHook {
 
 		if ( $this->bsgConfig->has( 'TranslateTransferTargetNamespaceMapping' ) ) {
 			$sktemplate->getOutput()->addJsConfigVars(
-				'wgTranslateTransferTargetNamespaceMapping', $this->bsgConfig->get( 'TranslateTransferTargetNamespaceMapping' )
+				'wgTranslateTransferTargetNamespaceMapping',
+				$this->bsgConfig->get( 'TranslateTransferTargetNamespaceMapping' )
 			);
 		}
 

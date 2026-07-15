@@ -50,7 +50,6 @@ class TranslateTransferTargetNamespaceMapping extends ConfigDefinition {
 	}
 
 	/**
-	 *
 	 * @return string[]
 	 */
 	public function getPaths() {
@@ -62,7 +61,6 @@ class TranslateTransferTargetNamespaceMapping extends ConfigDefinition {
 	}
 
 	/**
-	 *
 	 * @return string
 	 */
 	public function getLabelMessageKey() {
@@ -70,7 +68,6 @@ class TranslateTransferTargetNamespaceMapping extends ConfigDefinition {
 	}
 
 	/**
-	 *
 	 * @return string
 	 */
 	public function getVariableName() {
@@ -78,7 +75,6 @@ class TranslateTransferTargetNamespaceMapping extends ConfigDefinition {
 	}
 
 	/**
-	 *
 	 * @return NamespaceMappingField
 	 */
 	public function getHtmlFormField() {
@@ -93,7 +89,6 @@ class TranslateTransferTargetNamespaceMapping extends ConfigDefinition {
 	}
 
 	/**
-	 *
 	 * @return string|null
 	 */
 	public function getHelpMessageKey() {

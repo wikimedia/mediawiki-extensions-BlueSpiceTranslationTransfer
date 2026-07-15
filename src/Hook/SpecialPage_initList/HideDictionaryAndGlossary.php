@@ -1,13 +1,14 @@
 <?php
 
-namespace BlueSpice\TranslationTransfer\Hook\SpecialPage_initList;
+namespace BlueSpice\TranslationTransfer\Hook\SpecialPage_initList; // phpcs:ignore MediaWiki.NamingConventions.NamespaceName.NamespaceUnderscore, Generic.Files.LineLength.TooLong
 
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\SpecialPage\Hook\SpecialPage_initListHook;
 
 /**
- * Hides "Special:TranslationDictionary" and "Special:TranslationGlossary" pages for instances which language is not leading one.
+ * Hides "Special:TranslationDictionary"
+ * and "Special:TranslationGlossary" pages for instances which language is not leading one.
  *
  * If no leading language is configured - pages are not hidden.
  */

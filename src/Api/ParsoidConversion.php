@@ -10,9 +10,6 @@ use Wikimedia\ParamValidator\ParamValidator;
 class ParsoidConversion extends ApiVisualEditor {
 	use ApiParsoidTrait;
 
-	/**
-	 *
-	 */
 	public function execute() {
 		$content = $this->getParameter( 'content' );
 		$to = $this->getParameter( 'to' );
@@ -34,7 +31,6 @@ class ParsoidConversion extends ApiVisualEditor {
 	}
 
 	/**
-	 *
 	 * @return array
 	 */
 	public function getAllowedParams() {
@@ -50,7 +46,6 @@ class ParsoidConversion extends ApiVisualEditor {
 	}
 
 	/**
-	 *
 	 * @return bool
 	 */
 	public function mustBePosted() {

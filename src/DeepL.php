@@ -23,7 +23,6 @@ class DeepL extends DeepLTranslator {
 	private $glossaryDao;
 
 	/**
-	 *
 	 * @param Config $config
 	 * @param HttpRequestFactory $requestFactory
 	 */
@@ -36,7 +35,6 @@ class DeepL extends DeepLTranslator {
 	}
 
 	/**
-	 *
 	 * @param Title|null $title
 	 * @param string|null $wikitext
 	 * @param string[] $targetLanguages
@@ -143,7 +141,6 @@ class DeepL extends DeepLTranslator {
 	}
 
 	/**
-	 *
 	 * @return string|false
 	 */
 	public function extractSourceLanguage() {
@@ -151,7 +148,6 @@ class DeepL extends DeepLTranslator {
 	}
 
 	/**
-	 *
 	 * @param Title $title
 	 * @return array
 	 */
