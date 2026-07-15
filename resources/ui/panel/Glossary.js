@@ -85,7 +85,7 @@ translationTransfer.ui.panel.Glossary = function ( cfg ) {
 		this.store.reload();
 	} );
 
-	this.submitNewTranslationButton = new OO.ui.ButtonWidget( {
+	this.submitNewTranslationButton = new OO.ui.ButtonWidget( { // eslint-disable-line mediawiki/no-unlabeled-buttonwidget
 		icon: 'check',
 		flags: [ 'primary', 'progressive' ]
 	} ).on( 'click', () => {
