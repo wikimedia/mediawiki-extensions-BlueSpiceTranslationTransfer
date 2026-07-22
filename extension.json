@@ -375,6 +375,10 @@
 			"description": "When true, use the new placeholder-based translation pipeline instead of the legacy ignore_tags approach. The new pipeline sends only inline HTML fragments to DeepL, avoiding structural wikitext corruption. By default: true, as the legacy pipeline is deprecated and will eventually be removed. Set to false to temporarily disable the new pipeline if you encounter issues.",
 			"value": true
 		},
+		"TranslateTransferDeeplGlossaryId": {
+			"description": "The ID of the multilingual glossary on DeepL (v3 API). Stored automatically after the first glossary sync. Migrated from per-language 'bs_tt_glossary' table by MigrateGlossaryToV3 maintenance script which runs with update.php.",
+			"value": null
+		},
 		"TranslateTransferTemplateArgs": {
 			"description": "Registry of template arguments that should be translated. Keys are template names, values are maps of argument name to translation method ('text' for regular DeepL translation, 'title' for wiki page title translation via TitleDictionary). Example: {\"Hint box\": {\"Note text\": \"text\"}, \"ButtonLink\": {\"label\": \"text\", \"target\": \"title\"}}",
 			"value": {}

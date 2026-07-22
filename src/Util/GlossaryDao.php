@@ -2,9 +2,12 @@
 
 namespace BlueSpice\TranslationTransfer\Util;
 
+use MediaWiki\Json\FormatJson;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 class GlossaryDao {
+
+	private const GLOSSARY_ID_CONFIG_NAME = 'TranslateTransferDeeplGlossaryId';
 
 	/**
 	 * @var ILoadBalancer
@@ -27,7 +30,6 @@ class GlossaryDao {
 	public function updateEntry( string $lang, string $sourceText, string $newTranslation ): void {
 		$dbw = $this->lb->getConnection( DB_PRIMARY );
 
-		// TODO: Is it okay to do that in DAO, or should we do that in "client code"?
 		// DeepL is pretty strict about glossary format
 		// We need to make sure that each entry will not have starting/trailing whitespaces
 		$newTranslation = trim( $newTranslation );
@@ -57,7 +59,6 @@ class GlossaryDao {
 	public function insertEntry( string $lang, string $sourceText, string $translation ): void {
 		$dbw = $this->lb->getConnection( DB_PRIMARY );
 
-		// TODO: Is it okay to do that in DAO, or should we do that in "client code"?
 		// DeepL is pretty strict about glossary format
 		// We need to make sure that each entry will not have starting/trailing whitespaces
 		$sourceText = trim( $sourceText );
@@ -124,67 +125,85 @@ class GlossaryDao {
 	}
 
 	/**
-	 * @param string $lang
-	 * @return string|null <tt>null</tt> if glossary for that language does not exist in DB yet
+	 * Get the single multilingual glossary ID from config storage.
+	 *
+	 * @return string|null <tt>null</tt> if glossary does not exist yet
 	 */
-	public function getGlossaryId( string $lang ): ?string {
+	public function getGlossaryId(): ?string {
 		$dbr = $this->lb->getConnection( DB_REPLICA );
 
-		$glossaryId = $dbr->selectField(
-			'bs_tt_glossary',
-			'tt_glossary_id',
+		$value = $dbr->selectField(
+			'bs_settings3',
+			's_value',
 			[
-				'tt_glossary_lang' => $lang
+				's_name' => self::GLOSSARY_ID_CONFIG_NAME
 			],
 			__METHOD__
 		);
 
-		if ( $glossaryId === false ) {
+		if ( $value === false ) {
 			return null;
 		}
 
-		return $glossaryId;
+		$decoded = FormatJson::decode( $value, true );
+		return is_string( $decoded ) ? $decoded : null;
 	}
 
 	/**
-	 * @param string $lang
+	 * Persist the single multilingual glossary ID to config storage.
+	 *
 	 * @param string $id
 	 * @return void
 	 */
-	public function persistGlossaryId( string $lang, string $id ): void {
+	public function persistGlossaryId( string $id ): void {
 		$dbw = $this->lb->getConnection( DB_PRIMARY );
 
-		// Check if glossary for that language already exists in DB
-		$glossaryExists = $dbw->selectField(
-			'bs_tt_glossary',
+		$existing = $dbw->selectField(
+			'bs_settings3',
 			'1',
 			[
-				'tt_glossary_lang' => $lang
+				's_name' => self::GLOSSARY_ID_CONFIG_NAME
 			],
 			__METHOD__
 		);
 
 		$row = [
-			'tt_glossary_id' => $id,
-			'tt_glossary_lang' => $lang,
+			's_name' => self::GLOSSARY_ID_CONFIG_NAME,
+			's_value' => FormatJson::encode( $id ),
 		];
 
-		// It would be case for "upsert", but it sometimes works weird.
-		if ( $glossaryExists ) {
+		if ( $existing ) {
 			$dbw->update(
-				'bs_tt_glossary',
+				'bs_settings3',
 				$row,
 				[
-					'tt_glossary_lang' => $lang
+					's_name' => self::GLOSSARY_ID_CONFIG_NAME
 				],
 				__METHOD__
 			);
 		} else {
 			$dbw->insert(
-				'bs_tt_glossary',
+				'bs_settings3',
 				$row,
 				__METHOD__
 			);
 		}
+	}
+
+	/**
+	 * Clear the glossary ID from config storage.
+	 *
+	 * @return void
+	 */
+	public function clearGlossaryId(): void {
+		$dbw = $this->lb->getConnection( DB_PRIMARY );
+
+		$dbw->delete(
+			'bs_settings3',
+			[
+				's_name' => self::GLOSSARY_ID_CONFIG_NAME
+			],
+			__METHOD__
+		);
 	}
 }
