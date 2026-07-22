@@ -9,17 +9,24 @@ use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Config\MultiConfig;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Json\FormatJson;
+use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\Message\Message;
 use MediaWiki\Rest\Handler;
+use Psr\Log\LoggerInterface;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 /**
+ * Syncs local glossary entries with a DeepL v3 multilingual glossary.
+ *
  * Algorithm:
- * * Get all entries of glossary for specific language from DB.
- * * Send request to DeepL to delete glossary for that language.
- * * Send request to DeepL to create new glossary for that language.
- * 		Request contains glossary entries from DB, as CSV string.
+ * * Get glossary entries for the target language from DB.
+ * * If a glossary already exists on DeepL, replace its dictionary for
+ *   the target language via PUT /v3/glossaries/{id}/dictionaries.
+ * * If the glossary was deleted on DeepL (404), log a warning,
+ *   clear the local ID and create a new glossary.
+ * * If no glossary exists yet, create one via POST /v3/glossaries.
  */
 class SyncRemoteGlossary extends Handler {
 
@@ -39,6 +46,11 @@ class SyncRemoteGlossary extends Handler {
 	private $requestFactory;
 
 	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
+
+	/**
 	 * @param ILoadBalancer $lb
 	 * @param ConfigFactory $configFactory
 	 * @param HttpRequestFactory $requestFactory
@@ -55,6 +67,7 @@ class SyncRemoteGlossary extends Handler {
 		] );
 
 		$this->requestFactory = $requestFactory;
+		$this->logger = LoggerFactory::getInstance( 'BlueSpiceTranslationTransfer' );
 	}
 
 	/**
@@ -87,74 +100,124 @@ class SyncRemoteGlossary extends Handler {
 	 * @throws Exception
 	 */
 	private function syncGlossary( string $targetLang ): void {
-		$glossaryId = $this->glossaryDao->getGlossaryId( $targetLang );
-		if ( $glossaryId !== null ) {
-			// Glossary for that language exists in DeepL, so remove it
-			$data = array_merge(
-				$this->makeOptions(),
-				[
-					'method' => 'delete'
-				]
-			);
-
-			$url = $this->makeRootUrl() . '/glossaries/' . $glossaryId;
-
-			$req = $this->requestFactory->create(
-				$url,
-				$data
-			);
-			$req->setHeader(
-				'Authorization',
-				'DeepL-Auth-Key ' . $this->config->get( 'DeeplTranslateServiceAuth' )
-			);
-
-			$status = $req->execute();
-			if ( !$status->isOK() ) {
-				$response = $req->getContent();
-				throw new Exception( 'Failed to delete DeepL glossary. Response from DeepL: ' . $response );
-			}
-		}
-
-		$entriesString = '';
-
 		$entries = $this->glossaryDao->getGlossaryEntries( $targetLang );
 		if ( empty( $entries ) ) {
-			// No need to create remote glossary if there are no entries.
-			// Even if we'll try - it will cause error from DeepL side.
+			// No entries — nothing to sync.
+			// DeepL would reject an empty dictionary anyway.
 			return;
 		}
 
-		foreach ( $entries as $source => $translation ) {
-			$entriesString .= "$source,$translation\n";
+		$glossaryId = $this->glossaryDao->getGlossaryId();
+
+		if ( $glossaryId !== null ) {
+			$success = $this->putDictionary( $glossaryId, $targetLang, $entries );
+			if ( $success ) {
+				return;
+			}
+			// PUT failed with 404 — glossary was deleted on DeepL side.
+			// Clear local ID and create a new glossary below.
+			$this->glossaryDao->clearGlossaryId();
 		}
 
-		$sourceLang = $this->extractSourceLanguage();
+		// No glossary yet (or it was just cleared after 404) — create one
+		$this->createGlossary( $targetLang, $entries );
+	}
 
-		// Create new fresh DeepL glossary
-		$data = array_merge(
-			$this->makeOptions(),
-			[
-				'method' => 'post',
-				'postData' => [
-					'name' => "$sourceLang-$targetLang Glossary",
+	/**
+	 * Replace/create a dictionary within an existing v3 multilingual glossary.
+	 *
+	 * Uses MultiHttpClient because MW's MWHttpRequest only sends body for POST requests.
+	 *
+	 * @param string $glossaryId
+	 * @param string $targetLang
+	 * @param array $entries source => translation
+	 * @return bool true if successful, false if glossary not found (404)
+	 *
+	 * @throws Exception on non-404 errors
+	 */
+	private function putDictionary( string $glossaryId, string $targetLang, array $entries ): bool {
+		$sourceLang = $this->extractSourceLanguage();
+		$entriesString = $this->buildCsvEntries( $entries );
+
+		$jsonBody = FormatJson::encode( [
+			'source_lang' => $sourceLang,
+			'target_lang' => $targetLang,
+			'entries' => $entriesString,
+			'entries_format' => 'csv'
+		] );
+
+		$url = $this->makeGlossaryUrl() . '/' . $glossaryId . '/dictionaries';
+
+		$multiClient = $this->requestFactory->createMultiClient( $this->makeOptions() );
+
+		$req = [
+			'method' => 'PUT',
+			'url' => $url,
+			'body' => $jsonBody,
+			'headers' => [
+				'Content-Type' => 'application/json',
+				'Authorization' => 'DeepL-Auth-Key ' . $this->config->get( 'DeeplTranslateServiceAuth' )
+			]
+		];
+
+		[ $rcode, $rdesc, $rhdrs, $rbody, $rerr ] = $multiClient->run( $req );
+
+		if ( $rcode === 404 ) {
+			$this->logger->warning(
+				'DeepL glossary {glossaryId} not found on remote (404). '
+				. 'It may have been deleted externally. Will create a new glossary.',
+				[ 'glossaryId' => $glossaryId ]
+			);
+			return false;
+		}
+
+		if ( $rcode < 200 || $rcode >= 300 ) {
+			throw new Exception(
+				'Failed to update DeepL glossary dictionary. Response from DeepL: ' . $rbody
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Create a new v3 multilingual glossary with a single dictionary.
+	 *
+	 * @param string $targetLang
+	 * @param array $entries source => translation
+	 * @return void
+	 *
+	 * @throws Exception
+	 */
+	private function createGlossary( string $targetLang, array $entries ): void {
+		$sourceLang = $this->extractSourceLanguage();
+		$entriesString = $this->buildCsvEntries( $entries );
+
+		$jsonBody = FormatJson::encode( [
+			'name' => "BlueSpice Glossary",
+			'dictionaries' => [
+				[
 					'source_lang' => $sourceLang,
 					'target_lang' => $targetLang,
 					'entries' => $entriesString,
 					'entries_format' => 'csv'
 				]
 			]
+		] );
+
+		$url = $this->makeGlossaryUrl();
+
+		$data = array_merge(
+			$this->makeOptions(),
+			[
+				'method' => 'post',
+				'postData' => $jsonBody
+			]
 		);
 
-		$url = $this->makeRootUrl() . '/glossaries';
-
-		$req = $this->requestFactory->create(
-			$url,
-			$data
-		);
-		$req->setHeader(
-			'Authorization',
-			'DeepL-Auth-Key ' . $this->config->get( 'DeeplTranslateServiceAuth' )
-		);
+		$req = $this->requestFactory->create( $url, $data );
+		$req->setHeader( 'Content-Type', 'application/json' );
+		$this->setAuthHeader( $req );
 
 		$status = $req->execute();
 		if ( !$status->isOK() ) {
@@ -164,14 +227,42 @@ class SyncRemoteGlossary extends Handler {
 
 		$responseRaw = $req->getContent();
 		if ( $responseRaw ) {
-			$response = json_decode( $responseRaw, true );
+			$response = FormatJson::decode( $responseRaw, true );
 
 			if ( $response && isset( $response['glossary_id'] ) ) {
-				$glossaryId = $response['glossary_id'];
-
-				$this->glossaryDao->persistGlossaryId( $targetLang, $glossaryId );
+				$this->glossaryDao->persistGlossaryId( $response['glossary_id'] );
 			}
 		}
+	}
+
+	/**
+	 * Build CSV-formatted glossary entries string.
+	 *
+	 * @param array $entries source => translation
+	 * @return string
+	 */
+	private function buildCsvEntries( array $entries ): string {
+		$lines = [];
+		foreach ( $entries as $source => $translation ) {
+			// Properly escape any double quotes inside of values, if there are any,
+			// and wrap values themselves into double quotes.
+			$source = '"' . str_replace( '"', '""', $source ) . '"';
+			$translation = '"' . str_replace( '"', '""', $translation ) . '"';
+
+			$lines[] = "$source,$translation";
+		}
+		return implode( "\n", $lines ) . "\n";
+	}
+
+	/**
+	 * @param \MWHttpRequest $req
+	 * @return void
+	 */
+	private function setAuthHeader( $req ): void {
+		$req->setHeader(
+			'Authorization',
+			'DeepL-Auth-Key ' . $this->config->get( 'DeeplTranslateServiceAuth' )
+		);
 	}
 
 	/**
@@ -200,16 +291,23 @@ class SyncRemoteGlossary extends Handler {
 	}
 
 	/**
-	 * @return string
+	 * Build the v3 glossaries base URL.
+	 *
+	 * @return string e.g. "https://api-free.deepl.com/v3/glossaries"
 	 */
-	private function makeRootUrl() {
-		return $this->config->get( 'DeeplTranslateServiceUrl' );
+	private function makeGlossaryUrl(): string {
+		$url = $this->config->get( 'DeeplTranslateServiceUrl' );
+		$url = rtrim( $url, '/' );
+		// B/C: strip trailing version path if present (e.g. /v2)
+		$url = preg_replace( '#/v\d+$#', '', $url );
+
+		return $url . '/v3/glossaries';
 	}
 
 	/**
-	 * @return string|false
+	 * @return string
 	 */
-	private function extractSourceLanguage() {
+	private function extractSourceLanguage(): string {
 		return explode( '-', $this->config->get( 'LanguageCode' ) )[0];
 	}
 }

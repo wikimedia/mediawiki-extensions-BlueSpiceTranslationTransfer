@@ -13,7 +13,7 @@ use MediaWiki\Rest\Handler;
 /**
  * Gets list of supported by DeepL glossary language pairs.
  *
- * https://developers.deepl.com/docs/api-reference/glossaries#list-supported-glossary-language-pairs
+ * Uses the v3 API: GET /v3/languages?resource=glossary
  */
 class GetSupportedTargetLangs extends Handler {
 
@@ -48,7 +48,7 @@ class GetSupportedTargetLangs extends Handler {
 	 */
 	public function execute() {
 		try {
-			$languagePairs = $this->getLanguagePairs();
+			$languages = $this->getGlossaryLanguages();
 		} catch ( Exception $e ) {
 			return $this->getResponseFactory()->createJson( [
 				'success' => false,
@@ -59,9 +59,13 @@ class GetSupportedTargetLangs extends Handler {
 		$supportedTargetLangs = [];
 
 		$sourceLang = $this->extractSourceLanguage();
-		foreach ( $languagePairs as $languagePair ) {
-			if ( $languagePair['source_lang'] === $sourceLang ) {
-				$supportedTargetLangs[] = $languagePair['target_lang'];
+		foreach ( $languages as $language ) {
+			$langCode = strtolower( $language['lang'] ?? '' );
+			$isTarget = $language['usable_as_target'] ?? false;
+
+			// Include languages that can be glossary targets, excluding the source language
+			if ( $isTarget && $langCode !== $sourceLang ) {
+				$supportedTargetLangs[] = $langCode;
 			}
 		}
 
@@ -72,11 +76,12 @@ class GetSupportedTargetLangs extends Handler {
 	}
 
 	/**
+	 * Fetch glossary-capable languages from DeepL v3 API.
+	 *
 	 * @return array
 	 * @throws Exception
 	 */
-	private function getLanguagePairs(): array {
-		// Glossary for that language exists in DeepL, so remove it
+	private function getGlossaryLanguages(): array {
 		$data = array_merge(
 			$this->makeOptions(),
 			[
@@ -84,7 +89,7 @@ class GetSupportedTargetLangs extends Handler {
 			]
 		);
 
-		$url = $this->makeRootUrl() . '/glossary-language-pairs';
+		$url = $this->makeBaseUrl() . '/v3/languages?resource=glossary';
 
 		$req = $this->requestFactory->create(
 			$url,
@@ -97,17 +102,19 @@ class GetSupportedTargetLangs extends Handler {
 
 		$status = $req->execute();
 		if ( !$status->isOK() ) {
-			throw new Exception( 'Failed to get glossary language pairs: bad status' );
+			throw new Exception( 'Failed to get glossary languages: bad status' );
 		}
 
 		$responseRaw = $req->getContent();
 		if ( $responseRaw ) {
 			$response = json_decode( $responseRaw, true );
 
-			return $response['supported_languages'];
-		} else {
-			throw new Exception( 'Failed to get glossary language pairs: bad response' );
+			if ( is_array( $response ) ) {
+				return $response;
+			}
 		}
+
+		throw new Exception( 'Failed to get glossary languages: bad response' );
 	}
 
 	/**
@@ -123,16 +130,23 @@ class GetSupportedTargetLangs extends Handler {
 	}
 
 	/**
+	 * Get the DeepL API base URL (without version path).
+	 *
 	 * @return string
 	 */
-	private function makeRootUrl() {
-		return $this->config->get( 'DeeplTranslateServiceUrl' );
+	private function makeBaseUrl(): string {
+		$url = $this->config->get( 'DeeplTranslateServiceUrl' );
+		$url = rtrim( $url, '/' );
+		// B/C: strip trailing version path if present (e.g. /v2)
+		$url = preg_replace( '#/v\d+$#', '', $url );
+
+		return $url;
 	}
 
 	/**
-	 * @return string|false
+	 * @return string
 	 */
-	private function extractSourceLanguage() {
+	private function extractSourceLanguage(): string {
 		return explode( '-', $this->config->get( 'LanguageCode' ) )[0];
 	}
 }

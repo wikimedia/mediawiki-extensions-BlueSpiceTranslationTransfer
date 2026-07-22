@@ -241,7 +241,11 @@ class SegmentTranslator implements LoggerAwareInterface {
 	 * @throws Exception
 	 */
 	private function callDeepL( array $texts, string $sourceLang, string $targetLang ): array {
-		$url = rtrim( $this->config->get( 'DeeplTranslateServiceUrl' ), '/' ) . '/translate';
+		$url = $this->config->get( 'DeeplTranslateServiceUrl' );
+		$url = rtrim( $url, '/' );
+		// B/C: strip trailing version path if present (e.g. /v2)
+		$url = preg_replace( '#/v\d+$#', '', $url );
+		$url .= '/v2/translate';
 
 		$postData = [
 			'source_lang' => strtoupper( $sourceLang ),
