@@ -126,13 +126,8 @@ class DeepL extends DeepLTranslator {
 	protected function makePostData( $text, $sourceLang, $targetLang ) {
 		$data = parent::makePostData( $text, $sourceLang, $targetLang );
 
-		// Consider DeepL glossary
-		$glossaryId = $this->glossaryDao->getGlossaryId(
-			// DeepL requires "target_lang" to be upper-case,
-			// but in all other places (for example, local glossary)
-			// lower-case language is used
-			strtolower( $targetLang )
-		);
+		// v3 multilingual glossary — single ID covers all language pairs
+		$glossaryId = $this->glossaryDao->getGlossaryId();
 		if ( $glossaryId !== null ) {
 			$data[static::PARAM_GLOSSARY_ID] = $glossaryId;
 		}
