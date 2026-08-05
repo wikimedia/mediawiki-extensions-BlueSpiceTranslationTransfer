@@ -9,8 +9,8 @@ use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Config\MultiConfig;
 use MediaWiki\Http\HttpRequestFactory;
+use MediaWiki\Message\Message;
 use MediaWiki\Rest\Handler;
-use Message;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\Rdbms\ILoadBalancer;
 
