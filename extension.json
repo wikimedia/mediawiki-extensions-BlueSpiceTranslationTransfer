@@ -75,12 +75,18 @@
 				"UserFactory",
 				"UserOptionsLookup",
 				"WatchlistManager",
+				"WatchlistLabelStore",
+				"WatchedItemStore",
 				"ContentTransformer",
-				"StatsdDataFactory",
+				"StatsFactory",
 				"WikiPageFactory",
 				"IntroMessageBuilder",
 				"PreloadedContentBuilder",
 				"SpecialPageFactory",
+				"LinkRenderer",
+				"LinkBatchFactory",
+				"RestrictionStore",
+				"TextboxBuilder",
 				"VisualEditor.ParsoidClientFactory"
 			]
 		}
