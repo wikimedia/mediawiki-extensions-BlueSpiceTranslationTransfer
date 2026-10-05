@@ -49,7 +49,7 @@ class UpdateTranslationTargetTimestamp extends Job implements LoggerAwareInterfa
 	/**
 	 * @inheritDoc
 	 */
-	public function setLogger( LoggerInterface $logger ) {
+	public function setLogger( LoggerInterface $logger ): void {
 		$this->logger = $logger;
 	}
 
