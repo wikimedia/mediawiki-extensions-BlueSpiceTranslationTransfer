@@ -3,7 +3,7 @@
 namespace BlueSpice\TranslationTransfer\Logger;
 
 use Exception;
-use ManualLogEntry;
+use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 

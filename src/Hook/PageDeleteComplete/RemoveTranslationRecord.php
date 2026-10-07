@@ -4,7 +4,7 @@ namespace BlueSpice\TranslationTransfer\Hook\PageDeleteComplete;
 
 use BlueSpice\TranslationTransfer\Util\ContentTransfer\TargetRecognizer;
 use BlueSpice\TranslationTransfer\Util\TranslationsDao;
-use ManualLogEntry;
+use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\Page\Hook\PageDeleteCompleteHook;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Permissions\Authority;
