@@ -224,8 +224,8 @@ class WikitextSegmenter implements LoggerAwareInterface {
 				if ( $this->hasUnbalancedBraces( $paragraphBuffer ) ) {
 					// Inside a multi-line template — keep accumulating
 					$paragraphBuffer[] = $line;
-					$paragraphLineIndices[] = count( $skeletonLines );
 					$skeletonLines[] = null;
+					$paragraphLineIndices[] = array_key_last( $skeletonLines );
 					continue;
 				}
 				$this->flushParagraph(
@@ -246,9 +246,11 @@ class WikitextSegmenter implements LoggerAwareInterface {
 
 			// Regular content line — accumulate as paragraph
 			$paragraphBuffer[] = $line;
-			$paragraphLineIndices[] = count( $skeletonLines );
 			// placeholder, will be filled on flush
 			$skeletonLines[] = null;
+			// Record the real key: flushParagraph() unsets the extra lines of multi-line
+			// paragraphs, so count( $skeletonLines ) lags behind the next appended key
+			$paragraphLineIndices[] = array_key_last( $skeletonLines );
 		}
 
 		// Flush remaining paragraph

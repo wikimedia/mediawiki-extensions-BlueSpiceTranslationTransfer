@@ -537,22 +537,33 @@ class InlineConverter implements LoggerAwareInterface {
 	/**
 	 * Restore opaque elements from placeholders.
 	 *
+	 * Opaque content can itself contain placeholders, because inner elements are extracted
+	 * before the elements enclosing them (e.g. a template inside a <ref>). Each pass resolves
+	 * one nesting level; nested placeholders always reference earlier entries, so the number
+	 * of passes is bounded by the size of the map.
+	 *
 	 * @param string $wikitext
 	 * @return string
 	 */
 	private function restoreOpaqueElements( string $wikitext ): string {
-		return preg_replace_callback(
-			'#<span\s+data-opaque-id="(\d+)">\s*</span>#',
-			function ( $matches ) {
-				$id = (int)$matches[1];
-				if ( isset( $this->opaqueMap[$id] ) ) {
-					return $this->opaqueMap[$id];
-				}
-				$this->logger->error( "Opaque placeholder id={$id} not found in map" );
-				return '';
-			},
-			$wikitext
-		);
+		$passesLeft = count( $this->opaqueMap ) + 1;
+		do {
+			$previous = $wikitext;
+			$wikitext = preg_replace_callback(
+				'#<span\s+data-opaque-id="(\d+)">\s*</span>#',
+				function ( $matches ) {
+					$id = (int)$matches[1];
+					if ( isset( $this->opaqueMap[$id] ) ) {
+						return $this->opaqueMap[$id];
+					}
+					$this->logger->error( "Opaque placeholder id={$id} not found in map" );
+					return '';
+				},
+				$wikitext
+			);
+		} while ( $wikitext !== $previous && --$passesLeft > 0 );
+
+		return $wikitext;
 	}
 
 	/**
