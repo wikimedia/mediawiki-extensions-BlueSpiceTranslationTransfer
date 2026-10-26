@@ -11,7 +11,7 @@ use ContentTransfer\AuthenticatedRequestHandlerFactory;
 use ContentTransfer\Target;
 use ContentTransfer\TargetManager;
 use Exception;
-use JobQueueGroup;
+use MediaWiki\JobQueue\JobQueueGroup;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\TitleFactory;
 use Psr\Log\LoggerAwareInterface;
