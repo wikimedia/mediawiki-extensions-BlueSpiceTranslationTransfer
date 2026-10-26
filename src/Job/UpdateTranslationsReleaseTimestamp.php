@@ -3,7 +3,7 @@
 namespace BlueSpice\TranslationTransfer\Job;
 
 use BlueSpice\TranslationTransfer\Util\TranslationsDao;
-use Job;
+use MediaWiki\JobQueue\Job;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Title\Title;
