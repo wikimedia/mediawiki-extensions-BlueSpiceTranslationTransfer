@@ -9,12 +9,12 @@ use BlueSpice\TranslationTransfer\Translator;
 use BlueSpice\TranslationTransfer\Util\TranslationsDao;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Page\WikiPage;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 use PHPUnit\Framework\TestCase;
 use StatusValue;
-use WikiPage;
 
 /**
  * @covers \BlueSpice\TranslationTransfer\Translator
