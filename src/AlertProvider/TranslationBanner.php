@@ -11,9 +11,9 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Message\Message;
+use MediaWiki\Skin\Skin;
 use MediaWiki\Title\Title;
 use MediaWiki\User\UserGroupManager;
-use Skin;
 use Wikimedia\Rdbms\LoadBalancer;
 
 /**
