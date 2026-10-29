@@ -90,6 +90,8 @@
 	"bs-translation-transfer-glossary-edit-dialog-save": "Speichern",
 	"bs-translation-transfer-glossary-edit-dialog-cancel": "Abbrechen",
 	"bs-translation-transfer-glossary-edit-dialog-change-translation-label": "Übersetzung ändern für: <b>$1</b>",
+	"bs-translation-transfer-special-page-not-configured": "Es scheint, als ob einige Konfigurationen für BlueSpiceTranslationTransfer fehlen. Bitte {{#FORMAL:wende dich|wenden Sie sich}} an den Administrator, um diese korrekt vorzunehmen.",
+	"bs-translation-transfer-glossary-sync-error": "Es gab einen Fehler bei der Synchronisierung des Glossars",
 	"bs-translation-transfer-config-column-target-language": "Sprache",
 	"bs-translation-transfer-config-column-delete-title": "Löschen",
 	"bs-translation-transfer-config-namespaces-enabled": "Für die Übersetzung aktivierte Namensräume",
