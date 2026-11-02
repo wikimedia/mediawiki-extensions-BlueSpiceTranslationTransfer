@@ -14,8 +14,8 @@ use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\Message\Message;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Skin\SkinTemplate;
 use Psr\Log\LoggerInterface;
-use SkinTemplate;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 class AddTranslateAction implements SkinTemplateNavigation__UniversalHook {
