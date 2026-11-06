@@ -19,6 +19,11 @@ class EnabledNamespacesFormField extends HTMLMultiSelectEx {
 			return false;
 		}
 
+		if ( empty( $value ) ) {
+			// Not required
+			return true;
+		}
+
 		$currentLang = $this->mParams['data']['currentLang'];
 		if ( !isset( $value[$currentLang] ) || !is_array( $value[$currentLang] ) ) {
 			return false;
