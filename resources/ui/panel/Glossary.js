@@ -225,7 +225,7 @@ translationTransfer.ui.panel.Glossary.prototype.updateTranslationLanguageHeader 
 	const $translationLanguageHeader =
 		$( '#translate-transfer-glossary th.oojsplus-data-gridWidget-column-header[data-field="translation_normalized"]' );
 
-	$translationLanguageHeader.find( '.header-button .oo-ui-labelElement-label' ).text( languageLabel );
+	$translationLanguageHeader.find( '.header-button.oo-ui-labelElement-label' ).text( languageLabel );
 };
 
 /**
