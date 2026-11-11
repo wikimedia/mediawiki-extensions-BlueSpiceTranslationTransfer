@@ -188,5 +188,5 @@ translationTransfer.ui.panel.Dictionary.prototype.updateTranslationLanguageHeade
 	const $translationLanguageHeader =
 		$( '#translate-transfer-dictionary-grid th.oojsplus-data-gridWidget-column-header[data-field="translation_normalized"]' );
 
-	$translationLanguageHeader.find( '.header-button.oo-ui-labelElement-label' ).text( languageLabel );
+	$translationLanguageHeader.find( '.header-button .oo-ui-labelElement-label' ).text( languageLabel );
 };
